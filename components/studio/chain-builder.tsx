@@ -5,7 +5,7 @@ import { TopBar } from './top-bar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { NativeSelect } from '@/components/ui/native-select';
 import {
   ArrowLeft, Play, Save, Trash2, ChevronUp, ChevronDown, X,
   Type, Image, AudioLines, MessageSquare, Mic, Volume2, Eye,
@@ -201,18 +201,13 @@ export function ChainBuilder({ teamName, xp }: ChainBuilderProps) {
               placeholder={t('chain.namePlaceholder')}
               className="w-48"
             />
-            <Select onValueChange={(v) => v && loadTemplate(v as string)}>
-              <SelectTrigger className="w-36">
-                <SelectValue placeholder={t('chain.templates')} />
-              </SelectTrigger>
-              <SelectContent>
-                {templates.map(tpl => (
-                  <SelectItem key={tpl.id} value={tpl.id}>
-                    {locale === 'fr' && tpl.nameFr ? tpl.nameFr : tpl.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <NativeSelect value="" onChange={loadTemplate} placeholder={t('chain.templates')} className="w-36">
+              {templates.map(tpl => (
+                <option key={tpl.id} value={tpl.id}>
+                  {locale === 'fr' && tpl.nameFr ? tpl.nameFr : tpl.name}
+                </option>
+              ))}
+            </NativeSelect>
             <Button variant="outline" size="sm" onClick={clearChain} className="gap-1.5">
               <Trash2 size={14} />
               {t('chain.clear')}
@@ -391,14 +386,11 @@ function BlockConfig({ block, onUpdate }: { block: ChainBlock; onUpdate: (key: s
       );
     case 'process-tts':
       return (
-        <Select value={(block.config.voice as string) || 'nova'} onValueChange={(v) => v && onUpdate('voice', v)}>
-          <SelectTrigger><SelectValue /></SelectTrigger>
-          <SelectContent>
-            {['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'].map(v => (
-              <SelectItem key={v} value={v}>{v}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <NativeSelect value={(block.config.voice as string) || 'nova'} onChange={(v) => onUpdate('voice', v)}>
+          {['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'].map(v => (
+            <option key={v} value={v}>{v}</option>
+          ))}
+        </NativeSelect>
       );
     case 'process-translate':
       return (

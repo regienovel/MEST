@@ -7,7 +7,6 @@ import { useI18n } from '@/lib/i18n-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function LandingPage() {
   const { t } = useI18n();
@@ -77,25 +76,24 @@ export default function LandingPage() {
 
         {/* Login card */}
         <div className="w-full max-w-sm">
-          <form onSubmit={handleLogin} className="bg-white rounded-xl border border-mest-grey-300/60 shadow-sm p-6 space-y-4">
+          <form onSubmit={handleLogin} className="bg-white rounded-xl border border-mest-grey-300/60 shadow-sm p-6 space-y-5">
             <h2 className="font-serif text-2xl text-mest-ink">
               {t('landing.login.title')}
             </h2>
 
             <div className="space-y-2">
               <Label htmlFor="team">{t('landing.login.team')}</Label>
-              <Select value={teamId} onValueChange={(v) => v && setTeamId(v)}>
-                <SelectTrigger>
-                  <SelectValue placeholder={t('landing.login.teamPlaceholder')} />
-                </SelectTrigger>
-                <SelectContent>
-                  {teams.map(team => (
-                    <SelectItem key={team.id} value={team.id}>
-                      {team.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <select
+                id="team"
+                value={teamId}
+                onChange={e => setTeamId(e.target.value)}
+                className="w-full h-10 rounded-lg border border-mest-grey-300 bg-white px-3 text-sm text-mest-ink focus:border-mest-blue focus:ring-2 focus:ring-mest-blue/20 outline-none appearance-none cursor-pointer"
+              >
+                <option value="" disabled>{t('landing.login.teamPlaceholder')}</option>
+                {teams.map(team => (
+                  <option key={team.id} value={team.id}>{team.name}</option>
+                ))}
+              </select>
             </div>
 
             <div className="space-y-2">

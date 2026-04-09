@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useI18n } from '@/lib/i18n-context';
 import { TopBar } from './top-bar';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { NativeSelect } from '@/components/ui/native-select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ArrowLeft, MessageSquare, Mic, Eye, Workflow, Star, GitFork, Eye as EyeIcon, Copy } from 'lucide-react';
 import Link from 'next/link';
@@ -123,29 +123,19 @@ export function Gallery({ teamName, xp, teams }: GalleryProps) {
             ))}
           </div>
 
-          <Select value={teamFilter} onValueChange={(v) => v && setTeamFilter(v as string)}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder={t('gallery.filter.team')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t('gallery.filter.team')}</SelectItem>
-              {teams.map(team => (
-                <SelectItem key={team.id} value={team.id}>{team.name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <NativeSelect value={teamFilter} onChange={setTeamFilter} className="w-40">
+            <option value="all">{t('gallery.filter.team')}</option>
+            {teams.map(team => (
+              <option key={team.id} value={team.id}>{team.name}</option>
+            ))}
+          </NativeSelect>
 
-          <Select value={sort} onValueChange={(v) => v && setSort(v as string)}>
-            <SelectTrigger className="w-36">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="newest">{t('gallery.sort.newest')}</SelectItem>
-              <SelectItem value="views">{t('gallery.sort.views')}</SelectItem>
-              <SelectItem value="forks">{t('gallery.sort.forks')}</SelectItem>
-              <SelectItem value="featured">{t('gallery.sort.featured')}</SelectItem>
-            </SelectContent>
-          </Select>
+          <NativeSelect value={sort} onChange={setSort} className="w-36">
+            <option value="newest">{t('gallery.sort.newest')}</option>
+            <option value="views">{t('gallery.sort.views')}</option>
+            <option value="forks">{t('gallery.sort.forks')}</option>
+            <option value="featured">{t('gallery.sort.featured')}</option>
+          </NativeSelect>
         </div>
 
         {/* Featured */}

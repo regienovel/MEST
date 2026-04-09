@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { NativeSelect } from '@/components/ui/native-select';
 import { LogOut, ArrowLeft, Star, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -261,15 +261,12 @@ export default function AdminPage() {
             </div>
           </div>
           <div className="flex items-center gap-3 mt-4">
-            <Select value={broadcastDuration} onValueChange={(v) => v && setBroadcastDuration(v as string)}>
-              <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="5">5 min</SelectItem>
-                <SelectItem value="10">10 min</SelectItem>
-                <SelectItem value="15">15 min</SelectItem>
-                <SelectItem value="30">30 min</SelectItem>
-              </SelectContent>
-            </Select>
+            <NativeSelect value={broadcastDuration} onChange={setBroadcastDuration} className="w-32">
+              <option value="5">5 min</option>
+              <option value="10">10 min</option>
+              <option value="15">15 min</option>
+              <option value="30">30 min</option>
+            </NativeSelect>
             <Button onClick={sendBroadcast} className="bg-mest-blue hover:bg-mest-blue/90 text-white">
               {t('admin.broadcast.send')}
             </Button>

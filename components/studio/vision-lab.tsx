@@ -7,7 +7,7 @@ import { ModelToggle } from './model-toggle';
 import { SaveDialog } from './save-dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { NativeSelect } from '@/components/ui/native-select';
 import { ArrowLeft, Save, ImageIcon, X, Camera } from 'lucide-react';
 import Link from 'next/link';
 
@@ -217,18 +217,13 @@ export function VisionLab({ teamName, xp }: VisionLabProps) {
 
         {/* Preset prompts */}
         <div className="flex flex-col sm:flex-row gap-3">
-          <Select onValueChange={(v) => handlePreset(v as string)}>
-            <SelectTrigger className="w-full sm:w-64">
-              <SelectValue placeholder={t('vision.presets')} />
-            </SelectTrigger>
-            <SelectContent>
-              {PRESET_KEYS.map(key => (
-                <SelectItem key={key} value={key}>
-                  {t(`vision.preset.${key}` as Parameters<typeof t>[0])}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <NativeSelect value="" onChange={handlePreset} placeholder={t('vision.presets')} className="w-full sm:w-64">
+            {PRESET_KEYS.map(key => (
+              <option key={key} value={key}>
+                {t(`vision.preset.${key}` as Parameters<typeof t>[0])}
+              </option>
+            ))}
+          </NativeSelect>
         </div>
 
         {/* Custom prompt */}

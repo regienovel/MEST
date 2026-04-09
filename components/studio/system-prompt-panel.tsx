@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useI18n } from '@/lib/i18n-context';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { NativeSelect } from '@/components/ui/native-select';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface SystemPromptPanelProps {
@@ -32,8 +32,10 @@ const PRESETS: Record<string, { en: string; fr: string }> = {
 export function SystemPromptPanel({ value, onChange }: SystemPromptPanelProps) {
   const { t, locale } = useI18n();
   const [open, setOpen] = useState(false);
+  const [presetKey, setPresetKey] = useState('none');
 
   const handlePreset = (key: string) => {
+    setPresetKey(key);
     if (key === 'none') {
       onChange('');
     } else if (PRESETS[key]) {
@@ -52,18 +54,13 @@ export function SystemPromptPanel({ value, onChange }: SystemPromptPanelProps) {
       </button>
       {open && (
         <div className="px-4 pb-4 space-y-3">
-          <Select onValueChange={(v) => handlePreset(v as string)}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={t('chat.preset.none')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">{t('chat.preset.none')}</SelectItem>
-              <SelectItem value="trader">{t('chat.preset.trader')}</SelectItem>
-              <SelectItem value="healthWorker">{t('chat.preset.healthWorker')}</SelectItem>
-              <SelectItem value="logistics">{t('chat.preset.logistics')}</SelectItem>
-              <SelectItem value="critic">{t('chat.preset.critic')}</SelectItem>
-            </SelectContent>
-          </Select>
+          <NativeSelect value={presetKey} onChange={handlePreset}>
+            <option value="none">{t('chat.preset.none')}</option>
+            <option value="trader">{t('chat.preset.trader')}</option>
+            <option value="healthWorker">{t('chat.preset.healthWorker')}</option>
+            <option value="logistics">{t('chat.preset.logistics')}</option>
+            <option value="critic">{t('chat.preset.critic')}</option>
+          </NativeSelect>
           <Textarea
             value={value}
             onChange={e => onChange(e.target.value)}

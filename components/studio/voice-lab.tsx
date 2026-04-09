@@ -6,7 +6,7 @@ import { TopBar } from './top-bar';
 import { ModelToggle } from './model-toggle';
 import { SaveDialog } from './save-dialog';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { NativeSelect } from '@/components/ui/native-select';
 import { Mic, Square, Upload, Volume2, ArrowLeft, Save, Download } from 'lucide-react';
 import Link from 'next/link';
 
@@ -208,16 +208,11 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
           <div className="flex items-center gap-3 flex-wrap">
             <ModelToggle value={model} onChange={setModel} disabled={isResponding} />
 
-            <Select value={voice} onValueChange={(v) => v && setVoice(v)}>
-              <SelectTrigger className="w-28">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {VOICES.map(v => (
-                  <SelectItem key={v} value={v}>{v}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <NativeSelect value={voice} onChange={setVoice} className="w-28">
+              {VOICES.map(v => (
+                <option key={v} value={v}>{v}</option>
+              ))}
+            </NativeSelect>
 
             <label className="flex items-center gap-2 text-sm cursor-pointer">
               <input
