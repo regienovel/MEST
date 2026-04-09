@@ -1,13 +1,10 @@
 import { getCurrentTeam } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import { VoiceLab } from '@/components/studio/voice-lab';
 
 export default async function VoicePage() {
   const team = await getCurrentTeam();
   if (!team) redirect('/');
 
-  return (
-    <div className="min-h-screen bg-mest-paper flex items-center justify-center">
-      <p className="text-mest-grey-500">Voice Lab — Coming soon</p>
-    </div>
-  );
+  return <VoiceLab teamName={team.name} xp={team.xp} />;
 }
