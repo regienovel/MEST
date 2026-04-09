@@ -1,27 +1,18 @@
 import { NextRequest } from 'next/server';
 import { openai } from '@/lib/openai';
 import { anthropic } from '@/lib/anthropic';
-import { storage } from '@/lib/storage';
 import { ensureSeeded } from '@/lib/seed';
 import { checkRateLimit, incrementUsage } from '@/lib/rate-limit';
-import type { Session } from '@/lib/types';
 
 const DEFAULT_SYSTEM = 'You are a helpful assistant. Respond in the language the user is writing in.';
 
 export async function POST(req: NextRequest) {
   await ensureSeeded();
 
-  const sessionId = req.cookies.get('mest_session')?.value;
-  if (!sessionId) {
-    return new Response('Unauthorized', { status: 401 });
-  }
-
-  const session = await storage.get<Session>(`session:${sessionId}`);
-  if (!session) {
-    return new Response('Unauthorized', { status: 401 });
-  }
-
-  const teamId = session.teamId;
+  const teamCookie = req.cookies.get('mest_team')?.value;
+  if (!teamCookie) return new Response('Unauthorized', { status: 401 });
+  let teamId: string;
+  try { teamId = JSON.parse(decodeURIComponent(teamCookie)).id; } catch { return new Response('Unauthorized', { status: 401 }); }
   const { allowed, remaining } = await checkRateLimit(teamId);
   if (!allowed) {
     const encoder = new TextEncoder();

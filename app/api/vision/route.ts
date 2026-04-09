@@ -1,21 +1,18 @@
 import { NextRequest } from 'next/server';
 import { openai } from '@/lib/openai';
 import { anthropic } from '@/lib/anthropic';
-import { storage } from '@/lib/storage';
 import { ensureSeeded } from '@/lib/seed';
 import { checkRateLimit, incrementUsage } from '@/lib/rate-limit';
-import type { Session } from '@/lib/types';
 
 export async function POST(req: NextRequest) {
   await ensureSeeded();
 
-  const sessionId = req.cookies.get('mest_session')?.value;
-  if (!sessionId) return new Response('Unauthorized', { status: 401 });
+  const teamCookie = req.cookies.get('mest_team')?.value;
+  if (!teamCookie) return new Response('Unauthorized', { status: 401 });
+  let teamId: string;
+  try { teamId = JSON.parse(decodeURIComponent(teamCookie)).id; } catch { return new Response('Unauthorized', { status: 401 }); }
 
-  const session = await storage.get<Session>(`session:${sessionId}`);
-  if (!session) return new Response('Unauthorized', { status: 401 });
-
-  const { allowed } = await checkRateLimit(session.teamId);
+  const { allowed } = await checkRateLimit(teamId);
   if (!allowed) {
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
@@ -39,7 +36,7 @@ export async function POST(req: NextRequest) {
 
         const gptPromise = (async () => {
           try {
-            await incrementUsage(session.teamId, 0.01);
+            await incrementUsage(teamId, 0.01);
             const content: Array<{ type: string; text?: string; image_url?: { url: string } }> = [];
             for (const img of images) {
               content.push({ type: 'image_url', image_url: { url: img } });
@@ -61,7 +58,7 @@ export async function POST(req: NextRequest) {
 
         const claudePromise = (async () => {
           try {
-            await incrementUsage(session.teamId, 0.01);
+            await incrementUsage(teamId, 0.01);
             const content: Array<unknown> = [];
             for (const img of images) {
               const match = img.match(/^data:(image\/\w+);base64,(.+)$/);
@@ -104,7 +101,7 @@ export async function POST(req: NextRequest) {
       };
 
       try {
-        await incrementUsage(session.teamId, 0.01);
+        await incrementUsage(teamId, 0.01);
 
         if (model === 'gpt-4o') {
           const content: Array<{ type: string; text?: string; image_url?: { url: string } }> = [];

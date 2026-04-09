@@ -3,20 +3,17 @@ import { storage } from '@/lib/storage';
 import { ensureSeeded } from '@/lib/seed';
 import { awardXp } from '@/lib/usage';
 import { logActivity } from '@/lib/activity';
-import type { Session, Team, GalleryItem } from '@/lib/types';
+import type { GalleryItem } from '@/lib/types';
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   await ensureSeeded();
   const { id } = await params;
 
-  const sessionId = req.cookies.get('mest_session')?.value;
-  if (!sessionId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-  const session = await storage.get<Session>(`session:${sessionId}`);
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-  const team = await storage.get<Team>(`team:${session.teamId}`);
-  if (!team) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const teamCookie = req.cookies.get('mest_team')?.value;
+  if (!teamCookie) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  let team: { id: string; name: string };
+  try { team = JSON.parse(decodeURIComponent(teamCookie)); } catch { return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); }
+  if (!team.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const original = await storage.get<GalleryItem>(`gallery:${id}`);
   if (!original || original.type !== 'chain') {

@@ -1,24 +1,22 @@
 import { cookies } from 'next/headers';
-import { storage } from './storage';
-import type { Session, Team } from './types';
+import type { Team } from './types';
 
 export async function getCurrentTeam(): Promise<Team | null> {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get('mest_session')?.value;
   if (!sessionId) return null;
 
-  const session = await storage.get<Session>(`session:${sessionId}`);
-  if (!session) return null;
+  // Read team info directly from cookie (works across serverless instances)
+  const teamCookie = cookieStore.get('mest_team')?.value;
+  if (!teamCookie) return null;
 
-  if (new Date(session.expiresAt) < new Date()) {
-    await storage.delete(`session:${sessionId}`);
+  try {
+    const team = JSON.parse(decodeURIComponent(teamCookie)) as Team;
+    if (!team.id) return null;
+    return team;
+  } catch {
     return null;
   }
-
-  const team = await storage.get<Team>(`team:${session.teamId}`);
-  if (!team || team.disabled) return null;
-
-  return team;
 }
 
 export async function isAdmin(): Promise<boolean> {

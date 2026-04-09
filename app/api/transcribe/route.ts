@@ -2,20 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { openai } from '@/lib/openai';
 import { ensureSeeded } from '@/lib/seed';
 import { checkRateLimit, incrementUsage } from '@/lib/rate-limit';
-import { storage } from '@/lib/storage';
 import { getLanguageName } from '@/lib/languages';
-import type { Session } from '@/lib/types';
 
 export async function POST(req: NextRequest) {
   await ensureSeeded();
 
-  const sessionId = req.cookies.get('mest_session')?.value;
-  if (!sessionId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const teamCookie = req.cookies.get('mest_team')?.value;
+  if (!teamCookie) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  let teamId: string;
+  try { teamId = JSON.parse(decodeURIComponent(teamCookie)).id; } catch { return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); }
 
-  const session = await storage.get<Session>(`session:${sessionId}`);
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-  const { allowed } = await checkRateLimit(session.teamId);
+  const { allowed } = await checkRateLimit(teamId);
   if (!allowed) {
     return NextResponse.json({ ok: false, error: 'Rate limit exceeded' }, { status: 429 });
   }
@@ -27,7 +24,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'No audio file provided' }, { status: 400 });
     }
 
-    await incrementUsage(session.teamId, 0.006);
+    await incrementUsage(teamId, 0.006);
 
     const transcription = await openai.audio.transcriptions.create({
       file: audioFile,

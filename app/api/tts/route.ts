@@ -2,19 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { openai } from '@/lib/openai';
 import { ensureSeeded } from '@/lib/seed';
 import { checkRateLimit, incrementUsage } from '@/lib/rate-limit';
-import { storage } from '@/lib/storage';
-import type { Session } from '@/lib/types';
 
 export async function POST(req: NextRequest) {
   await ensureSeeded();
 
-  const sessionId = req.cookies.get('mest_session')?.value;
-  if (!sessionId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const teamCookie = req.cookies.get('mest_team')?.value;
+  if (!teamCookie) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  let teamId: string;
+  try { teamId = JSON.parse(decodeURIComponent(teamCookie)).id; } catch { return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); }
 
-  const session = await storage.get<Session>(`session:${sessionId}`);
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-  const { allowed } = await checkRateLimit(session.teamId);
+  const { allowed } = await checkRateLimit(teamId);
   if (!allowed) {
     return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
   }
@@ -26,7 +23,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Text too long or empty' }, { status: 400 });
     }
 
-    await incrementUsage(session.teamId, 0.015);
+    await incrementUsage(teamId, 0.015);
 
     const response = await openai.audio.speech.create({
       model: 'tts-1',

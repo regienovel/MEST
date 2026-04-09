@@ -48,6 +48,15 @@ export async function POST(req: NextRequest) {
       maxAge: 86400,
     });
 
+    // Store team info in cookie so server components work across serverless instances
+    const teamData = { id: team.id, name: team.name, xp: team.xp, password: team.password, createdAt: team.createdAt };
+    res.cookies.set('mest_team', encodeURIComponent(JSON.stringify(teamData)), {
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 86400,
+    });
+
     if (isAdmin) {
       res.cookies.set('mest_admin', '1', {
         httpOnly: true,
