@@ -1,13 +1,10 @@
 import { getCurrentTeam } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import { VisionLab } from '@/components/studio/vision-lab';
 
 export default async function VisionPage() {
   const team = await getCurrentTeam();
   if (!team) redirect('/');
 
-  return (
-    <div className="min-h-screen bg-mest-paper flex items-center justify-center">
-      <p className="text-mest-grey-500">Vision Lab — Coming soon</p>
-    </div>
-  );
+  return <VisionLab teamName={team.name} xp={team.xp} />;
 }
