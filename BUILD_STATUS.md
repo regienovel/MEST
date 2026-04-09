@@ -1,6 +1,6 @@
 # MEST AI Studio — Build Status
 
-## Current Phase: Phase 0 ✅ Complete
+## Current Phase: Phase 1 ✅ Complete
 
 ## Completed Phases
 
@@ -14,8 +14,22 @@
 - [x] Dev server starts without errors
 - [x] TypeScript compilation passes
 
-## Next Phase: Phase 1 — Design System & i18n
+### Phase 1 — Design System & i18n
+- [x] Color tokens added to tailwind.config.ts (mest.ink, paper, blue, teal, gold, rust, sage, grey)
+- [x] CSS variables added to globals.css
+- [x] Fonts installed: Inter (sans) + Instrument Serif (serif) via next/font/google
+- [x] Font variables added to Tailwind config
+- [x] layout.tsx updated with fonts, metadata, I18nProvider wrapper
+- [x] /lib/i18n.ts created with full EN/FR dictionary (~160 string pairs)
+- [x] /lib/i18n-context.tsx created with provider, hook, localStorage persistence
+- [x] /components/studio/wordmark.tsx created
+- [x] /components/studio/language-toggle.tsx created
+- [x] Test page at / shows wordmark + language toggle + bilingual text
+- [x] TypeScript compilation passes
+
+## Next Phase: Phase 2 — Auth & Storage
 
 ## Decisions Made
 - Used sonner instead of toast (shadcn deprecated toast in favor of sonner)
-- Removed default Geist fonts from layout (will add Inter + Instrument Serif in Phase 1)
+- Removed default Geist fonts from layout (replaced with Inter + Instrument Serif)
+- Used Record<keyof typeof en, string> for fr type instead of typeof en to avoid literal type conflicts
