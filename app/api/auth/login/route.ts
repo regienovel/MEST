@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { storage } from '@/lib/storage';
-import { ensureSeeded } from '@/lib/seed';
-import type { Team } from '@/lib/types';
+import teamsSeed from '@/seed/teams.json';
 
 export async function POST(req: NextRequest) {
-  await ensureSeeded();
-
   try {
     const { teamId, password, adminPassword } = await req.json();
 
@@ -13,31 +9,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Missing team or password' }, { status: 400 });
     }
 
-    const team = await storage.get<Team>(`team:${teamId}`);
+    // Validate against seed file directly — works on Vercel without storage
+    const team = teamsSeed.teams.find(t => t.id === teamId);
     if (!team || team.password !== password) {
       return NextResponse.json({ ok: false, error: 'Invalid team or password' }, { status: 401 });
     }
 
-    if (team.disabled) {
-      return NextResponse.json({ ok: false, error: 'Team is disabled' }, { status: 403 });
-    }
-
     const sessionId = crypto.randomUUID();
-    const now = new Date();
-    const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-
-    await storage.set(`session:${sessionId}`, {
-      id: sessionId,
-      teamId: team.id,
-      createdAt: now.toISOString(),
-      expiresAt: expiresAt.toISOString(),
-    });
 
     const isAdmin = adminPassword && adminPassword === process.env.ADMIN_PASSWORD;
 
     const res = NextResponse.json({
       ok: true,
-      team: { id: team.id, name: team.name, xp: team.xp },
+      team: { id: team.id, name: team.name, xp: 0 },
       isAdmin,
     });
 
@@ -49,7 +33,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Store team info in cookie so server components work across serverless instances
-    const teamData = { id: team.id, name: team.name, xp: team.xp, password: team.password, createdAt: team.createdAt };
+    const teamData = { id: team.id, name: team.name, xp: 0, password: team.password, createdAt: new Date().toISOString() };
     res.cookies.set('mest_team', encodeURIComponent(JSON.stringify(teamData)), {
       httpOnly: true,
       sameSite: 'lax',

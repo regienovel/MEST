@@ -2,29 +2,29 @@ import { NextResponse } from 'next/server';
 import { storage } from '@/lib/storage';
 import { ensureSeeded } from '@/lib/seed';
 import { isAdmin } from '@/lib/auth';
-import type { Team, UsageRecord } from '@/lib/types';
+import teamsSeed from '@/seed/teams.json';
+import type { UsageRecord } from '@/lib/types';
 
 export async function GET() {
   if (!(await isAdmin())) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   await ensureSeeded();
 
-  const teamKeys = await storage.list('team:');
   const currentHour = new Date().toISOString().slice(0, 13);
   const teams: Array<{
     id: string; name: string; xp: number; disabled: boolean;
     callsThisHour: number; costThisHour: number;
   }> = [];
 
-  for (const key of teamKeys) {
-    const team = await storage.get<Team>(key);
-    if (!team || team.id === 'admin') continue;
+  // Read team list from seed file, usage from storage (ephemeral)
+  for (const seedTeam of teamsSeed.teams) {
+    if (seedTeam.id === 'admin') continue;
 
-    const usage = await storage.get<UsageRecord>(`usage:${team.id}:${currentHour}`);
+    const usage = await storage.get<UsageRecord>(`usage:${seedTeam.id}:${currentHour}`);
     teams.push({
-      id: team.id,
-      name: team.name,
-      xp: team.xp || 0,
-      disabled: !!team.disabled,
+      id: seedTeam.id,
+      name: seedTeam.name,
+      xp: 0,
+      disabled: false,
       callsThisHour: usage?.calls || 0,
       costThisHour: usage?.estimatedCostUsd || 0,
     });
@@ -54,7 +54,7 @@ export async function GET() {
       totalCallsToday,
       totalCostToday: totalCostToday.toFixed(2),
       topTeam: topTeam?.name || '-',
-      topModule: 'Chat', // Simplified
+      topModule: 'Chat',
     },
   });
 }

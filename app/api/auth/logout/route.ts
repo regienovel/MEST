@@ -1,13 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { storage } from '@/lib/storage';
+import { NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest) {
-  const sessionId = req.cookies.get('mest_session')?.value;
-
-  if (sessionId) {
-    await storage.delete(`session:${sessionId}`);
-  }
-
+export async function POST() {
   const res = NextResponse.json({ ok: true });
   res.cookies.delete('mest_session');
   res.cookies.delete('mest_team');

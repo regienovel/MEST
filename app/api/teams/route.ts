@@ -1,20 +1,11 @@
 import { NextResponse } from 'next/server';
-import { storage } from '@/lib/storage';
-import { ensureSeeded } from '@/lib/seed';
-import type { Team } from '@/lib/types';
+import teamsSeed from '@/seed/teams.json';
 
 export async function GET() {
-  await ensureSeeded();
-
-  const keys = await storage.list('team:');
-  const teams: Array<{ id: string; name: string }> = [];
-
-  for (const key of keys) {
-    const team = await storage.get<Team>(key);
-    if (team && team.id !== 'admin' && !team.disabled) {
-      teams.push({ id: team.id, name: team.name });
-    }
-  }
+  // Read directly from seed file — works on Vercel without storage
+  const teams = teamsSeed.teams
+    .filter(t => t.id !== 'admin')
+    .map(t => ({ id: t.id, name: t.name }));
 
   return NextResponse.json({ teams });
 }
