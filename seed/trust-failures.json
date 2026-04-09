@@ -1,0 +1,76 @@
+{
+  "cases": [
+    {
+      "id": "coded-gaze",
+      "title": "The Coded Gaze",
+      "titleFr": "Le Regard Codé",
+      "year": 2018,
+      "protagonist": "Joy Buolamwini",
+      "summary": "MIT researcher Joy Buolamwini discovered that commercial facial recognition systems from IBM, Microsoft, and Amazon misidentified darker-skinned women up to 35% of the time, while white men were identified correctly over 99% of the time. The bias was baked into the training data.",
+      "summaryFr": "La chercheuse du MIT Joy Buolamwini a découvert que les systèmes commerciaux de reconnaissance faciale d'IBM, Microsoft et Amazon identifiaient mal les femmes à la peau foncée jusqu'à 35% du temps, tandis que les hommes blancs étaient correctement identifiés à plus de 99%. Le biais était intégré aux données d'entraînement.",
+      "lesson": "Training data determines who the AI sees — and who it erases.",
+      "lessonFr": "Les données d'entraînement déterminent qui l'IA voit — et qui elle efface.",
+      "tags": ["bias", "vision", "representation"]
+    },
+    {
+      "id": "apple-card",
+      "title": "The Apple Card Gender Gap",
+      "titleFr": "L'Écart de Genre de l'Apple Card",
+      "year": 2019,
+      "protagonist": "David Heinemeier Hansson",
+      "summary": "Tech entrepreneur David Heinemeier Hansson tweeted that Apple Card offered him 20x the credit limit of his wife, despite her having a higher credit score. Apple co-founder Steve Wozniak reported the same. Apple's response: 'It's the algorithm.' No one could explain why.",
+      "summaryFr": "L'entrepreneur tech David Heinemeier Hansson a tweeté qu'Apple Card lui offrait 20 fois la limite de crédit de sa femme, bien qu'elle ait un meilleur score de crédit. Le co-fondateur d'Apple, Steve Wozniak, a signalé la même chose. La réponse d'Apple : 'C'est l'algorithme.' Personne n'a pu expliquer pourquoi.",
+      "lesson": "When you can't explain the decision, you can't defend it — and neither can your customer.",
+      "lessonFr": "Quand vous ne pouvez pas expliquer la décision, vous ne pouvez pas la défendre — et votre client non plus.",
+      "tags": ["bias", "opacity", "finance"]
+    },
+    {
+      "id": "amazon-recruitment",
+      "title": "Amazon's Biased Hiring AI",
+      "titleFr": "L'IA de Recrutement Biaisée d'Amazon",
+      "year": 2018,
+      "protagonist": "Amazon engineering team",
+      "summary": "Amazon built an AI tool to screen resumes, trained on 10 years of their own hiring data. The model taught itself to penalize any resume containing the word 'women's' (as in 'women's chess club captain') and downgraded graduates of two all-women's colleges. Amazon scrapped the project.",
+      "summaryFr": "Amazon a construit un outil d'IA pour filtrer les CV, entraîné sur 10 ans de leurs propres données d'embauche. Le modèle a appris à pénaliser tout CV contenant le mot 'femmes' (comme 'capitaine du club d'échecs féminin') et a rétrogradé les diplômées de deux universités pour femmes. Amazon a abandonné le projet.",
+      "lesson": "AI trained on your history will perpetuate your history, including the parts you want to leave behind.",
+      "lessonFr": "Une IA entraînée sur votre histoire perpétuera votre histoire, y compris les parties que vous voulez laisser derrière.",
+      "tags": ["bias", "hiring", "feedback-loop"]
+    },
+    {
+      "id": "air-canada-chatbot",
+      "title": "Air Canada's Lying Chatbot",
+      "titleFr": "Le Chatbot Menteur d'Air Canada",
+      "year": 2024,
+      "protagonist": "Jake Moffatt",
+      "summary": "When Jake Moffatt's grandmother died, Air Canada's chatbot told him he could book full-fare flights and apply for a bereavement discount retroactively. He did. Air Canada refused the refund, claiming the chatbot was 'a separate legal entity' responsible for its own information. A Canadian tribunal disagreed and ordered Air Canada to pay.",
+      "summaryFr": "Quand la grand-mère de Jake Moffatt est décédée, le chatbot d'Air Canada lui a dit qu'il pouvait réserver des vols plein tarif et demander une réduction de deuil rétroactivement. Il l'a fait. Air Canada a refusé le remboursement, affirmant que le chatbot était 'une entité juridique distincte' responsable de ses propres informations. Un tribunal canadien n'était pas d'accord et a ordonné à Air Canada de payer.",
+      "lesson": "Your AI's hallucinations are your company's promises. Legally.",
+      "lessonFr": "Les hallucinations de votre IA sont les promesses de votre entreprise. Juridiquement.",
+      "tags": ["hallucination", "liability", "customer-service"]
+    },
+    {
+      "id": "kenya-digital-lenders",
+      "title": "Kenya's Digital Lending Black Box",
+      "titleFr": "La Boîte Noire des Prêteurs Numériques du Kenya",
+      "year": 2021,
+      "protagonist": "Millions of Kenyan borrowers",
+      "summary": "Kenyan fintech lenders (Tala, Branch, Okash) approved millions of microloans in seconds using AI models that analyzed phone contacts, SMS patterns, and social networks. Borrowers who fell behind found themselves in algorithmic debt spirals. When denied a loan, they had no explanation and no appeal. The Central Bank of Kenya intervened in 2022 to regulate the sector.",
+      "summaryFr": "Les prêteurs fintech kényans (Tala, Branch, Okash) ont approuvé des millions de microprêts en quelques secondes en utilisant des modèles d'IA qui analysaient les contacts téléphoniques, les SMS et les réseaux sociaux. Les emprunteurs en retard se sont retrouvés dans des spirales de dette algorithmique. Lorsqu'un prêt était refusé, ils n'avaient ni explication ni recours. La Banque centrale du Kenya est intervenue en 2022 pour réguler le secteur.",
+      "lesson": "Speed and scale without accountability create new forms of harm that traditional finance never managed.",
+      "lessonFr": "La vitesse et l'échelle sans responsabilité créent de nouvelles formes de préjudice que la finance traditionnelle n'a jamais produites.",
+      "tags": ["finance", "africa", "accountability"]
+    },
+    {
+      "id": "meta-ethiopia",
+      "title": "Meta's Ethiopia Moderation Failure",
+      "titleFr": "L'Échec de Modération de Meta en Éthiopie",
+      "year": 2022,
+      "protagonist": "Meareg Amare (victim)",
+      "summary": "During the Tigray war, Meta's Amharic-language moderation systems failed to remove posts calling for violence against ethnic Tigrayans. University professor Meareg Amare was named, targeted, and murdered after a post about him went viral on Facebook. His son sued Meta in Kenyan court, alleging the algorithm amplified the content that led to his father's death. The case revealed Meta had only 25 content moderators for 500+ million African users.",
+      "summaryFr": "Pendant la guerre du Tigré, les systèmes de modération en amharique de Meta n'ont pas réussi à supprimer les publications appelant à la violence contre les Tigréens ethniques. Le professeur d'université Meareg Amare a été nommé, ciblé et assassiné après qu'une publication à son sujet soit devenue virale sur Facebook. Son fils a poursuivi Meta devant un tribunal kényan, alléguant que l'algorithme avait amplifié le contenu qui avait conduit à la mort de son père. L'affaire a révélé que Meta n'avait que 25 modérateurs de contenu pour plus de 500 millions d'utilisateurs africains.",
+      "lesson": "Big Tech's 'global' systems were never built for your language, your context, or your life.",
+      "lessonFr": "Les systèmes 'mondiaux' des géants de la tech n'ont jamais été conçus pour votre langue, votre contexte, ou votre vie.",
+      "tags": ["moderation", "africa", "safety", "language"]
+    }
+  ]
+}

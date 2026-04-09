@@ -1,0 +1,46 @@
+{
+  "teams": [
+    {
+      "id": "sankofa",
+      "name": "Sankofa",
+      "password": "sankofa2026",
+      "meaning": "Akan — 'go back and fetch it' — the wisdom of learning from the past"
+    },
+    {
+      "id": "asase",
+      "name": "Asase",
+      "password": "asase2026",
+      "meaning": "Akan — 'the earth' — grounded, rooted in place"
+    },
+    {
+      "id": "baobab",
+      "name": "Baobab",
+      "password": "baobab2026",
+      "meaning": "The tree of life — resilient, long-lived, central to West African village life"
+    },
+    {
+      "id": "kora",
+      "name": "Kora",
+      "password": "kora2026",
+      "meaning": "21-string West African harp — complex, melodic, built by hand"
+    },
+    {
+      "id": "harmattan",
+      "name": "Harmattan",
+      "password": "harmattan2026",
+      "meaning": "The dry season wind from the Sahara — relentless, transformative"
+    },
+    {
+      "id": "zawadi",
+      "name": "Zawadi",
+      "password": "zawadi2026",
+      "meaning": "Swahili — 'gift' — what you build for others"
+    },
+    {
+      "id": "admin",
+      "name": "Admin",
+      "password": "mest-operator-2026",
+      "meaning": "Operator account. Use admin password during login to also set admin flag."
+    }
+  ]
+}
