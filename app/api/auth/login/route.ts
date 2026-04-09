@@ -17,7 +17,8 @@ export async function POST(req: NextRequest) {
 
     const sessionId = crypto.randomUUID();
 
-    const isAdmin = adminPassword && adminPassword === process.env.ADMIN_PASSWORD;
+    // Grant admin if: (1) admin password matches env var, OR (2) logging in as the admin team
+    const isAdmin = (adminPassword && adminPassword === process.env.ADMIN_PASSWORD) || team.id === 'admin';
 
     const res = NextResponse.json({
       ok: true,
