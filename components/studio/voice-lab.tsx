@@ -201,7 +201,7 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
   }
 
   async function handleSaveToGallery(title: string) {
-    await fetch('/api/gallery', {
+    const res = await fetch('/api/gallery', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -215,6 +215,8 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
         },
       }),
     });
+    const result = await res.json();
+    if (!result.ok) throw new Error(result.error || 'Save failed');
   }
 
   const hasContent = transcription || aiResponse || gptResponse || claudeResponse;

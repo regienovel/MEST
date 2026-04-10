@@ -64,11 +64,13 @@ export function ChatLab({ teamName, xp }: ChatLabProps) {
       ? { model: 'both', gptMessages, claudeMessages, systemPrompt }
       : { model, messages, systemPrompt };
 
-    await fetch('/api/gallery', {
+    const res = await fetch('/api/gallery', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ type: 'chat', title, data }),
     });
+    const result = await res.json();
+    if (!result.ok) throw new Error(result.error || 'Save failed');
   };
 
   const handleExport = () => {

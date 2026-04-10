@@ -109,7 +109,7 @@ export function VisionLab({ teamName, xp }: VisionLabProps) {
   };
 
   const handleSaveToGallery = async (title: string) => {
-    await fetch('/api/gallery', {
+    const res = await fetch('/api/gallery', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -123,6 +123,8 @@ export function VisionLab({ teamName, xp }: VisionLabProps) {
         },
       }),
     });
+    const result = await res.json();
+    if (!result.ok) throw new Error(result.error || 'Save failed');
   };
 
   const hasResponse = response || gptResponse || claudeResponse;
