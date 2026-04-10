@@ -12,5 +12,5 @@ export default async function GalleryPage() {
     .filter(t => t.id !== 'admin')
     .map(t => ({ id: t.id, name: t.name }));
 
-  return <Gallery teamName={team.name} xp={team.xp || 0} teams={teams} />;
+  return <Gallery teamId={team.id} teamName={team.name} xp={team.xp || 0} teams={teams} />;
 }

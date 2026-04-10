@@ -5,7 +5,7 @@ import { TopBar } from './top-bar';
 import { Button } from '@/components/ui/button';
 import { NativeSelect } from '@/components/ui/native-select';
 import { Modal } from '@/components/ui/modal';
-import { ArrowLeft, MessageSquare, Mic, Eye, Workflow, Star, GitFork, Eye as EyeIcon, Copy } from 'lucide-react';
+import { ArrowLeft, MessageSquare, Mic, Eye, Workflow, Star, GitFork, Eye as EyeIcon, Copy, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 
 interface GalleryItem {
@@ -23,6 +23,7 @@ interface GalleryItem {
 }
 
 interface GalleryProps {
+  teamId: string;
   teamName: string;
   xp: number;
   teams: Array<{ id: string; name: string }>;
@@ -46,7 +47,7 @@ function timeAgo(date: string, locale: string): string {
   return locale === 'fr' ? `il y a ${days}j` : `${days}d ago`;
 }
 
-export function Gallery({ teamName, xp, teams }: GalleryProps) {
+export function Gallery({ teamId, teamName, xp, teams }: GalleryProps) {
   const { t, locale } = useI18n();
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [type, setType] = useState('all');
@@ -79,9 +80,33 @@ export function Gallery({ teamName, xp, teams }: GalleryProps) {
     setDetailData(data.item);
   };
 
+  const [actionMessage, setActionMessage] = useState('');
+
   const handleFork = async (id: string) => {
-    await fetch(`/api/gallery/${id}/fork`, { method: 'POST' });
+    const res = await fetch(`/api/gallery/${id}/fork`, { method: 'POST' });
+    const data = await res.json();
+    if (data.ok) {
+      setActionMessage('Chain forked to your workspace! Go to Chain Builder to find it.');
+      setTimeout(() => setActionMessage(''), 4000);
+    } else {
+      setActionMessage(data.error || 'Fork failed');
+      setTimeout(() => setActionMessage(''), 3000);
+    }
     fetchItems();
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Delete this item? This cannot be undone.')) return;
+    const res = await fetch(`/api/gallery/${id}/delete`, { method: 'POST' });
+    const data = await res.json();
+    if (data.ok) {
+      setSelectedItem(null);
+      setDetailData(null);
+      fetchItems();
+    } else {
+      setActionMessage(data.error || 'Delete failed');
+      setTimeout(() => setActionMessage(''), 3000);
+    }
   };
 
   const featured = items.filter(i => i.featured);
@@ -189,6 +214,12 @@ export function Gallery({ teamName, xp, teams }: GalleryProps) {
               {renderDetailContent(detailData)}
             </div>
 
+            {actionMessage && (
+              <p className="text-sm text-mest-blue font-medium bg-mest-blue-light px-3 py-2 rounded-lg">
+                {actionMessage}
+              </p>
+            )}
+
             <div className="flex gap-2 justify-end">
               {detailData.type === 'chain' && (
                 <Button
@@ -206,6 +237,8 @@ export function Gallery({ teamName, xp, teams }: GalleryProps) {
                   onClick={() => {
                     const content = renderDetailContent(detailData);
                     navigator.clipboard.writeText(typeof content === 'string' ? content : '');
+                    setActionMessage('Copied!');
+                    setTimeout(() => setActionMessage(''), 2000);
                   }}
                   variant="outline"
                   size="sm"
@@ -213,6 +246,17 @@ export function Gallery({ teamName, xp, teams }: GalleryProps) {
                 >
                   <Copy size={14} />
                   {t('gallery.detail.copyContent')}
+                </Button>
+              )}
+              {detailData.teamId === teamId && (
+                <Button
+                  onClick={() => handleDelete(detailData.id)}
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5 text-mest-rust hover:bg-mest-rust-light"
+                >
+                  <Trash2 size={14} />
+                  {t('common.delete')}
                 </Button>
               )}
             </div>
