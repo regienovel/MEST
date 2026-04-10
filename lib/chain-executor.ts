@@ -79,9 +79,14 @@ async function executeBlock(
     case 'process-transcribe': {
       const audioDataUrl = outputs['previous'] as string;
       if (!audioDataUrl) throw new Error('No audio input');
-      const res = await fetch(audioDataUrl);
-      const blob = await res.blob();
-      const file = new File([blob], 'audio.webm', { type: 'audio/webm' });
+      // Parse data URL to buffer (fetch() with data URLs doesn't work on Vercel)
+      const match = audioDataUrl.match(/^data:(audio\/\w+);base64,(.+)$/);
+      if (!match) throw new Error('Invalid audio data URL');
+      const mimeType = match[1];
+      const buffer = Buffer.from(match[2], 'base64');
+      const ext = mimeType.includes('mp4') ? 'mp4' : mimeType.includes('wav') ? 'wav' : mimeType.includes('mpeg') ? 'mp3' : 'webm';
+      const { toFile } = await import('openai');
+      const file = await toFile(buffer, `audio.${ext}`, { type: mimeType });
       const result = await openai.audio.transcriptions.create({ file, model: 'whisper-1' });
       return result.text;
     }
