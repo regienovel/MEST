@@ -74,7 +74,9 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
     setIsTranscribing(true);
     try {
       const formData = new FormData();
-      formData.append('audio', audio, 'recording.webm');
+      // Use correct extension based on mime type
+      const ext = audio.type?.includes('mp4') ? 'mp4' : audio.type?.includes('wav') ? 'wav' : 'webm';
+      formData.append('audio', audio, `recording.${ext}`);
       const res = await fetch('/api/transcribe', { method: 'POST', body: formData });
       const data = await res.json();
 

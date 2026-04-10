@@ -3,6 +3,7 @@ import { openai } from '@/lib/openai';
 import { ensureSeeded } from '@/lib/seed';
 import { checkRateLimit, incrementUsage } from '@/lib/rate-limit';
 import { getLanguageName } from '@/lib/languages';
+import { toFile } from 'openai';
 
 export async function POST(req: NextRequest) {
   await ensureSeeded();
@@ -26,8 +27,19 @@ export async function POST(req: NextRequest) {
 
     await incrementUsage(teamId, 0.006);
 
+    // Convert to buffer and create a proper file for the OpenAI SDK
+    const arrayBuffer = await audioFile.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Determine extension from mime type
+    const mimeType = audioFile.type || 'audio/webm';
+    const ext = mimeType.includes('mp4') ? 'mp4' : mimeType.includes('wav') ? 'wav' : mimeType.includes('mpeg') ? 'mp3' : 'webm';
+    const fileName = `recording.${ext}`;
+
+    const file = await toFile(buffer, fileName, { type: mimeType });
+
     const transcription = await openai.audio.transcriptions.create({
-      file: audioFile,
+      file,
       model: 'whisper-1',
       response_format: 'verbose_json',
     });
