@@ -357,6 +357,10 @@ function BlockConfig({ block, onUpdate }: { block: ChainBlock; onUpdate: (key: s
           rows={3}
         />
       );
+    case 'input-image':
+      return <FileUploadConfig accept="image/jpeg,image/png,image/webp,image/gif" label="Upload image" currentValue={block.config.dataUrl as string} onUpdate={(v) => onUpdate('dataUrl', v)} />;
+    case 'input-audio':
+      return <FileUploadConfig accept="audio/mp3,audio/wav,audio/webm,audio/m4a,audio/mpeg" label="Upload audio" currentValue={block.config.dataUrl as string} onUpdate={(v) => onUpdate('dataUrl', v)} />;
     case 'process-chat-gpt':
     case 'process-chat-claude':
       return (
@@ -430,6 +434,42 @@ function BlockConfig({ block, onUpdate }: { block: ChainBlock; onUpdate: (key: s
     default:
       return <p className="text-xs text-mest-grey-500">No configuration needed.</p>;
   }
+}
+
+function FileUploadConfig({ accept, label, currentValue, onUpdate }: { accept: string; label: string; currentValue: string; onUpdate: (v: string) => void }) {
+  const isImage = accept.startsWith('image');
+  const hasFile = !!currentValue;
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => onUpdate(reader.result as string);
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
+  return (
+    <div className="space-y-2">
+      {hasFile && isImage && (
+        <img src={currentValue} alt="Uploaded" className="max-h-32 rounded-lg" />
+      )}
+      {hasFile && !isImage && (
+        <div className="flex items-center gap-2">
+          <audio controls src={currentValue} className="flex-1" />
+        </div>
+      )}
+      <div className="flex items-center gap-2">
+        <label className="cursor-pointer inline-flex items-center gap-2 px-3 py-2 text-sm bg-mest-grey-100 hover:bg-mest-grey-300/50 rounded-lg transition-colors">
+          {hasFile ? `Change ${label.toLowerCase()}` : label}
+          <input type="file" accept={accept} onChange={handleFile} className="hidden" />
+        </label>
+        {hasFile && (
+          <button onClick={() => onUpdate('')} className="text-xs text-mest-rust hover:underline">Remove</button>
+        )}
+      </div>
+    </div>
+  );
 }
 
 function BlockOutput({ output, type }: { output: unknown; type: ChainBlockType }) {
