@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { openai } from '@/lib/openai';
 import { ensureSeeded } from '@/lib/seed';
+
+export const maxDuration = 30;
 import { checkRateLimit, incrementUsage } from '@/lib/rate-limit';
 import { getLanguageName } from '@/lib/languages';
 import { toFile } from 'openai';

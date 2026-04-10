@@ -2,6 +2,8 @@ import { NextRequest } from 'next/server';
 import { openai } from '@/lib/openai';
 import { anthropic } from '@/lib/anthropic';
 import { ensureSeeded } from '@/lib/seed';
+
+export const maxDuration = 60;
 import { checkRateLimit, incrementUsage } from '@/lib/rate-limit';
 
 const DEFAULT_SYSTEM = 'You are a helpful assistant. Respond in the language the user is writing in.';

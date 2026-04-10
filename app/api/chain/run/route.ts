@@ -3,6 +3,9 @@ import { ensureSeeded } from '@/lib/seed';
 import { checkRateLimit, incrementUsage } from '@/lib/rate-limit';
 import { executeChain } from '@/lib/chain-executor';
 
+// Allow up to 60 seconds for chain execution (default is 10s on Vercel Hobby)
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
   await ensureSeeded();
 

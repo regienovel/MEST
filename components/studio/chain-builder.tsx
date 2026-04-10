@@ -161,8 +161,18 @@ export function ChainBuilder({ teamName, xp }: ChainBuilderProps) {
         }
       }
     } catch {
-      // ignore
+      // Connection lost or timeout
     } finally {
+      // Mark any blocks still showing "running" as errored (stream ended unexpectedly)
+      setBlockStatuses(prev => {
+        const updated = { ...prev };
+        for (const block of blocks) {
+          if (updated[block.id]?.status === 'running') {
+            updated[block.id] = { status: 'error', error: 'Timed out or connection lost. Try running again.' };
+          }
+        }
+        return updated;
+      });
       setIsRunning(false);
     }
   };
