@@ -93,15 +93,26 @@ async function executeBlock(
 
     case 'process-tts': {
       const text = typeof outputs['previous'] === 'string' ? outputs['previous'] : '';
+      if (!text.trim()) throw new Error('TTS: No text to speak');
       const voice = (block.config.voice as string) || 'nova';
-      const response = await openai.audio.speech.create({
-        model: 'tts-1',
-        voice: voice as 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer',
-        input: (text as string).slice(0, 4096),
-      });
-      const buffer = await response.arrayBuffer();
-      const base64 = Buffer.from(buffer).toString('base64');
-      return `data:audio/mpeg;base64,${base64}`;
+      const inputText = text.slice(0, 4096);
+      console.log(`[chain-tts] Generating speech: ${inputText.length} chars, voice=${voice}`);
+      try {
+        const response = await openai.audio.speech.create({
+          model: 'tts-1',
+          voice: voice as 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer',
+          input: inputText,
+        });
+        const buffer = await response.arrayBuffer();
+        const base64 = Buffer.from(buffer).toString('base64');
+        console.log(`[chain-tts] Generated audio: ${base64.length} base64 chars`);
+        return `data:audio/mpeg;base64,${base64}`;
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        const detail = (err as { status?: number; error?: { message?: string } })?.error?.message || msg;
+        console.error(`[chain-tts] Failed: ${detail}`);
+        throw new Error(`TTS failed: ${detail}`);
+      }
     }
 
     case 'process-vision-gpt': {

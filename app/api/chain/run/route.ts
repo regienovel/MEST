@@ -34,19 +34,26 @@ export async function POST(req: NextRequest) {
     async start(controller) {
       try {
         await incrementUsage(teamId, 0.02);
+        console.log(`[chain-run] Starting chain with ${blocks.length} blocks`);
 
         for await (const event of executeChain(blocks)) {
           const data = event as Record<string, unknown>;
           if (data.done) {
             data.totalDurationMs = Date.now() - startTime;
+            console.log(`[chain-run] Chain completed in ${data.totalDurationMs}ms, success=${data.success}`);
+          }
+          if (data.status === 'error') {
+            console.error(`[chain-run] Block ${data.blockId} error: ${data.error}`);
           }
           try {
             controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
           } catch { break; }
         }
       } catch (err) {
+        const errorMsg = err instanceof Error ? err.message : 'Chain execution failed';
+        console.error(`[chain-run] Fatal error: ${errorMsg}`);
         try {
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: 'Chain execution failed' })}\n\n`));
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: errorMsg })}\n\n`));
         } catch {}
       }
       controller.close();
