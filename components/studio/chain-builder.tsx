@@ -29,31 +29,92 @@ const BLOCK_PALETTE: Array<{ category: string; categoryKey: string; items: Array
   {
     category: 'Inputs', categoryKey: 'chain.blocks.inputs',
     items: [
-      { type: 'input-text', labelKey: 'chain.block.inputText', icon: Type, defaultConfig: { value: '' } },
-      { type: 'input-image', labelKey: 'chain.block.inputImage', icon: Image, defaultConfig: { dataUrl: '' } },
-      { type: 'input-audio', labelKey: 'chain.block.inputAudio', icon: AudioLines, defaultConfig: { dataUrl: '' } },
+      { type: 'input-text', labelKey: 'chain.block.inputText', icon: Type, defaultConfig: {
+        value: '',
+        _desc: 'Type or paste text here. This is the starting point of your chain. Example: a question, a message to translate, or a business scenario.',
+        _descFr: 'Tapez ou collez du texte ici. C\'est le point de départ de votre chaîne. Exemple : une question, un message à traduire, ou un scénario commercial.',
+      } },
+      { type: 'input-image', labelKey: 'chain.block.inputImage', icon: Image, defaultConfig: {
+        dataUrl: '',
+        _desc: 'Upload an image (photo, receipt, document). Click ⚙ then "Upload image" to select a file. The next block should be a Vision block to analyze it.',
+        _descFr: 'Téléversez une image (photo, reçu, document). Cliquez ⚙ puis "Upload image" pour choisir un fichier. Le bloc suivant devrait être un bloc Vision pour l\'analyser.',
+      } },
+      { type: 'input-audio', labelKey: 'chain.block.inputAudio', icon: AudioLines, defaultConfig: {
+        dataUrl: '',
+        _desc: 'Upload an audio file (mp3, wav, webm). Click ⚙ then "Upload audio" to select a file. The next block should be a Transcribe block to convert it to text.',
+        _descFr: 'Téléversez un fichier audio (mp3, wav, webm). Cliquez ⚙ puis "Upload audio" pour choisir un fichier. Le bloc suivant devrait être un bloc Transcrire pour le convertir en texte.',
+      } },
     ],
   },
   {
     category: 'Process', categoryKey: 'chain.blocks.process',
     items: [
-      { type: 'process-chat-gpt', labelKey: 'chain.block.chatGpt', icon: MessageSquare, defaultConfig: { prompt: '{{previous}}', temperature: 0.7 } },
-      { type: 'process-chat-claude', labelKey: 'chain.block.chatClaude', icon: MessageSquare, defaultConfig: { prompt: '{{previous}}', temperature: 0.7 } },
-      { type: 'process-transcribe', labelKey: 'chain.block.transcribe', icon: Mic, defaultConfig: {} },
-      { type: 'process-tts', labelKey: 'chain.block.tts', icon: Volume2, defaultConfig: { voice: 'nova' } },
-      { type: 'process-vision-gpt', labelKey: 'chain.block.visionGpt', icon: Eye, defaultConfig: { prompt: 'Describe this image in detail.' } },
-      { type: 'process-vision-claude', labelKey: 'chain.block.visionClaude', icon: Eye, defaultConfig: { prompt: 'Describe this image in detail.' } },
-      { type: 'process-translate', labelKey: 'chain.block.translate', icon: Languages, defaultConfig: { targetLanguage: 'French' } },
-      { type: 'process-extract-json', labelKey: 'chain.block.extractJson', icon: Braces, defaultConfig: { schema: '{ key: string }' } },
-      { type: 'process-summarize', labelKey: 'chain.block.summarize', icon: AlignLeft, defaultConfig: { maxWords: 50 } },
+      { type: 'process-chat-gpt', labelKey: 'chain.block.chatGpt', icon: MessageSquare, defaultConfig: {
+        prompt: '{{previous}}',
+        temperature: 0.7,
+        _desc: 'Send a prompt to GPT-4o (OpenAI). Use {{previous}} to include the output of the block above. Example: "Summarize this: {{previous}}" or "Translate to Yoruba: {{previous}}"',
+        _descFr: 'Envoyez un prompt à GPT-4o (OpenAI). Utilisez {{previous}} pour inclure la sortie du bloc précédent. Exemple : "Résume ceci : {{previous}}" ou "Traduis en yoruba : {{previous}}"',
+      } },
+      { type: 'process-chat-claude', labelKey: 'chain.block.chatClaude', icon: MessageSquare, defaultConfig: {
+        prompt: '{{previous}}',
+        temperature: 0.7,
+        _desc: 'Send a prompt to Claude (Anthropic). Use {{previous}} for the previous block\'s output. Great for getting a second opinion or critique after a GPT block.',
+        _descFr: 'Envoyez un prompt à Claude (Anthropic). Utilisez {{previous}} pour la sortie du bloc précédent. Idéal pour obtenir un second avis ou une critique après un bloc GPT.',
+      } },
+      { type: 'process-transcribe', labelKey: 'chain.block.transcribe', icon: Mic, defaultConfig: {
+        _desc: 'Converts audio to text using OpenAI Whisper. Place this after an Audio Input block. Auto-detects the language — works best with English, French, Spanish. May struggle with Twi, Yoruba, Wolof.',
+        _descFr: 'Convertit l\'audio en texte avec OpenAI Whisper. Placez-le après un bloc Entrée Audio. Détecte automatiquement la langue — fonctionne mieux en anglais, français, espagnol. Peut avoir du mal avec le twi, le yoruba, le wolof.',
+      } },
+      { type: 'process-tts', labelKey: 'chain.block.tts', icon: Volume2, defaultConfig: {
+        voice: 'nova',
+        _desc: 'Converts text to spoken audio using OpenAI TTS. Choose a voice: alloy, echo, fable, onyx, nova, shimmer. Works well with English, French, Spanish, Portuguese. Place a Display Audio block after this.',
+        _descFr: 'Convertit le texte en audio parlé avec OpenAI TTS. Choisissez une voix : alloy, echo, fable, onyx, nova, shimmer. Fonctionne bien en anglais, français, espagnol, portugais. Placez un bloc Lire Audio après.',
+      } },
+      { type: 'process-vision-gpt', labelKey: 'chain.block.visionGpt', icon: Eye, defaultConfig: {
+        prompt: 'Describe this image in detail.',
+        _desc: 'GPT-4o analyzes an image. Place this after an Image Upload block. Write a prompt telling it what to look for. Example: "What products are in this market photo? Estimate prices in Cedis."',
+        _descFr: 'GPT-4o analyse une image. Placez-le après un bloc Image. Écrivez un prompt lui disant quoi chercher. Exemple : "Quels produits sont dans cette photo de marché ? Estimez les prix en Cedis."',
+      } },
+      { type: 'process-vision-claude', labelKey: 'chain.block.visionClaude', icon: Eye, defaultConfig: {
+        prompt: 'Describe this image in detail.',
+        _desc: 'Claude analyzes an image. Place this after an Image Upload block. Write a prompt for what to analyze. Try using this alongside Vision (GPT) to compare how two AI models see the same image differently.',
+        _descFr: 'Claude analyse une image. Placez-le après un bloc Image. Écrivez un prompt pour l\'analyse. Essayez-le à côté de Vision (GPT) pour comparer comment deux modèles voient la même image différemment.',
+      } },
+      { type: 'process-translate', labelKey: 'chain.block.translate', icon: Languages, defaultConfig: {
+        targetLanguage: 'French',
+        _desc: 'Translates the previous block\'s text to another language. Type the language name: French, Twi, Yoruba, Hausa, Wolof, Spanish, etc. Uses GPT-4o. Accuracy is higher for major languages.',
+        _descFr: 'Traduit le texte du bloc précédent dans une autre langue. Tapez le nom de la langue : français, twi, yoruba, haoussa, wolof, espagnol, etc. Utilise GPT-4o. La précision est meilleure pour les langues principales.',
+      } },
+      { type: 'process-extract-json', labelKey: 'chain.block.extractJson', icon: Braces, defaultConfig: {
+        schema: '{ key: string }',
+        _desc: 'Extracts structured data from text into JSON format. Define a schema like: { name: string, price: number, currency: string }. Useful for turning messy text into clean, organized data.',
+        _descFr: 'Extrait des données structurées du texte en format JSON. Définissez un schéma comme : { nom: string, prix: number, devise: string }. Utile pour transformer du texte brut en données propres et organisées.',
+      } },
+      { type: 'process-summarize', labelKey: 'chain.block.summarize', icon: AlignLeft, defaultConfig: {
+        maxWords: 50,
+        _desc: 'Shortens the previous block\'s text to a set number of words. Set the max word count (e.g. 50). Useful for making long AI responses more concise before translating or speaking them.',
+        _descFr: 'Raccourcit le texte du bloc précédent à un nombre de mots défini. Définissez le nombre max de mots (ex : 50). Utile pour rendre les longues réponses IA plus concises avant de les traduire ou les lire.',
+      } },
     ],
   },
   {
     category: 'Outputs', categoryKey: 'chain.blocks.outputs',
     items: [
-      { type: 'output-text', labelKey: 'chain.block.outputText', icon: Monitor, defaultConfig: { label: 'Result' } },
-      { type: 'output-audio', labelKey: 'chain.block.outputAudio', icon: Headphones, defaultConfig: { label: 'Audio' } },
-      { type: 'output-image', labelKey: 'chain.block.outputImage', icon: ImageIcon, defaultConfig: { label: 'Image' } },
+      { type: 'output-text', labelKey: 'chain.block.outputText', icon: Monitor, defaultConfig: {
+        label: 'Result',
+        _desc: 'Displays the final text result. Give it a label like "Summary", "Translation", or "Analysis". Place this at the end of your chain.',
+        _descFr: 'Affiche le résultat texte final. Donnez-lui un label comme "Résumé", "Traduction", ou "Analyse". Placez-le à la fin de votre chaîne.',
+      } },
+      { type: 'output-audio', labelKey: 'chain.block.outputAudio', icon: Headphones, defaultConfig: {
+        label: 'Audio',
+        _desc: 'Plays an audio result with a built-in player. Place this after a Generate Speech (TTS) block. Give it a label like "French Summary" or "Spoken Response".',
+        _descFr: 'Lit un résultat audio avec un lecteur intégré. Placez-le après un bloc Générer la Voix (TTS). Donnez-lui un label comme "Résumé en français" ou "Réponse parlée".',
+      } },
+      { type: 'output-image', labelKey: 'chain.block.outputImage', icon: ImageIcon, defaultConfig: {
+        label: 'Image',
+        _desc: 'Displays an image result. Place this at the end if your chain produces an image output.',
+        _descFr: 'Affiche un résultat image. Placez-le à la fin si votre chaîne produit une image.',
+      } },
     ],
   },
 ];
