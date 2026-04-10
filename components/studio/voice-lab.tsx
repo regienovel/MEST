@@ -26,6 +26,8 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
   const [transcription, setTranscription] = useState('');
   const [detectedLang, setDetectedLang] = useState('');
   const [aiResponse, setAiResponse] = useState('');
+  const [gptResponse, setGptResponse] = useState('');
+  const [claudeResponse, setClaudeResponse] = useState('');
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [isResponding, setIsResponding] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -50,6 +52,8 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
       setError('');
       setTranscription('');
       setAiResponse('');
+      setGptResponse('');
+      setClaudeResponse('');
       setTtsAudioUrl(null);
       try {
         await start();
@@ -66,6 +70,8 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
     setError('');
     setTranscription('');
     setAiResponse('');
+    setGptResponse('');
+    setClaudeResponse('');
     setTtsAudioUrl(null);
     await processAudio(file);
   }
@@ -74,7 +80,6 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
     setIsTranscribing(true);
     try {
       const formData = new FormData();
-      // Use correct extension based on mime type
       const ext = audio.type?.includes('mp4') ? 'mp4' : audio.type?.includes('wav') ? 'wav' : 'webm';
       formData.append('audio', audio, `recording.${ext}`);
       const res = await fetch('/api/transcribe', { method: 'POST', body: formData });
@@ -90,7 +95,6 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
       setDetectedLang(`${data.languageName} (${data.language})`);
       setIsTranscribing(false);
 
-      // Get AI response
       await getAiResponse(data.text);
     } catch {
       setError('Transcription failed. Please try again.');
@@ -101,13 +105,15 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
   async function getAiResponse(text: string) {
     setIsResponding(true);
     setAiResponse('');
+    setGptResponse('');
+    setClaudeResponse('');
 
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: model === 'both' ? 'gpt-4o' : model,
+          model,
           messages: [{ role: 'user', content: text }],
           temperature: 0.7,
           maxTokens: 1024,
@@ -118,7 +124,9 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
       if (!reader) throw new Error('No reader');
 
       const decoder = new TextDecoder();
-      let fullResponse = '';
+      let singleResponse = '';
+      let gpt = '';
+      let claude = '';
 
       while (true) {
         const { done, value } = await reader.read();
@@ -128,9 +136,20 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
           if (!line.startsWith('data: ')) continue;
           try {
             const data = JSON.parse(line.slice(6));
-            if (data.chunk) {
-              fullResponse += data.chunk;
-              setAiResponse(fullResponse);
+            if (data.done) continue;
+            if (data.error) continue;
+
+            if (model === 'both') {
+              if (data.source === 'gpt' && data.chunk) {
+                gpt += data.chunk;
+                setGptResponse(gpt);
+              } else if (data.source === 'claude' && data.chunk) {
+                claude += data.chunk;
+                setClaudeResponse(claude);
+              }
+            } else if (data.chunk) {
+              singleResponse += data.chunk;
+              setAiResponse(singleResponse);
             }
           } catch {}
         }
@@ -138,9 +157,10 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
 
       setIsResponding(false);
 
-      // Auto-speak in continuous mode
-      if (continuousRef.current && fullResponse) {
-        await speakResponse(fullResponse);
+      // Auto-speak in continuous mode (use GPT response for 'both' mode)
+      const spokenText = model === 'both' ? gpt : singleResponse;
+      if (continuousRef.current && spokenText) {
+        await speakResponse(spokenText);
       }
     } catch {
       setError('AI response failed. Please try again.');
@@ -149,7 +169,7 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
   }
 
   async function speakResponse(text?: string) {
-    const textToSpeak = text || aiResponse;
+    const textToSpeak = text || (model === 'both' ? gptResponse : aiResponse);
     if (!textToSpeak) return;
 
     setIsSpeaking(true);
@@ -187,12 +207,17 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
       body: JSON.stringify({
         type: 'voice',
         title,
-        data: { transcription, detectedLang, aiResponse, model },
+        data: {
+          transcription,
+          detectedLang,
+          aiResponse: model === 'both' ? { gpt: gptResponse, claude: claudeResponse } : aiResponse,
+          model,
+        },
       }),
     });
   }
 
-  const hasContent = transcription || aiResponse;
+  const hasContent = transcription || aiResponse || gptResponse || claudeResponse;
 
   return (
     <div className="min-h-screen bg-mest-paper flex flex-col">
@@ -318,8 +343,58 @@ export function VoiceLab({ teamName, xp }: VoiceLabProps) {
           </div>
         )}
 
-        {/* AI Response */}
-        {(aiResponse || isResponding) && (
+        {/* AI Response — Compare Both mode */}
+        {model === 'both' && (gptResponse || claudeResponse || isResponding) && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white rounded-xl border border-mest-grey-300/60 p-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-semibold text-green-700">🤖 GPT-4o</span>
+                {gptResponse && !isResponding && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => speakResponse(gptResponse)}
+                    disabled={isSpeaking}
+                    className="gap-1.5"
+                  >
+                    <Volume2 size={14} />
+                    {t('voice.speak')}
+                  </Button>
+                )}
+              </div>
+              {isResponding && !gptResponse ? (
+                <p className="text-sm text-mest-grey-500 animate-pulse">{t('chat.thinking')}</p>
+              ) : (
+                <p className="text-sm text-mest-grey-700 whitespace-pre-wrap">{gptResponse}</p>
+              )}
+            </div>
+            <div className="bg-white rounded-xl border border-mest-grey-300/60 p-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-semibold text-purple-700">🤖 Claude Sonnet</span>
+                {claudeResponse && !isResponding && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => speakResponse(claudeResponse)}
+                    disabled={isSpeaking}
+                    className="gap-1.5"
+                  >
+                    <Volume2 size={14} />
+                    {t('voice.speak')}
+                  </Button>
+                )}
+              </div>
+              {isResponding && !claudeResponse ? (
+                <p className="text-sm text-mest-grey-500 animate-pulse">{t('chat.thinking')}</p>
+              ) : (
+                <p className="text-sm text-mest-grey-700 whitespace-pre-wrap">{claudeResponse}</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* AI Response — Single model mode */}
+        {model !== 'both' && (aiResponse || isResponding) && (
           <div className="bg-white rounded-xl border border-mest-grey-300/60 p-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-semibold text-mest-ink">
