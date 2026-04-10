@@ -246,13 +246,37 @@ export function ChainBuilder({ teamName, xp }: ChainBuilderProps) {
     }
   };
 
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
   const saveChain = async () => {
-    if (!chainName.trim()) return;
-    await fetch('/api/chain/save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: chainName, blocks }),
-    });
+    if (!chainName.trim()) {
+      setSaveMessage({ type: 'error', text: 'Please enter a chain name first.' });
+      return;
+    }
+    if (blocks.length === 0) {
+      setSaveMessage({ type: 'error', text: 'Add at least one block before saving.' });
+      return;
+    }
+    setIsSaving(true);
+    setSaveMessage(null);
+    try {
+      const res = await fetch('/api/chain/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: chainName, blocks }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        setSaveMessage({ type: 'success', text: `"${chainName}" saved to Gallery!` });
+      } else {
+        setSaveMessage({ type: 'error', text: data.error || 'Save failed. Try again.' });
+      }
+    } catch {
+      setSaveMessage({ type: 'error', text: 'Save failed. Check your connection and try again.' });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const clearChain = () => {
@@ -295,15 +319,24 @@ export function ChainBuilder({ teamName, xp }: ChainBuilderProps) {
               variant="outline"
               size="sm"
               onClick={saveChain}
-              disabled={!chainName.trim() || blocks.length === 0}
+              disabled={isSaving || !chainName.trim() || blocks.length === 0}
               className="gap-1.5"
             >
               <Save size={14} />
-              {t('chain.save')}
+              {isSaving ? t('common.loading') : t('chain.save')}
             </Button>
           </div>
         </div>
       </div>
+
+      {/* Save feedback message */}
+      {saveMessage && (
+        <div className={`px-4 py-2 text-sm text-center ${
+          saveMessage.type === 'success' ? 'bg-mest-sage-light text-mest-sage' : 'bg-mest-rust-light text-mest-rust'
+        }`}>
+          {saveMessage.text}
+        </div>
+      )}
 
       <div className="flex-1 max-w-7xl mx-auto w-full px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-6">

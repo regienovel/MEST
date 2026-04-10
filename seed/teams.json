@@ -1,46 +1,76 @@
 {
   "teams": [
     {
-      "id": "sankofa",
-      "name": "Sankofa",
-      "password": "sankofa2026",
-      "meaning": "Akan — 'go back and fetch it' — the wisdom of learning from the past"
+      "id": "ghana-jollof",
+      "name": "Ghana Jollof ⭐",
+      "password": "jollof2026",
+      "meaning": "The undisputed champion — smoky, bold, and always the best at the party"
     },
     {
-      "id": "asase",
-      "name": "Asase",
-      "password": "asase2026",
-      "meaning": "Akan — 'the earth' — grounded, rooted in place"
+      "id": "waakye",
+      "name": "Waakye",
+      "password": "waakye2026",
+      "meaning": "Ghana's beloved rice and beans — humble ingredients, extraordinary flavour"
     },
     {
-      "id": "baobab",
-      "name": "Baobab",
-      "password": "baobab2026",
-      "meaning": "The tree of life — resilient, long-lived, central to West African village life"
+      "id": "thieboudienne",
+      "name": "Thiéboudienne",
+      "password": "thieb2026",
+      "meaning": "Senegal's national dish — fish and rice that brings the whole family together"
     },
     {
-      "id": "kora",
-      "name": "Kora",
-      "password": "kora2026",
-      "meaning": "21-string West African harp — complex, melodic, built by hand"
+      "id": "fufu",
+      "name": "Fufu & Light Soup",
+      "password": "fufu2026",
+      "meaning": "The heartbeat of Ghanaian cuisine — pounded perfection in every bowl"
     },
     {
-      "id": "harmattan",
-      "name": "Harmattan",
-      "password": "harmattan2026",
-      "meaning": "The dry season wind from the Sahara — relentless, transformative"
+      "id": "egusi",
+      "name": "Egusi Soup",
+      "password": "egusi2026",
+      "meaning": "Nigeria's melon seed masterpiece — rich, thick, and full of surprises"
     },
     {
-      "id": "zawadi",
-      "name": "Zawadi",
-      "password": "zawadi2026",
-      "meaning": "Swahili — 'gift' — what you build for others"
+      "id": "kelewele",
+      "name": "Kelewele",
+      "password": "kelewele2026",
+      "meaning": "Ghana's spicy fried plantain — sweet heat on every street corner"
+    },
+    {
+      "id": "attieke",
+      "name": "Attiéké",
+      "password": "attieke2026",
+      "meaning": "Côte d'Ivoire's cassava couscous — light, tangy, and endlessly versatile"
+    },
+    {
+      "id": "suya",
+      "name": "Suya",
+      "password": "suya2026",
+      "meaning": "Nigeria's smoky spiced skewers — the original West African street food"
+    },
+    {
+      "id": "banku",
+      "name": "Banku & Tilapia",
+      "password": "banku2026",
+      "meaning": "Ghana's fermented corn dough with grilled fish — bold and unforgettable"
+    },
+    {
+      "id": "mafe",
+      "name": "Mafé",
+      "password": "mafe2026",
+      "meaning": "West Africa's groundnut stew — creamy, hearty, and loved from Senegal to Mali"
+    },
+    {
+      "id": "chinchinga",
+      "name": "Chinchinga",
+      "password": "chinchinga2026",
+      "meaning": "Ghana's grilled kebab — charcoal-kissed and impossible to eat just one"
     },
     {
       "id": "admin",
       "name": "Admin",
       "password": "mest-operator-2026",
-      "meaning": "Operator account. Use admin password during login to also set admin flag."
+      "meaning": "Operator account"
     }
   ]
 }
