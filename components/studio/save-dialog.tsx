@@ -17,14 +17,22 @@ export function SaveDialog({ open, onClose, defaultTitle, onSave }: SaveDialogPr
   const { t } = useI18n();
   const [title, setTitle] = useState(defaultTitle);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const handleSave = async () => {
     setSaving(true);
+    setError('');
+    setSuccess(false);
     try {
       await onSave(title);
-      onClose();
+      setSuccess(true);
+      setTimeout(() => {
+        onClose();
+        setSuccess(false);
+      }, 1500);
     } catch {
-      // ignore
+      setError('Save failed. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -37,14 +45,20 @@ export function SaveDialog({ open, onClose, defaultTitle, onSave }: SaveDialogPr
           <Label>{t('common.title')}</Label>
           <Input value={title} onChange={e => setTitle(e.target.value)} />
         </div>
+        {error && (
+          <p className="text-sm text-mest-rust">{error}</p>
+        )}
+        {success && (
+          <p className="text-sm text-mest-sage font-medium">Saved to Gallery!</p>
+        )}
         <div className="flex gap-2 justify-end">
           <Button variant="outline" onClick={onClose}>{t('common.cancel')}</Button>
           <Button
             onClick={handleSave}
-            disabled={saving || !title.trim()}
+            disabled={saving || !title.trim() || success}
             className="bg-mest-blue hover:bg-mest-blue/90 text-white"
           >
-            {saving ? t('common.loading') : t('common.save')}
+            {saving ? t('common.loading') : success ? '✓' : t('common.save')}
           </Button>
         </div>
       </div>
