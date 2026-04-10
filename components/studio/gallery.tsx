@@ -210,8 +210,8 @@ export function Gallery({ teamId, teamName, xp, teams }: GalleryProps) {
               <span className="flex items-center gap-1"><EyeIcon size={12} /> {detailData.views}</span>
             </div>
 
-            <div className="bg-mest-grey-50 rounded-lg p-4 text-sm whitespace-pre-wrap max-h-96 overflow-y-auto">
-              {renderDetailContent(detailData)}
+            <div className="max-h-[60vh] overflow-y-auto">
+              <DetailContent item={detailData} />
             </div>
 
             {actionMessage && (
@@ -235,8 +235,7 @@ export function Gallery({ teamId, teamName, xp, teams }: GalleryProps) {
               {detailData.type === 'chat' && (
                 <Button
                   onClick={() => {
-                    const content = renderDetailContent(detailData);
-                    navigator.clipboard.writeText(typeof content === 'string' ? content : '');
+                    navigator.clipboard.writeText(getPlainTextContent(detailData));
                     setActionMessage('Copied!');
                     setTimeout(() => setActionMessage(''), 2000);
                   }}
@@ -301,37 +300,239 @@ function GalleryCard({ item, locale, onClick, featured }: {
   );
 }
 
-function renderDetailContent(item: GalleryItem): string {
+const BLOCK_TYPE_INFO: Record<string, { label: string; color: string; emoji: string }> = {
+  'input-text': { label: 'Text Input', color: 'bg-blue-50 border-blue-200 text-blue-800', emoji: '📝' },
+  'input-image': { label: 'Image Upload', color: 'bg-amber-50 border-amber-200 text-amber-800', emoji: '📸' },
+  'input-audio': { label: 'Audio Input', color: 'bg-violet-50 border-violet-200 text-violet-800', emoji: '🎤' },
+  'process-chat-gpt': { label: 'Ask GPT-4o', color: 'bg-green-50 border-green-200 text-green-800', emoji: '🤖' },
+  'process-chat-claude': { label: 'Ask Claude', color: 'bg-purple-50 border-purple-200 text-purple-800', emoji: '🧠' },
+  'process-transcribe': { label: 'Transcribe Audio', color: 'bg-sky-50 border-sky-200 text-sky-800', emoji: '🎧' },
+  'process-tts': { label: 'Generate Speech', color: 'bg-pink-50 border-pink-200 text-pink-800', emoji: '🔊' },
+  'process-vision-gpt': { label: 'Vision (GPT)', color: 'bg-emerald-50 border-emerald-200 text-emerald-800', emoji: '👁️' },
+  'process-vision-claude': { label: 'Vision (Claude)', color: 'bg-indigo-50 border-indigo-200 text-indigo-800', emoji: '👁️' },
+  'process-translate': { label: 'Translate', color: 'bg-cyan-50 border-cyan-200 text-cyan-800', emoji: '🌍' },
+  'process-extract-json': { label: 'Extract as JSON', color: 'bg-orange-50 border-orange-200 text-orange-800', emoji: '{ }' },
+  'process-summarize': { label: 'Summarize', color: 'bg-teal-50 border-teal-200 text-teal-800', emoji: '✂️' },
+  'output-text': { label: 'Display Text', color: 'bg-slate-50 border-slate-200 text-slate-800', emoji: '📄' },
+  'output-audio': { label: 'Play Audio', color: 'bg-rose-50 border-rose-200 text-rose-800', emoji: '🎵' },
+  'output-image': { label: 'Display Image', color: 'bg-lime-50 border-lime-200 text-lime-800', emoji: '🖼️' },
+};
+
+function DetailContent({ item }: { item: GalleryItem }) {
+  const data = item.data as Record<string, unknown>;
+
+  if (item.type === 'chain') {
+    return <ChainDetailView data={data} />;
+  }
+
+  if (item.type === 'chat') {
+    return <ChatDetailView data={data} />;
+  }
+
+  if (item.type === 'voice') {
+    return <VoiceDetailView data={data} />;
+  }
+
+  if (item.type === 'vision') {
+    return <VisionDetailView data={data} />;
+  }
+
+  return <pre className="text-xs text-mest-grey-500">{JSON.stringify(data, null, 2)}</pre>;
+}
+
+function ChainDetailView({ data }: { data: Record<string, unknown> }) {
+  const blocks = (data.blocks || []) as Array<{ id: string; type: string; config: Record<string, unknown> }>;
+
+  return (
+    <div className="space-y-3">
+      {/* Pipeline visualization */}
+      <div className="bg-gradient-to-br from-mest-blue-light to-mest-teal-light rounded-xl p-5">
+        <h4 className="text-xs uppercase tracking-wider text-mest-blue font-semibold mb-4">Pipeline Flow</h4>
+        <div className="space-y-2">
+          {blocks.map((block, i) => {
+            const info = BLOCK_TYPE_INFO[block.type] || { label: block.type, color: 'bg-gray-50 border-gray-200 text-gray-800', emoji: '⚙️' };
+            const desc = block.config._desc as string || '';
+            const prompt = (block.config.prompt || block.config.value || '') as string;
+            const hasPrompt = prompt && prompt.length > 0;
+
+            return (
+              <div key={block.id || i}>
+                <div className={`border rounded-lg p-3 ${info.color}`}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{info.emoji}</span>
+                    <span className="font-semibold text-sm">Step {i + 1}: {info.label}</span>
+                    {!!block.config.targetLanguage && (
+                      <span className="text-xs bg-white/60 px-2 py-0.5 rounded-full">→ {String(block.config.targetLanguage)}</span>
+                    )}
+                    {!!block.config.voice && (
+                      <span className="text-xs bg-white/60 px-2 py-0.5 rounded-full">voice: {String(block.config.voice)}</span>
+                    )}
+                    {!!block.config.maxWords && (
+                      <span className="text-xs bg-white/60 px-2 py-0.5 rounded-full">{String(block.config.maxWords)} words</span>
+                    )}
+                  </div>
+                  {desc && (
+                    <p className="text-xs mt-1 opacity-75 italic">{desc}</p>
+                  )}
+                  {hasPrompt && (
+                    <div className="mt-2 bg-white/50 rounded p-2 text-xs font-mono whitespace-pre-wrap max-h-24 overflow-y-auto">
+                      {prompt.length > 200 ? prompt.slice(0, 200) + '...' : prompt}
+                    </div>
+                  )}
+                </div>
+                {i < blocks.length - 1 && (
+                  <div className="flex justify-center py-1">
+                    <div className="w-0.5 h-4 bg-mest-blue/30 rounded-full" />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Summary stats */}
+      <div className="flex gap-3 text-xs text-mest-grey-500">
+        <span className="bg-mest-grey-100 px-2 py-1 rounded">{blocks.length} blocks</span>
+        <span className="bg-mest-grey-100 px-2 py-1 rounded">
+          {blocks.filter(b => b.type.startsWith('process-')).length} AI steps
+        </span>
+        {blocks.some(b => b.type.includes('gpt')) && <span className="bg-green-50 text-green-700 px-2 py-1 rounded">GPT-4o</span>}
+        {blocks.some(b => b.type.includes('claude')) && <span className="bg-purple-50 text-purple-700 px-2 py-1 rounded">Claude</span>}
+        {blocks.some(b => b.type === 'process-tts') && <span className="bg-pink-50 text-pink-700 px-2 py-1 rounded">TTS</span>}
+        {blocks.some(b => b.type === 'process-transcribe') && <span className="bg-sky-50 text-sky-700 px-2 py-1 rounded">Whisper</span>}
+      </div>
+    </div>
+  );
+}
+
+function ChatDetailView({ data }: { data: Record<string, unknown> }) {
+  const messages = (data.messages || data.gptMessages || []) as Array<{ role: string; content: string }>;
+  const model = data.model as string || 'gpt-4o';
+  const systemPrompt = data.systemPrompt as string;
+
+  return (
+    <div className="space-y-3">
+      {systemPrompt && (
+        <div className="bg-mest-gold-light border border-mest-gold/30 rounded-lg p-3">
+          <span className="text-xs font-semibold text-mest-gold">System Prompt</span>
+          <p className="text-sm text-mest-grey-700 mt-1">{systemPrompt}</p>
+        </div>
+      )}
+      <div className="text-xs text-mest-grey-500 mb-2">Model: {model === 'both' ? 'Compare Mode (GPT-4o + Claude)' : model === 'gpt-4o' ? 'GPT-4o' : 'Claude Sonnet'}</div>
+      {messages.map((msg, i) => (
+        <div key={i} className={`rounded-lg p-3 ${msg.role === 'user' ? 'bg-mest-blue text-white ml-8' : 'bg-white border border-mest-grey-300/60 mr-8'}`}>
+          <span className="text-xs font-semibold opacity-70">{msg.role === 'user' ? 'You' : '🤖 AI'}</span>
+          <p className="text-sm mt-1 whitespace-pre-wrap">{msg.content}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function VoiceDetailView({ data }: { data: Record<string, unknown> }) {
+  const transcription = data.transcription as string;
+  const detectedLang = data.detectedLang as string;
+  const aiResponse = data.aiResponse;
+  const model = data.model as string || 'gpt-4o';
+
+  return (
+    <div className="space-y-3">
+      <div className="bg-mest-teal-light border border-mest-teal/30 rounded-lg p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-lg">🎤</span>
+          <span className="text-xs font-semibold text-mest-teal">Transcription</span>
+          {detectedLang && <span className="text-xs bg-white/60 px-2 py-0.5 rounded-full">{detectedLang}</span>}
+        </div>
+        <p className="text-sm text-mest-grey-700">{transcription || 'No transcription'}</p>
+      </div>
+      <div className="bg-white border border-mest-grey-300/60 rounded-lg p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-lg">🤖</span>
+          <span className="text-xs font-semibold text-mest-ink">{model === 'gpt-4o' ? 'GPT-4o' : model === 'claude-sonnet' ? 'Claude' : 'AI'} Response</span>
+        </div>
+        {typeof aiResponse === 'string' ? (
+          <p className="text-sm text-mest-grey-700 whitespace-pre-wrap">{aiResponse}</p>
+        ) : aiResponse && typeof aiResponse === 'object' ? (
+          <div className="space-y-2">
+            {(aiResponse as Record<string, string>).gpt && (
+              <div className="bg-green-50 rounded p-2">
+                <span className="text-xs font-semibold text-green-700">GPT-4o</span>
+                <p className="text-sm mt-1">{(aiResponse as Record<string, string>).gpt}</p>
+              </div>
+            )}
+            {(aiResponse as Record<string, string>).claude && (
+              <div className="bg-purple-50 rounded p-2">
+                <span className="text-xs font-semibold text-purple-700">Claude</span>
+                <p className="text-sm mt-1">{(aiResponse as Record<string, string>).claude}</p>
+              </div>
+            )}
+          </div>
+        ) : <p className="text-sm text-mest-grey-500">No response</p>}
+      </div>
+    </div>
+  );
+}
+
+function VisionDetailView({ data }: { data: Record<string, unknown> }) {
+  const prompt = data.prompt as string;
+  const response = data.response;
+  const imageCount = data.imageCount as number;
+
+  return (
+    <div className="space-y-3">
+      {imageCount && (
+        <div className="text-xs text-mest-grey-500">{imageCount} image{imageCount > 1 ? 's' : ''} analyzed</div>
+      )}
+      <div className="bg-mest-gold-light border border-mest-gold/30 rounded-lg p-3">
+        <span className="text-xs font-semibold text-mest-gold">Prompt</span>
+        <p className="text-sm text-mest-grey-700 mt-1">{prompt}</p>
+      </div>
+      {typeof response === 'string' ? (
+        <div className="bg-white border border-mest-grey-300/60 rounded-lg p-4">
+          <p className="text-sm text-mest-grey-700 whitespace-pre-wrap">{response}</p>
+        </div>
+      ) : response && typeof response === 'object' ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {(response as Record<string, string>).gpt && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <span className="text-xs font-semibold text-green-700">GPT-4o Vision</span>
+              <p className="text-sm mt-2 whitespace-pre-wrap">{(response as Record<string, string>).gpt}</p>
+            </div>
+          )}
+          {(response as Record<string, string>).claude && (
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+              <span className="text-xs font-semibold text-purple-700">Claude Vision</span>
+              <p className="text-sm mt-2 whitespace-pre-wrap">{(response as Record<string, string>).claude}</p>
+            </div>
+          )}
+        </div>
+      ) : <p className="text-sm text-mest-grey-500">No response</p>}
+    </div>
+  );
+}
+
+function getPlainTextContent(item: GalleryItem): string {
   const data = item.data as Record<string, unknown>;
 
   if (item.type === 'chat') {
     const messages = (data.messages || data.gptMessages || []) as Array<{ role: string; content: string }>;
     return messages.map(m => `${m.role === 'user' ? 'User' : 'AI'}: ${m.content}`).join('\n\n');
   }
-
   if (item.type === 'voice') {
-    const parts: string[] = [];
-    if (data.transcription) parts.push(`Transcription: ${data.transcription}`);
-    if (data.aiResponse) parts.push(`AI Response: ${data.aiResponse}`);
-    return parts.join('\n\n') || 'No content available';
+    return `Transcription: ${data.transcription || ''}\n\nAI Response: ${typeof data.aiResponse === 'string' ? data.aiResponse : JSON.stringify(data.aiResponse)}`;
   }
-
   if (item.type === 'vision') {
-    const parts: string[] = [];
-    if (data.prompt) parts.push(`Prompt: ${data.prompt}`);
-    if (typeof data.response === 'string') parts.push(`Response: ${data.response}`);
-    else if (data.response && typeof data.response === 'object') {
-      const r = data.response as Record<string, string>;
-      if (r.gpt) parts.push(`GPT-4o: ${r.gpt}`);
-      if (r.claude) parts.push(`Claude: ${r.claude}`);
-    }
-    return parts.join('\n\n') || 'No content available';
+    return `Prompt: ${data.prompt || ''}\n\nResponse: ${typeof data.response === 'string' ? data.response : JSON.stringify(data.response)}`;
   }
-
   if (item.type === 'chain') {
     const blocks = (data.blocks || []) as Array<{ type: string; config: Record<string, unknown> }>;
-    return blocks.map((b, i) => `${i + 1}. ${b.type}`).join('\n') || 'No blocks';
+    return blocks.map((b, i) => {
+      const info = BLOCK_TYPE_INFO[b.type];
+      const label = info?.label || b.type;
+      const desc = b.config._desc || '';
+      return `Step ${i + 1}: ${label}${desc ? ` — ${desc}` : ''}`;
+    }).join('\n');
   }
-
   return JSON.stringify(data, null, 2);
 }
