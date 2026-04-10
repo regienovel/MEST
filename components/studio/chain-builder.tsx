@@ -138,11 +138,19 @@ export function ChainBuilder({ teamName, xp }: ChainBuilderProps) {
       if (!reader) throw new Error('No reader');
 
       const decoder = new TextDecoder();
+      let buffer = '';
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        const lines = decoder.decode(value, { stream: true }).split('\n');
-        for (const line of lines) {
+        buffer += decoder.decode(value, { stream: true });
+
+        // Process complete SSE messages (terminated by \n\n)
+        const parts = buffer.split('\n\n');
+        // Keep the last part as it may be incomplete
+        buffer = parts.pop() || '';
+
+        for (const part of parts) {
+          const line = part.trim();
           if (!line.startsWith('data: ')) continue;
           try {
             const data = JSON.parse(line.slice(6));
