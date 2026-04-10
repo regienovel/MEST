@@ -4,14 +4,15 @@
       "id": "template-market-whisperer",
       "name": "Market Whisperer",
       "nameFr": "Le Murmure du Marché",
-      "description": "Upload a market photo. Get products, prices, credit signals, and a Twi translation.",
-      "descriptionFr": "Téléversez une photo de marché. Obtenez produits, prix, signaux de crédit, et une traduction en twi.",
+      "description": "Upload a market photo. Get products, prices, credit signals, and a French voice summary.",
+      "descriptionFr": "Téléversez une photo de marché. Obtenez produits, prix, signaux de crédit, et un résumé vocal en français.",
       "blocks": [
         { "id": "b1", "type": "input-image", "config": { "dataUrl": "", "_desc": "Upload a photo of a West African market. This image will be analyzed by AI.", "_descFr": "Téléversez une photo d'un marché ouest-africain. Cette image sera analysée par l'IA." } },
         { "id": "b2", "type": "process-vision-gpt", "config": { "prompt": "You are a West African market intelligence analyst. Identify every product visible in this image, estimate prices in local currency (Naira, Cedi, CFA), and flag any signs of informal credit or bargaining. Be specific. If you are unsure about a product's identity or price, say so.", "_desc": "GPT-4o Vision analyzes the market photo — identifies products, estimates prices in Naira/Cedi/CFA, and spots signs of informal credit.", "_descFr": "GPT-4o Vision analyse la photo du marché — identifie les produits, estime les prix en Naira/Cedi/CFA, et repère les signes de crédit informel." } },
         { "id": "b3", "type": "process-summarize", "config": { "maxWords": 80, "_desc": "Condenses the full analysis into a short 80-word summary using GPT-4o.", "_descFr": "Condense l'analyse complète en un résumé court de 80 mots avec GPT-4o." } },
-        { "id": "b4", "type": "process-translate", "config": { "targetLanguage": "Twi", "_desc": "Translates the summary from English to Twi using GPT-4o. Note: AI translation of Twi may have errors — a teaching moment about AI language bias toward Western languages.", "_descFr": "Traduit le résumé de l'anglais vers le twi avec GPT-4o. Note : la traduction IA du twi peut contenir des erreurs — un moment pédagogique sur le biais linguistique de l'IA envers les langues occidentales." } },
-        { "id": "b5", "type": "output-text", "config": { "label": "Market summary in Twi", "_desc": "Displays the Twi translation of the market analysis. Compare it with the English summary above — how accurate is the Twi?", "_descFr": "Affiche la traduction twi de l'analyse du marché. Comparez-la avec le résumé anglais ci-dessus — le twi est-il précis ?" } }
+        { "id": "b4", "type": "process-translate", "config": { "targetLanguage": "French", "_desc": "Translates the summary from English to French using GPT-4o.", "_descFr": "Traduit le résumé de l'anglais vers le français avec GPT-4o." } },
+        { "id": "b5", "type": "process-tts", "config": { "voice": "nova", "_desc": "Converts the French text to spoken audio using OpenAI Text-to-Speech (voice: nova).", "_descFr": "Convertit le texte français en audio parlé avec OpenAI Text-to-Speech (voix : nova)." } },
+        { "id": "b6", "type": "output-audio", "config": { "label": "Market summary in French", "_desc": "Plays the final audio — a spoken French summary of the market photo.", "_descFr": "Lit l'audio final — un résumé parlé en français de la photo du marché." } }
       ]
     },
     {
