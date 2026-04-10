@@ -53,8 +53,13 @@ export async function POST(req: NextRequest) {
       languageName: getLanguageName(language),
       durationSeconds: (transcription as unknown as { duration?: number }).duration || 0,
     });
-  } catch (err) {
-    console.error('[transcribe] error:', err);
-    return NextResponse.json({ ok: false, error: 'Transcription failed. Please try again.' }, { status: 500 });
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    const errorDetails = (err as { status?: number; error?: { message?: string } })?.error?.message || errorMessage;
+    console.error('[transcribe] error:', errorDetails, err);
+    return NextResponse.json({
+      ok: false,
+      error: `Transcription failed: ${errorDetails}`
+    }, { status: 500 });
   }
 }
