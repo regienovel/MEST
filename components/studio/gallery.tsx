@@ -4,7 +4,7 @@ import { useI18n } from '@/lib/i18n-context';
 import { TopBar } from './top-bar';
 import { Button } from '@/components/ui/button';
 import { NativeSelect } from '@/components/ui/native-select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Modal } from '@/components/ui/modal';
 import { ArrowLeft, MessageSquare, Mic, Eye, Workflow, Star, GitFork, Eye as EyeIcon, Copy } from 'lucide-react';
 import Link from 'next/link';
 
@@ -168,57 +168,57 @@ export function Gallery({ teamName, xp, teams }: GalleryProps) {
       </div>
 
       {/* Detail modal */}
-      <Dialog open={!!selectedItem} onOpenChange={() => { setSelectedItem(null); setDetailData(null); }}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="font-serif">{selectedItem?.title}</DialogTitle>
-          </DialogHeader>
-          {detailData && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 text-sm text-mest-grey-500">
-                <span className="px-2 py-0.5 bg-mest-blue-light text-mest-blue rounded-full text-xs font-medium">
-                  {detailData.teamName}
-                </span>
-                <span>{detailData.type}</span>
-                <span>{timeAgo(detailData.createdAt, locale)}</span>
-                <span className="flex items-center gap-1"><EyeIcon size={12} /> {detailData.views}</span>
-              </div>
-
-              <div className="bg-mest-grey-50 rounded-lg p-4 text-sm whitespace-pre-wrap max-h-96 overflow-y-auto">
-                {renderDetailContent(detailData)}
-              </div>
-
-              <div className="flex gap-2 justify-end">
-                {detailData.type === 'chain' && (
-                  <Button
-                    onClick={() => handleFork(detailData.id)}
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5"
-                  >
-                    <GitFork size={14} />
-                    {t('gallery.fork')}
-                  </Button>
-                )}
-                {detailData.type === 'chat' && (
-                  <Button
-                    onClick={() => {
-                      const content = renderDetailContent(detailData);
-                      navigator.clipboard.writeText(typeof content === 'string' ? content : '');
-                    }}
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5"
-                  >
-                    <Copy size={14} />
-                    {t('gallery.detail.copyContent')}
-                  </Button>
-                )}
-              </div>
+      <Modal
+        open={!!selectedItem}
+        onClose={() => { setSelectedItem(null); setDetailData(null); }}
+        title={selectedItem?.title}
+        className="max-w-2xl"
+      >
+        {detailData && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 text-sm text-mest-grey-500">
+              <span className="px-2 py-0.5 bg-mest-blue-light text-mest-blue rounded-full text-xs font-medium">
+                {detailData.teamName}
+              </span>
+              <span>{detailData.type}</span>
+              <span>{timeAgo(detailData.createdAt, locale)}</span>
+              <span className="flex items-center gap-1"><EyeIcon size={12} /> {detailData.views}</span>
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+
+            <div className="bg-mest-grey-50 rounded-lg p-4 text-sm whitespace-pre-wrap max-h-96 overflow-y-auto">
+              {renderDetailContent(detailData)}
+            </div>
+
+            <div className="flex gap-2 justify-end">
+              {detailData.type === 'chain' && (
+                <Button
+                  onClick={() => handleFork(detailData.id)}
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5"
+                >
+                  <GitFork size={14} />
+                  {t('gallery.fork')}
+                </Button>
+              )}
+              {detailData.type === 'chat' && (
+                <Button
+                  onClick={() => {
+                    const content = renderDetailContent(detailData);
+                    navigator.clipboard.writeText(typeof content === 'string' ? content : '');
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5"
+                >
+                  <Copy size={14} />
+                  {t('gallery.detail.copyContent')}
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }
