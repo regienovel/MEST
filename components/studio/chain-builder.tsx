@@ -315,6 +315,13 @@ export function ChainBuilder({ teamName, xp }: ChainBuilderProps) {
                       </div>
                     </div>
 
+                    {/* Block description from template */}
+                    {(block.config._desc as string) && (
+                      <div className="px-4 py-2 text-xs text-mest-grey-500 italic bg-mest-grey-50/50 border-t border-mest-grey-300/30">
+                        {locale === 'fr' && block.config._descFr ? String(block.config._descFr) : String(block.config._desc)}
+                      </div>
+                    )}
+
                     {expandedBlock === block.id && (
                       <div className="border-t border-mest-grey-300/60 px-4 py-3 space-y-2">
                         <BlockConfig block={block} onUpdate={(key, val) => updateConfig(block.id, key, val)} />

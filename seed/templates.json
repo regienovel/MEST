@@ -7,12 +7,12 @@
       "description": "Upload a market photo. Get products, prices, credit signals, and a Twi voice summary.",
       "descriptionFr": "Téléversez une photo de marché. Obtenez produits, prix, signaux de crédit, et un résumé vocal en twi.",
       "blocks": [
-        { "id": "b1", "type": "input-image", "config": { "dataUrl": "" } },
-        { "id": "b2", "type": "process-vision-gpt", "config": { "prompt": "You are a West African market intelligence analyst. Identify every product visible in this image, estimate prices in local currency (Naira, Cedi, CFA), and flag any signs of informal credit or bargaining. Be specific. If you are unsure about a product's identity or price, say so." } },
-        { "id": "b3", "type": "process-summarize", "config": { "maxWords": 80 } },
-        { "id": "b4", "type": "process-translate", "config": { "targetLanguage": "Twi" } },
-        { "id": "b5", "type": "process-tts", "config": { "voice": "nova" } },
-        { "id": "b6", "type": "output-audio", "config": { "label": "Market summary in Twi" } }
+        { "id": "b1", "type": "input-image", "config": { "dataUrl": "", "_desc": "Upload a photo of a West African market. This image will be analyzed by AI.", "_descFr": "Téléversez une photo d'un marché ouest-africain. Cette image sera analysée par l'IA." } },
+        { "id": "b2", "type": "process-vision-gpt", "config": { "prompt": "You are a West African market intelligence analyst. Identify every product visible in this image, estimate prices in local currency (Naira, Cedi, CFA), and flag any signs of informal credit or bargaining. Be specific. If you are unsure about a product's identity or price, say so.", "_desc": "GPT-4o Vision analyzes the market photo — identifies products, estimates prices in Naira/Cedi/CFA, and spots signs of informal credit.", "_descFr": "GPT-4o Vision analyse la photo du marché — identifie les produits, estime les prix en Naira/Cedi/CFA, et repère les signes de crédit informel." } },
+        { "id": "b3", "type": "process-summarize", "config": { "maxWords": 80, "_desc": "Condenses the full analysis into a short 80-word summary using GPT-4o.", "_descFr": "Condense l'analyse complète en un résumé court de 80 mots avec GPT-4o." } },
+        { "id": "b4", "type": "process-translate", "config": { "targetLanguage": "Twi", "_desc": "Translates the summary from English to Twi using GPT-4o. Note: AI translation of Twi may have errors — a teaching moment about language bias.", "_descFr": "Traduit le résumé de l'anglais vers le twi avec GPT-4o. Note : la traduction IA du twi peut contenir des erreurs — un moment pédagogique sur le biais linguistique." } },
+        { "id": "b5", "type": "process-tts", "config": { "voice": "nova", "_desc": "Converts the Twi text to spoken audio using OpenAI Text-to-Speech (voice: nova). TTS may struggle with Twi pronunciation.", "_descFr": "Convertit le texte twi en audio parlé avec OpenAI Text-to-Speech (voix : nova). Le TTS peut avoir du mal avec la prononciation twi." } },
+        { "id": "b6", "type": "output-audio", "config": { "label": "Market summary in Twi", "_desc": "Plays the final audio — a spoken Twi summary of the market photo.", "_descFr": "Lit l'audio final — un résumé parlé en twi de la photo du marché." } }
       ]
     },
     {
@@ -22,10 +22,10 @@
       "description": "Ask GPT and Claude the same question. Watch Claude critique GPT's answer.",
       "descriptionFr": "Posez la même question à GPT et Claude. Regardez Claude critiquer la réponse de GPT.",
       "blocks": [
-        { "id": "b1", "type": "input-text", "config": { "value": "What is the most important lesson for West African entrepreneurs building AI products today?" } },
-        { "id": "b2", "type": "process-chat-gpt", "config": { "prompt": "{{previous}}\n\nAnswer clearly and specifically. Take a position. Do not hedge." } },
-        { "id": "b3", "type": "process-chat-claude", "config": { "prompt": "Here is GPT-4o's answer to a question.\n\nThe question was: {{block_1_output}}\n\nGPT-4o said:\n{{block_2_output}}\n\nAs Claude, what are the three biggest weaknesses in GPT-4o's answer? Be specific and cite passages." } },
-        { "id": "b4", "type": "output-text", "config": { "label": "Claude's critique" } }
+        { "id": "b1", "type": "input-text", "config": { "value": "What is the most important lesson for West African entrepreneurs building AI products today?", "_desc": "The starting question. You can edit this to ask anything you want.", "_descFr": "La question de départ. Vous pouvez la modifier pour poser n'importe quelle question." } },
+        { "id": "b2", "type": "process-chat-gpt", "config": { "prompt": "{{previous}}\n\nAnswer clearly and specifically. Take a position. Do not hedge.", "_desc": "GPT-4o answers the question first. It's told to be direct and take a clear position.", "_descFr": "GPT-4o répond en premier à la question. On lui demande d'être direct et de prendre position." } },
+        { "id": "b3", "type": "process-chat-claude", "config": { "prompt": "Here is GPT-4o's answer to a question.\n\nThe question was: {{block_1_output}}\n\nGPT-4o said:\n{{block_2_output}}\n\nAs Claude, what are the three biggest weaknesses in GPT-4o's answer? Be specific and cite passages.", "_desc": "Claude reads GPT-4o's answer and critiques it — finding the 3 biggest weaknesses. This shows how different AI models disagree.", "_descFr": "Claude lit la réponse de GPT-4o et la critique — en trouvant les 3 plus grandes faiblesses. Cela montre comment différents modèles d'IA sont en désaccord." } },
+        { "id": "b4", "type": "output-text", "config": { "label": "Claude's critique", "_desc": "Displays Claude's critique of GPT-4o's answer.", "_descFr": "Affiche la critique de Claude sur la réponse de GPT-4o." } }
       ]
     },
     {
@@ -35,11 +35,11 @@
       "description": "Record in any language. Hear it transcribed, translated to French, and spoken back.",
       "descriptionFr": "Enregistrez dans n'importe quelle langue. Entendez-la transcrite, traduite en français et lue à voix haute.",
       "blocks": [
-        { "id": "b1", "type": "input-audio", "config": { "dataUrl": "" } },
-        { "id": "b2", "type": "process-transcribe", "config": {} },
-        { "id": "b3", "type": "process-translate", "config": { "targetLanguage": "French" } },
-        { "id": "b4", "type": "process-tts", "config": { "voice": "alloy" } },
-        { "id": "b5", "type": "output-audio", "config": { "label": "French translation spoken" } }
+        { "id": "b1", "type": "input-audio", "config": { "dataUrl": "", "_desc": "Upload an audio recording in any language. The AI will transcribe, translate, and speak it back.", "_descFr": "Téléversez un enregistrement audio dans n'importe quelle langue. L'IA va le transcrire, le traduire et le relire." } },
+        { "id": "b2", "type": "process-transcribe", "config": { "_desc": "OpenAI Whisper converts the audio to text. It auto-detects the language — but may struggle with some African languages.", "_descFr": "OpenAI Whisper convertit l'audio en texte. Il détecte automatiquement la langue — mais peut avoir du mal avec certaines langues africaines." } },
+        { "id": "b3", "type": "process-translate", "config": { "targetLanguage": "French", "_desc": "GPT-4o translates the transcribed text into French.", "_descFr": "GPT-4o traduit le texte transcrit en français." } },
+        { "id": "b4", "type": "process-tts", "config": { "voice": "alloy", "_desc": "OpenAI TTS converts the French text to spoken audio (voice: alloy).", "_descFr": "OpenAI TTS convertit le texte français en audio parlé (voix : alloy)." } },
+        { "id": "b5", "type": "output-audio", "config": { "label": "French translation spoken", "_desc": "Plays the French translation as audio.", "_descFr": "Lit la traduction française en audio." } }
       ]
     },
     {
@@ -49,10 +49,10 @@
       "description": "Upload a handwritten receipt. Get structured data and flagged anomalies.",
       "descriptionFr": "Téléversez un reçu manuscrit. Obtenez des données structurées et les anomalies signalées.",
       "blocks": [
-        { "id": "b1", "type": "input-image", "config": { "dataUrl": "" } },
-        { "id": "b2", "type": "process-vision-gpt", "config": { "prompt": "This is a receipt or informal ledger. Extract every line item, quantity, and price. Compute the total. Flag any anomalies or items you cannot read clearly. Be thorough." } },
-        { "id": "b3", "type": "process-extract-json", "config": { "schema": "{ items: [{ name: string, quantity: number, unitPrice: number, total: number }], subtotal: number, total: number, currency: string, anomalies: string[] }" } },
-        { "id": "b4", "type": "output-text", "config": { "label": "Extracted data" } }
+        { "id": "b1", "type": "input-image", "config": { "dataUrl": "", "_desc": "Upload a photo of a handwritten receipt, invoice, or informal ledger.", "_descFr": "Téléversez une photo d'un reçu manuscrit, d'une facture ou d'un registre informel." } },
+        { "id": "b2", "type": "process-vision-gpt", "config": { "prompt": "This is a receipt or informal ledger. Extract every line item, quantity, and price. Compute the total. Flag any anomalies or items you cannot read clearly. Be thorough.", "_desc": "GPT-4o Vision reads the receipt — extracts line items, quantities, prices, and flags anything unclear.", "_descFr": "GPT-4o Vision lit le reçu — extrait les articles, quantités, prix, et signale tout ce qui est flou." } },
+        { "id": "b3", "type": "process-extract-json", "config": { "schema": "{ items: [{ name: string, quantity: number, unitPrice: number, total: number }], subtotal: number, total: number, currency: string, anomalies: string[] }", "_desc": "GPT-4o structures the raw text into clean JSON data — items, prices, totals, and anomalies.", "_descFr": "GPT-4o structure le texte brut en données JSON propres — articles, prix, totaux et anomalies." } },
+        { "id": "b4", "type": "output-text", "config": { "label": "Extracted data", "_desc": "Displays the structured JSON data extracted from the receipt.", "_descFr": "Affiche les données JSON structurées extraites du reçu." } }
       ]
     },
     {
@@ -62,11 +62,11 @@
       "description": "GPT proposes a business idea. Claude critiques it. GPT rebuts. A three-step intellectual duel.",
       "descriptionFr": "GPT propose une idée. Claude la critique. GPT répond. Un duel intellectuel en trois étapes.",
       "blocks": [
-        { "id": "b1", "type": "input-text", "config": { "value": "A young entrepreneur in Abidjan wants to start an AI-powered business serving informal market traders. What business should they build and why?" } },
-        { "id": "b2", "type": "process-chat-gpt", "config": { "prompt": "{{previous}}\n\nBe specific. Name the product, the customer, and the first revenue stream. Avoid generic advice." } },
-        { "id": "b3", "type": "process-chat-claude", "config": { "prompt": "A business strategist has proposed this idea:\n\n{{block_2_output}}\n\nWhat are the three biggest reasons this will fail in a West African context? Be specific and brutal. Focus on local market realities most Western analysts miss." } },
-        { "id": "b4", "type": "process-chat-gpt", "config": { "prompt": "Someone critiqued your business idea.\n\nYour original idea:\n{{block_2_output}}\n\nTheir critique:\n{{block_3_output}}\n\nRebut their critique. Concede any valid points. Defend the rest." } },
-        { "id": "b5", "type": "output-text", "config": { "label": "The rebuttal" } }
+        { "id": "b1", "type": "input-text", "config": { "value": "A young entrepreneur in Abidjan wants to start an AI-powered business serving informal market traders. What business should they build and why?", "_desc": "The business scenario. Edit this to explore any business idea you want.", "_descFr": "Le scénario commercial. Modifiez-le pour explorer n'importe quelle idée d'entreprise." } },
+        { "id": "b2", "type": "process-chat-gpt", "config": { "prompt": "{{previous}}\n\nBe specific. Name the product, the customer, and the first revenue stream. Avoid generic advice.", "_desc": "Step 1: GPT-4o proposes a specific business idea with product, customer, and revenue model.", "_descFr": "Étape 1 : GPT-4o propose une idée d'entreprise spécifique avec produit, client et modèle de revenus." } },
+        { "id": "b3", "type": "process-chat-claude", "config": { "prompt": "A business strategist has proposed this idea:\n\n{{block_2_output}}\n\nWhat are the three biggest reasons this will fail in a West African context? Be specific and brutal. Focus on local market realities most Western analysts miss.", "_desc": "Step 2: Claude critiques GPT's idea — focusing on why it would fail in West Africa specifically.", "_descFr": "Étape 2 : Claude critique l'idée de GPT — en se concentrant sur pourquoi elle échouerait en Afrique de l'Ouest." } },
+        { "id": "b4", "type": "process-chat-gpt", "config": { "prompt": "Someone critiqued your business idea.\n\nYour original idea:\n{{block_2_output}}\n\nTheir critique:\n{{block_3_output}}\n\nRebut their critique. Concede any valid points. Defend the rest.", "_desc": "Step 3: GPT-4o reads Claude's critique and fights back — conceding valid points, defending the rest.", "_descFr": "Étape 3 : GPT-4o lit la critique de Claude et contre-attaque — concédant les points valides, défendant le reste." } },
+        { "id": "b5", "type": "output-text", "config": { "label": "The rebuttal", "_desc": "Displays GPT's final rebuttal to Claude's critique.", "_descFr": "Affiche la réponse finale de GPT à la critique de Claude." } }
       ]
     },
     {
@@ -76,10 +76,10 @@
       "description": "Type one message. Get it translated to 5 West African languages plus French.",
       "descriptionFr": "Tapez un message. Obtenez-le traduit en 5 langues ouest-africaines et en français.",
       "blocks": [
-        { "id": "b1", "type": "input-text", "config": { "value": "New solar charging station now open at Makola Market. Open 6am to 8pm daily. Pay only 2 cedis for a full phone charge." } },
-        { "id": "b2", "type": "process-chat-gpt", "config": { "prompt": "Translate this message into Twi, Yoruba, Wolof, Hausa, and French. Format as JSON with keys: twi, yoruba, wolof, hausa, french.\n\nMessage:\n{{previous}}" } },
-        { "id": "b3", "type": "process-extract-json", "config": { "schema": "{ twi: string, yoruba: string, wolof: string, hausa: string, french: string }" } },
-        { "id": "b4", "type": "output-text", "config": { "label": "Translations" } }
+        { "id": "b1", "type": "input-text", "config": { "value": "New solar charging station now open at Makola Market. Open 6am to 8pm daily. Pay only 2 cedis for a full phone charge.", "_desc": "The message to broadcast. Edit this to any announcement or message you want translated.", "_descFr": "Le message à diffuser. Modifiez-le pour n'importe quelle annonce que vous voulez traduire." } },
+        { "id": "b2", "type": "process-chat-gpt", "config": { "prompt": "Translate this message into Twi, Yoruba, Wolof, Hausa, and French. Format as JSON with keys: twi, yoruba, wolof, hausa, french.\n\nMessage:\n{{previous}}", "_desc": "GPT-4o translates the message into 5 languages at once. Note: accuracy varies by language — Twi and Wolof may have more errors than French.", "_descFr": "GPT-4o traduit le message en 5 langues à la fois. Note : la précision varie selon la langue — le twi et le wolof peuvent avoir plus d'erreurs que le français." } },
+        { "id": "b3", "type": "process-extract-json", "config": { "schema": "{ twi: string, yoruba: string, wolof: string, hausa: string, french: string }", "_desc": "Extracts the translations into clean structured JSON format.", "_descFr": "Extrait les traductions dans un format JSON structuré et propre." } },
+        { "id": "b4", "type": "output-text", "config": { "label": "Translations", "_desc": "Displays all 5 translations in a structured format.", "_descFr": "Affiche les 5 traductions dans un format structuré." } }
       ]
     }
   ]
