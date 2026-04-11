@@ -48,23 +48,37 @@ export function chunkByFixedSize(text: string, size: number = 500, overlap: numb
 }
 
 export async function chunkBySemantic(text: string): Promise<string[]> {
-  // Simplified semantic chunking: split on paragraph boundaries,
-  // then merge small paragraphs into larger chunks
-  const paragraphs = text.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 0);
-  const chunks: string[] = [];
-  let current = '';
+  try {
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 4096,
+      messages: [{
+        role: 'user',
+        content: `Split the following document into 4-8 semantically coherent chunks based on natural topic boundaries (e.g. sections, subject changes). Return ONLY a JSON array of chunk strings. Preserve the original text exactly — do not paraphrase, summarize, or modify any text. Each chunk should be a meaningful section.
 
-  for (const para of paragraphs) {
-    if (current.length + para.length > 800 && current.length > 100) {
-      chunks.push(current.trim());
-      current = para;
-    } else {
-      current += (current ? '\n\n' : '') + para;
+Document:
+${text.slice(0, 8000)}`,
+      }],
+    });
+
+    const responseText = response.content[0].type === 'text' ? response.content[0].text : '';
+
+    // Extract JSON array from response
+    const match = responseText.match(/\[[\s\S]*\]/);
+    if (match) {
+      const parsed = JSON.parse(match[0]) as string[];
+      if (Array.isArray(parsed) && parsed.length >= 2 && parsed.every(c => typeof c === 'string')) {
+        return parsed.filter(c => c.trim().length > 20);
+      }
     }
-  }
-  if (current.trim().length > 20) chunks.push(current.trim());
 
-  return chunks;
+    console.warn('[rag] Semantic chunking LLM response did not parse as array, falling back to fixed-size');
+  } catch (err) {
+    console.warn('[rag] Semantic chunking LLM call failed, falling back to fixed-size:', err);
+  }
+
+  // Fallback: fixed-size chunking
+  return chunkByFixedSize(text, 400, 40);
 }
 
 // --- Embedding ---
