@@ -13,6 +13,7 @@ import { VectorSpace } from './vector-space';
 import { ConfigureTab } from './rag-configure';
 import { ScenarioBrief } from './scenario-brief';
 import { ScenarioTab } from './scenario-tab';
+import { EmbeddingVisualizer } from './embedding-visualizer';
 
 interface RagLabProps {
   teamId: string;
@@ -173,18 +174,27 @@ function DocumentsTab({ teamId }: { teamId: string }) {
     setUploading(false);
   };
 
-  const [embedProgress, setEmbedProgress] = useState<{ docName: string; chunks: number; stage: string } | null>(null);
+  const [embedViz, setEmbedViz] = useState<{
+    docName: string; stage: 'chunking' | 'embedding' | 'done' | 'error';
+    chunkPreviews: Array<{ index: number; preview: string; charCount: number; sampleVector: number[] }>;
+    dimensions: number; activeChunkIndex: number; errorMessage?: string;
+  } | null>(null);
 
   const handleEmbed = async (docId: string) => {
     setEmbeddingDocId(docId);
     const doc = docs.find(d => d.id === docId);
     const docName = doc?.name || 'Document';
-    const chunks = doc?.chunkCount || 0;
+    const chunkCount = doc?.chunkCount || 0;
 
-    // Show progress stages
-    setEmbedProgress({ docName, chunks, stage: 'Preparing chunks...' });
-    await new Promise(r => setTimeout(r, 400));
-    setEmbedProgress({ docName, chunks, stage: `Converting ${chunks} text chunks to 1536-dimension vectors...` });
+    // Stage 1: Chunking visualization — show chunks appearing one by one
+    const emptyPreviews = Array.from({ length: chunkCount }, (_, i) => ({
+      index: i, preview: `Loading chunk ${i + 1}...`, charCount: 0, sampleVector: [],
+    }));
+    setEmbedViz({ docName, stage: 'chunking', chunkPreviews: emptyPreviews, dimensions: 1536, activeChunkIndex: -1 });
+    await new Promise(r => setTimeout(r, chunkCount * 300 + 500));
+
+    // Stage 2: Embedding — animate through chunks
+    setEmbedViz(prev => prev ? { ...prev, stage: 'embedding', activeChunkIndex: 0 } : null);
 
     try {
       const res = await fetch('/api/rag/embed', {
@@ -193,20 +203,38 @@ function DocumentsTab({ teamId }: { teamId: string }) {
         body: JSON.stringify({ documentId: docId }),
       });
       const data = await res.json();
-      if (data.ok) {
-        setEmbedProgress({ docName, chunks, stage: `✓ ${chunks} chunks embedded into ${data.dimensions || 1536}-dimensional vector space` });
+
+      if (data.ok && data.chunkPreviews) {
+        // Animate through each chunk
+        for (let i = 0; i < data.chunkPreviews.length; i++) {
+          setEmbedViz(prev => prev ? {
+            ...prev,
+            activeChunkIndex: i,
+            chunkPreviews: data.chunkPreviews,
+            dimensions: data.dimensions || 1536,
+          } : null);
+          await new Promise(r => setTimeout(r, 400));
+        }
+
+        // Done
+        setEmbedViz(prev => prev ? {
+          ...prev, stage: 'done',
+          activeChunkIndex: data.chunkPreviews.length,
+          chunkPreviews: data.chunkPreviews,
+          dimensions: data.dimensions || 1536,
+        } : null);
         setDocs(prev => prev.map(d => d.id === docId ? { ...d, embedded: true } : d));
-        await new Promise(r => setTimeout(r, 2000));
+        await new Promise(r => setTimeout(r, 4000));
       } else {
-        setEmbedProgress({ docName, chunks, stage: `✗ Embedding failed: ${data.error}` });
+        setEmbedViz(prev => prev ? { ...prev, stage: 'error', errorMessage: data.error || 'Failed' } : null);
         await new Promise(r => setTimeout(r, 3000));
       }
     } catch {
-      setEmbedProgress({ docName, chunks, stage: '✗ Embedding failed. Try again.' });
+      setEmbedViz(prev => prev ? { ...prev, stage: 'error', errorMessage: 'Embedding failed' } : null);
       await new Promise(r => setTimeout(r, 3000));
     }
     setEmbeddingDocId(null);
-    setEmbedProgress(null);
+    setEmbedViz(null);
   };
 
   const handleReprocess = async (docId: string) => {
@@ -343,54 +371,18 @@ function DocumentsTab({ teamId }: { teamId: string }) {
       )}
 
       {/* Embedding progress visualization */}
-      {embedProgress && (
-        <div className="bg-[#0F2F44] rounded-xl p-5 text-white">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-3 h-3 bg-mest-gold rounded-full animate-pulse" />
-            <h4 className="text-sm font-semibold">Embedding: {embedProgress.docName}</h4>
-          </div>
-          <p className="text-xs text-white/70 mb-3">{embedProgress.stage}</p>
-
-          {/* Visual: text → vectors animation */}
-          <div className="flex items-center gap-4 py-3">
-            <div className="flex-1">
-              <div className="flex flex-wrap gap-1">
-                {Array.from({ length: Math.min(embedProgress.chunks, 12) }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-6 rounded bg-white/20 text-[8px] text-white/50 flex items-center px-1.5 overflow-hidden"
-                    style={{ width: `${40 + Math.random() * 40}px`, animationDelay: `${i * 100}ms` }}
-                  >
-                    chunk {i + 1}
-                  </div>
-                ))}
-              </div>
-              <p className="text-[10px] text-white/40 mt-1">Text chunks</p>
-            </div>
-
-            <div className="text-mest-gold text-lg animate-pulse">→</div>
-
-            <div className="flex-1">
-              <div className="flex flex-wrap gap-1">
-                {Array.from({ length: Math.min(embedProgress.chunks, 12) }).map((_, i) => (
-                  <div
-                    key={i}
-                    className={`h-6 w-6 rounded-full flex items-center justify-center text-[7px] ${
-                      embeddingDocId ? 'bg-mest-gold/30 animate-pulse' : 'bg-mest-gold'
-                    }`}
-                    style={{ animationDelay: `${i * 150}ms` }}
-                  >
-                    {embeddingDocId ? '...' : '✓'}
-                  </div>
-                ))}
-              </div>
-              <p className="text-[10px] text-white/40 mt-1">1536-dim vectors</p>
-            </div>
-          </div>
-        </div>
+      {embedViz && (
+        <EmbeddingVisualizer
+          docName={embedViz.docName}
+          stage={embedViz.stage}
+          chunkPreviews={embedViz.chunkPreviews}
+          dimensions={embedViz.dimensions}
+          activeChunkIndex={embedViz.activeChunkIndex}
+          errorMessage={embedViz.errorMessage}
+        />
       )}
 
-      {docs.length === 0 && !uploading && !loading && !embedProgress && (
+      {docs.length === 0 && !uploading && !loading && !embedViz && (
         <div className="text-center text-mest-grey-500 py-12 font-serif italic text-lg">
           {t('rag.noDocuments')}
         </div>

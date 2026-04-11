@@ -28,7 +28,20 @@ export async function POST(req: NextRequest) {
     docs[docIndex] = doc;
     await storage.set(`rag:docs:${team.id}`, docs);
 
-    return NextResponse.json({ ok: true, chunkCount: chunkTexts.length, dimensions: embeddings[0]?.length || 0 });
+    // Return chunk previews and sample vector values for visualization
+    const chunkPreviews = doc.chunks.map((c, i) => ({
+      index: i,
+      preview: c.text.slice(0, 120),
+      charCount: c.text.length,
+      sampleVector: embeddings[i].slice(0, 8).map(v => Math.round(v * 1000) / 1000),
+    }));
+
+    return NextResponse.json({
+      ok: true,
+      chunkCount: chunkTexts.length,
+      dimensions: embeddings[0]?.length || 0,
+      chunkPreviews,
+    });
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Embedding failed';
     return NextResponse.json({ error: msg }, { status: 500 });
