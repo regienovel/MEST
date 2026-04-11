@@ -1,0 +1,44 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+LAGOS STATE CONSUMER PROTECTION AGENCY (LASCOPA)
+ADVISORY ON SURGE PRICING BY RIDE-HAILING PLATFORMS DURING EMERGENCIES
+Ref: LASCOPA/ADV/2021/003
+January 2021
+
+BACKGROUND
+
+The Lagos State Consumer Protection Agency received 214 formal complaints regarding surge pricing by ride-hailing platforms during the period of October 20-25, 2020, coinciding with the EndSARS protests and the subsequent imposition of a state-wide curfew.
+
+Complainants reported being charged between 5x and 10x the normal fare for rides taken during the crisis period. Several complainants reported being unable to secure a ride at any price during the peak of the crisis, despite the platform showing fares in excess of N15,000 for trips that typically cost N1,500-N2,000.
+
+FINDINGS
+
+The Agency finds that:
+
+1. The surge pricing applied during the October 20-25 period was the result of automated algorithmic pricing systems that responded to abnormal demand-supply imbalances without any mechanism for distinguishing between routine demand spikes and emergency displacement events.
+
+2. The platforms' algorithms treated demand from people fleeing violence identically to demand from people seeking routine transportation, applying the same market-clearing price logic in both situations.
+
+3. The platforms did not have pre-established policies for emergency pricing, nor did they have manual override mechanisms that local operations teams could activate during crises.
+
+4. While platforms subsequently announced "retrospective fare adjustments," the process for obtaining refunds was unclear, inconsistent, and required individual riders to request adjustments rather than automatically applying them.
+
+ADVISORY RECOMMENDATIONS
+
+LASCOPA advises ride-hailing platforms operating in Lagos State to implement the following measures:
+
+a) Emergency pricing protocols: Platforms must establish and publish clear policies for pricing during declared states of emergency, curfews, and civil unrest. These policies should include maximum surge multipliers during emergency periods, not to exceed 1.5x the base fare.
+
+b) Automatic activation: Emergency pricing protocols should be triggered automatically when the Lagos State Government declares a state of emergency, issues a curfew order, or when the platform's own systems detect anomalous demand patterns consistent with mass displacement.
+
+c) Manual override: Platforms must designate a Lagos-based operations manager with the authority to manually activate emergency pricing protocols at any time, without requiring approval from international headquarters.
+
+d) Automatic refunds: When emergency pricing protocols are activated retrospectively, affected riders should receive automatic refunds without needing to submit individual requests.
+
+e) Reporting: Platforms must report to LASCOPA within 72 hours of any event that triggers emergency pricing protocols, including the number of rides affected, the average fare charged, and the refunds issued.
+
+LEGISLATIVE RECOMMENDATION
+
+LASCOPA recommends that the Lagos State House of Assembly consider legislation requiring ride-hailing platforms to maintain emergency pricing policies as a condition of operating in Lagos State.
+
+The Agency notes that this is an advisory notice and does not currently carry the force of regulation. However, LASCOPA will monitor compliance and may recommend regulatory action if platforms fail to implement adequate emergency pricing safeguards.

@@ -1,0 +1,19 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+WESTERN CAPE HEALTHCARE TRIAGE MODEL — CLINICAL CASE STUDY
+
+Patient Case: Mrs. Nomsa T., Age 54, Khayelitsha Township
+
+In March 2022, Mrs. Nomsa T. presented at Khayelitsha District Hospital with persistent chest pain, shortness of breath, and fatigue she had experienced for approximately three weeks. She was a known hypertension patient who had been collecting medication from a community health centre for six years. Her blood pressure at triage was 178/105 mmHg. She reported episodes of dizziness and one near-syncope event the previous week.
+
+The Western Cape Department of Health had recently deployed a machine learning-assisted triage prioritisation system across several district hospitals. The system was designed to help overwhelmed emergency departments allocate limited specialist consultation slots by scoring patients on a composite risk index. The model used demographic data, presenting complaint codes, vital signs, and historical health system utilisation data to assign a priority tier: Tier 1 (immediate specialist review within 2 hours), Tier 2 (review within 24 hours), or Tier 3 (routine outpatient referral).
+
+Mrs. T. was assigned Tier 3 — routine outpatient referral with a follow-up appointment in 14 days. Her clinical presentation, however, warranted urgent investigation for possible acute coronary syndrome or hypertensive emergency. A senior registrar who reviewed her case the following day overrode the algorithmic recommendation and ordered an ECG, troponin levels, and an echocardiogram. The ECG showed ST-segment changes consistent with myocardial ischaemia. She was admitted and transferred to Tygerberg Hospital for cardiac catheterisation.
+
+Post-incident review revealed that the triage model had systematically under-prioritised patients from township postcodes, including 7784 (Khayelitsha), 7750 (Gugulethu), and 7764 (Nyanga). The model's training data included historical utilisation patterns, and patients from these areas had historically presented later in disease progression, had higher rates of missed appointments, and had lower rates of specialist referral completion. The model interpreted these patterns — which reflected systemic barriers to healthcare access including transport costs, long queues, and inability to take time off informal employment — as indicators of lower acuity or lower likelihood of benefiting from urgent intervention.
+
+In effect, the model learned that township patients were less likely to complete specialist referrals, and therefore deprioritised them for those referrals. This created a feedback loop: patients who were deprioritised received less care, which meant they continued to present late, which further reinforced the model's learned pattern.
+
+A subsequent audit by the University of Cape Town's School of Public Health examined 2,847 triage decisions made by the system over a four-month period. They found that patients from township postcodes were 2.4 times more likely to be assigned Tier 3 compared to patients from suburban postcodes presenting with comparable vital signs and complaint codes. Among patients later diagnosed with acute conditions requiring hospitalisation, 31% of township patients had been initially triaged to Tier 3, compared to 8% of patients from suburban areas.
+
+Mrs. T. recovered after her cardiac intervention, but clinicians noted that a 14-day delay would have carried significant risk of a major cardiac event. Her case became one of several that prompted the Western Cape Department of Health to suspend the algorithmic triage pilot and commission an independent review.

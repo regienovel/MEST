@@ -1,0 +1,66 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+SPEED WITHOUT SAFEGUARDS: THE ALGORITHMIC ARCHITECTURE OF DIGITAL LENDING IN EAST AFRICA
+FSD Africa — Research Report, June 2022
+
+1. EXECUTIVE SUMMARY
+
+Digital lending apps in Kenya approve microloans in as little as 7 seconds using machine learning models that analyse smartphone data as a proxy for creditworthiness. This paper examines the algorithmic architecture of these lending systems, identifies where human oversight was systematically removed, and analyses the consequences for borrowers.
+
+2. THE DATA PIPELINE
+
+Digital lending apps typically request the following permissions upon installation:
+- Contacts: Full access to the user's phone contacts
+- SMS: Ability to read incoming and outgoing text messages
+- Call logs: Record of all incoming and outgoing calls
+- Location: GPS tracking of the user's movements
+- Device information: Phone model, operating system, storage usage, installed apps
+- Calendar: Access to scheduled events
+
+From this data, the lending algorithm extracts hundreds of features, including:
+- Communication patterns: Frequency and diversity of contacts, ratio of incoming to outgoing calls
+- Financial signals: M-Pesa transaction notifications in SMS history, salary credit patterns
+- Behavioural stability: Regularity of daily routines inferred from location data, consistency of phone charging patterns
+- Social graph: Size and composition of contact network, frequency of communication with "high-value" contacts
+
+3. THE CREDIT DECISION
+
+The model assigns a credit score based on these features and makes a binary decision: approve or decline. If approved, the loan amount is determined by the score, with first-time borrowers typically receiving KES 500-2,000 and amounts increasing with successful repayment.
+
+The entire process — from data collection to credit decision to disbursement — happens in seconds, with no human review. This speed is a core value proposition: unlike traditional banking, which might take days or weeks to process a loan application, digital lenders offer instant gratification.
+
+4. THE COLLECTION ALGORITHM
+
+The same algorithmic approach extends to collections. When a loan becomes overdue, an automated escalation sequence activates:
+
+Day 1 overdue: Push notification reminding the borrower of the payment
+Day 2-3: SMS messages with increasingly urgent language
+Day 4-7: Automated calls with pre-recorded messages
+Day 7-14: SMS messages sent to the borrower's emergency contacts
+Day 14+: In some apps, SMS messages sent to the borrower's full contact list
+
+The final step — mass SMS to contacts — is the practice known as "digital shaming." It was designed as a collection mechanism exploiting social pressure in cultures where financial reputation is deeply tied to community standing.
+
+5. WHERE THE HUMAN DISAPPEARED
+
+The critical design choice in these systems is the systematic removal of human judgment from every stage:
+
+- No human reviews the loan application
+- No human assesses whether the borrower can afford to repay
+- No human reviews whether the interest rate is appropriate for the borrower's circumstances
+- No human decides when to escalate collection efforts
+- No human evaluates whether the borrower is experiencing genuine hardship
+- No human considers whether contacting the borrower's family, employer, or pastor is proportionate
+
+Each of these decisions, made by a human, would involve weighing competing considerations: the lender's right to recover funds versus the borrower's dignity, privacy, and wellbeing. The algorithm weighs only one factor: maximising repayment probability.
+
+6. THE HUMAN COST
+
+The consequences of this design have been severe:
+- Microsave Consulting found that 40% of digital borrowers in Kenya reported reducing food consumption to repay digital loans
+- The Kenya National Bureau of Statistics reported that digital loan default-related stress was cited in a growing number of mental health presentations at public health facilities
+- Multiple suicides have been attributed to digital shaming practices in Kenyan media, though comprehensive data is not available
+
+7. LESSONS
+
+The digital lending crisis in Kenya demonstrates that speed and scale without human oversight creates systems that are efficient at extraction but incapable of mercy. The algorithm can process a loan in 7 seconds, but it cannot spend even 1 second considering whether it should.

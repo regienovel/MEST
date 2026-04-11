@@ -1,0 +1,55 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+HIGH COURT OF KENYA AT NAIROBI
+CONSTITUTIONAL AND HUMAN RIGHTS DIVISION
+Petition No. E256 of 2022
+
+KATIBA INSTITUTE (on behalf of the estate of MEAREG AMARE)
+versus
+META PLATFORMS, INC. and SAMASOURCE KENYA EPZ LIMITED (trading as SAMA)
+
+SUMMARY OF PETITION
+
+1. THE PARTIES
+
+The Petitioner, Katiba Institute, is a Nairobi-based constitutional rights organisation acting on behalf of the family of the late Professor Meareg Amare, a Tigrayan chemistry professor who was murdered in November 2021 after being named in a Facebook post inciting ethnic violence.
+
+The First Respondent, Meta Platforms Inc., is the parent company of Facebook and operates its content moderation centre for East Africa through the Second Respondent.
+
+The Second Respondent, Samasource Kenya EPZ Limited (trading as Sama), is a Nairobi-based outsourcing company that provides content moderation services to Meta for the African market.
+
+2. FACTUAL BACKGROUND
+
+In November 2021, during the armed conflict in Ethiopia's Tigray region, a post was published on Facebook identifying Professor Meareg Amare by name and calling for violence against him as an ethnic Tigrayan.
+
+The Petitioner avers that:
+a) Professor Amare's son, Fisseha Meareg, reported the post to Facebook on multiple occasions using the platform's standard reporting tools.
+b) Facebook's automated system classified the post as not violating community standards.
+c) Subsequent reports were either not reviewed or were reviewed by moderators who failed to recognise the post as a credible incitement to violence.
+d) The post remained on Facebook for an extended period.
+e) Professor Amare was subsequently killed at his home.
+f) The post was removed only after Professor Amare's death and after media attention.
+
+3. LEGAL GROUNDS
+
+The Petition is brought on the following grounds:
+
+a) Meta failed in its duty of care to users of its platform in Ethiopia by maintaining grossly inadequate content moderation capacity in Amharic and other Ethiopian languages.
+
+b) Meta was aware, through its own internal research and through repeated warnings from civil society organisations, human rights groups, and its own employees, that its platform was being used to spread hate speech and incitement to violence in Ethiopia, and that its moderation systems were inadequate to address this.
+
+c) Meta's decision to prioritise content moderation investment in English-speaking and high-revenue markets while underinvesting in African markets constitutes a discriminatory allocation of safety resources.
+
+d) The Second Respondent, Sama, subjected its content moderators to harmful working conditions, including exposure to traumatic content without adequate psychological support, while paying wages significantly below those of moderators performing equivalent work in Meta's US and European operations.
+
+4. RELIEF SOUGHT
+
+The Petitioner seeks:
+a) A declaration that Meta violated its duty of care
+b) Compensation for the family of Professor Amare
+c) An order requiring Meta to invest in adequate content moderation capacity proportional to its user base in African markets
+d) An order requiring disclosure of Meta's content moderation staffing levels, language coverage, and automated detection performance for all African languages
+
+5. JURISDICTION
+
+The Petitioner submits that the Kenyan courts have jurisdiction because Meta's content moderation operations for the African continent are conducted from Nairobi through the Second Respondent, and decisions made at the Nairobi moderation centre directly affected the safety of Facebook users across the continent, including Professor Amare.

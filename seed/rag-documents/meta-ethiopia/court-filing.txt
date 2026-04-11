@@ -1,0 +1,34 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+META ETHIOPIA CONTENT MODERATION FAILURE — COURT FILING SUMMARY
+
+Case: Motague v. Meta Platforms, Inc.
+Filed: December 2022, Nairobi High Court (Kenya) with parallel proceedings in California
+
+NATURE OF THE CLAIM
+
+The plaintiffs, represented by Foxglove and the Katiba Institute, filed suit against Meta Platforms, Inc. (formerly Facebook) alleging that the company's failure to adequately moderate content in Amharic, Tigrinya, Oromo, and other Ethiopian languages contributed to the incitement and coordination of ethnic violence during the Tigray conflict (November 2020 — November 2022).
+
+The complaint alleges that Meta maintained grossly insufficient content moderation capacity for Ethiopian languages despite clear and repeated warnings from civil society organisations, its own Oversight Board, and internal employees that the platform was being used to incite ethnic violence. The plaintiffs include Abrham Meareg, whose father, Professor Meareg Bezabih, a chemistry professor at Bahir Dar University, was killed in November 2021 after Facebook posts identifying him by name, photograph, and location called for violence against ethnic Tigrayans.
+
+STATEMENT OF FACTS
+
+The complaint details the following timeline of Meta's knowledge and inaction:
+
+In October 2019, internal Meta research identified Ethiopia as a "Tier 1" country for risk of offline violence linked to Facebook content. Despite this classification, Meta employed only approximately 25 content moderators with Amharic language capability as of late 2021 — to serve an estimated 30 million Ethiopian Facebook users.
+
+Meta's automated content moderation systems, which formed the backbone of the company's enforcement at scale, had minimal capability in Ethiopian languages. The company's AI classifiers were trained primarily on English-language content, with limited training data for Amharic (which uses the Ge'ez script) and virtually no capability in Tigrinya, Afan Oromo, or Somali. Internal documents revealed that Meta's hate speech classifier for Amharic had a precision rate of approximately 35%, meaning nearly two-thirds of content flagged by the system was not actually violating. Conversely, the recall rate was estimated at under 20%, meaning over 80% of violating content was never detected.
+
+Between November 2020 and the end of 2021, civil society organisations including Amnesty International, the Network Against Facebook (NAF-Ethiopia), and Global Witness sent multiple formal notifications to Meta documenting specific posts inciting ethnic violence. Several of these posts remained online for weeks or months after notification. In at least four documented cases, posts calling for violence against named individuals remained accessible after those individuals were killed.
+
+The plaintiff alleges that Professor Meareg's case exemplifies Meta's systematic failure. Posts identifying him as a Tigrayan academic and calling for his killing were reported to Facebook multiple times by family members and colleagues. The posts were reviewed and found "not to violate community standards" by content moderators. Professor Meareg was shot and killed on November 3, 2021. The posts calling for his death were still accessible on the platform at the time of his killing.
+
+LEGAL THEORY
+
+The plaintiffs advance two primary legal theories: (1) that Meta owed a duty of care to users in conflict-affected regions where it had documented knowledge that its platform was being weaponised, and (2) that Meta's content moderation failures in non-English languages constitute discrimination in the provision of services, as users in African and other non-Western markets receive materially inferior safety protections compared to English-speaking users.
+
+The case raises fundamental questions about the obligations of global technology platforms when they operate in markets where they lack the linguistic and contextual capacity to enforce their own policies. The plaintiffs argue that Meta should not have operated in Ethiopia at the scale it did without commensurate investment in safety infrastructure — and that continuing to operate while aware of the harm constituted reckless disregard for human life.
+
+STATUS
+
+As of the filing date, the case remained in preliminary proceedings. Meta filed a motion to dismiss the Kenyan proceedings on jurisdictional grounds, arguing that content moderation decisions were made at its headquarters in Menlo Park, California.

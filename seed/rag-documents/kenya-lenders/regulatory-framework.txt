@@ -1,0 +1,37 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+KENYA DIGITAL LENDING — REGULATORY FRAMEWORK ANALYSIS
+
+The Evolution of Digital Credit Regulation in Kenya
+
+Prior to 2022, Kenya's digital lending market operated in a regulatory vacuum that allowed predatory practices to flourish. This document examines the regulatory landscape before and after the Central Bank of Kenya (CBK) Amendment Act, and assesses the effectiveness of the new framework.
+
+THE REGULATORY GAP (2015-2022)
+
+Kenya's financial regulation was designed for traditional banking. The Banking Act (Cap 488) governed licensed banks, the Microfinance Act (2006) covered deposit-taking microfinance institutions, and the Sacco Societies Act (2008) regulated savings and credit cooperatives. Digital lenders fell outside all three frameworks.
+
+Most digital lending apps registered as ordinary companies under the Companies Act, with no requirement to obtain financial services licenses. This meant they were not subject to interest rate regulations, prudential requirements, consumer protection rules, or Central Bank supervision. The CBK acknowledged this gap publicly in 2018 but lacked the statutory authority to act without legislative amendment.
+
+The Kenya Information and Communications Act provided some oversight through the Communications Authority (CA), which could theoretically regulate the SMS-based collection practices. However, the CA focused primarily on telecommunications infrastructure and had neither the expertise nor the mandate to regulate financial services delivered via mobile platforms.
+
+The Data Protection Act (2019) and the establishment of the Office of the Data Protection Commissioner (ODPC) provided a potential avenue for addressing contact list harvesting and digital shaming. However, enforcement was slow. The ODPC issued guidance in 2021 stating that blanket access to phone contacts was disproportionate data collection, but no penalties were levied against major digital lenders before the CBK Amendment Act took effect.
+
+THE CBK AMENDMENT ACT (2022)
+
+The Central Bank of Kenya (Amendment) Act, 2021 (enacted March 2022) established the first comprehensive regulatory framework for digital lenders. Key provisions include:
+
+Licensing Requirement: All digital credit providers must obtain a license from the CBK. Operating without a license became a criminal offence carrying fines up to KSh 10 million or imprisonment of up to three years.
+
+Pricing Transparency: Licensed digital lenders must disclose the total cost of credit, including all fees and interest, in annualised percentage rate (APR) format before the borrower accepts the loan. Hidden fees are prohibited.
+
+Collection Practice Restrictions: The Act prohibits digital lenders from contacting any person other than the borrower for debt collection purposes. It also prohibits threatening, abusive, or harassing communication with borrowers themselves. The practice of sending debt notification messages to borrowers' contacts is explicitly banned.
+
+Data Access Limitations: Digital lenders may only access data that is directly necessary for credit assessment. Blanket access to contact lists, SMS history, and call logs is prohibited unless the borrower provides specific, informed consent for each data category.
+
+Credit Information Sharing: Licensed digital lenders must report loan performance data to licensed credit reference bureaus, enabling a more complete picture of borrower indebtedness and reducing the risk of predatory multi-lending.
+
+ENFORCEMENT CHALLENGES
+
+Despite the strong legislative framework, enforcement remains challenging. The CBK approved only 32 of 288 applicants in the first licensing round, but many unlicensed apps continued to operate via offshore servers and foreign app store accounts. Google removed over 50 non-compliant lending apps from the Kenya Play Store following CBK requests, but new apps regularly appeared under different names.
+
+Cross-border enforcement is particularly difficult. Many digital lenders are registered in jurisdictions outside Kenya — the British Virgin Islands, Singapore, Hong Kong — making it difficult to enforce Kenyan regulatory requirements or levy penalties against non-compliant operators.

@@ -1,0 +1,22 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+META SUED OVER ROLE OF FACEBOOK IN FUELLING ETHIOPIAN VIOLENCE
+BBC News — December 14, 2022
+
+Meta, the parent company of Facebook, is being sued by a Kenyan rights group on behalf of a victim of violence in Ethiopia, in a case that centres on the platform's failure to moderate hate speech during the Tigray civil war.
+
+The lawsuit, filed in Kenya's High Court by the Katiba Institute, concerns Meareg Amare, a chemistry professor at Bahir Dar University. In November 2021, Professor Amare was named in a Facebook post that called for violence against ethnic Tigrayans. Despite being reported to Facebook multiple times by his son, the post was not removed. Professor Amare was subsequently killed at his home.
+
+The case has drawn attention to Meta's content moderation capacity in Africa. Court filings and internal documents reviewed by journalists revealed that Meta employed approximately 25 content moderators fluent in Amharic — the primary language of Ethiopian social media — to serve a continent of over 500 million Facebook users.
+
+"Twenty-five moderators for a country at war," said Mercy Mutemi, the Nairobi-based lawyer representing the Amare family. "Meta made the decision to operate in Ethiopia, to profit from Ethiopian users, and then failed to invest in the most basic safety infrastructure."
+
+Meta's automated content moderation system, which uses machine learning to detect and remove harmful content, was trained primarily on English-language data. Internal research conducted by Meta itself, disclosed during the 2021 "Facebook Papers" revelations, found that the company's automated systems caught only a small fraction of hate speech in languages other than English.
+
+For Amharic — spoken by approximately 32 million people and one of the most widely used languages on Ethiopian social media — the automated system was particularly inadequate. The language uses the Ge'ez script, has complex morphology, and was drastically under-represented in Meta's training data.
+
+Frances Haugen, the former Meta employee who disclosed thousands of internal documents in 2021, testified before the US Congress that Meta's safety investments were concentrated in English-speaking markets. "Meta knows that its systems are not adequate to detect hate speech in languages like Amharic, Tigrinya, and Oromo," Haugen told lawmakers. "They know this because their own researchers told them, and they chose not to act."
+
+The Tigray war, which lasted from November 2020 to November 2022, resulted in an estimated 300,000-500,000 deaths and was characterised by widespread atrocities on multiple sides. Throughout the conflict, Facebook was a primary channel for the spread of dehumanising rhetoric, coordination of violence, and disinformation.
+
+Human rights organisations documented numerous instances of Facebook posts containing explicit incitement to ethnic violence that remained on the platform for weeks or months before removal, if they were removed at all.

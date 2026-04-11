@@ -1,0 +1,34 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+EXCERPTS FROM THE TESTIMONY OF FRANCES HAUGEN
+U.S. Senate Committee on Commerce, Science, and Transportation
+Subcommittee on Consumer Protection, Product Safety, and Data Security
+October 5, 2021
+
+[The following excerpts focus on testimony related to content moderation in non-English languages, particularly in conflict zones]
+
+SENATOR BLUMENTHAL: Ms. Haugen, you've described a pattern of Meta prioritising profits over safety. Does this pattern extend beyond the United States?
+
+MS. HAUGEN: Yes, Senator, and in fact the problem is dramatically worse outside the United States and Western Europe. Meta invests the vast majority of its safety and content moderation resources in English-speaking markets. For most of the world — and I want to be very specific here — for most of Africa, most of Southeast Asia, most of South Asia, the safety systems are drastically under-resourced.
+
+I'll give you a concrete example. Meta's AI systems for detecting hate speech work reasonably well in English. They're decent in French, German, Spanish, and a few other high-resource languages. But in Amharic — which is spoken by over 30 million Ethiopians and is one of the most used languages on Ethiopian Facebook — the AI catches a tiny fraction of hate speech. Meta's own researchers estimated it was in the low single digits in terms of percentage.
+
+SENATOR BLUMENTHAL: And this was during a civil war?
+
+MS. HAUGEN: Yes. During the Tigray conflict, Facebook was one of the primary platforms for the spread of dehumanising rhetoric and incitement to violence. Meta's researchers internally flagged this. They warned management that the platform was being used to incite ethnic violence and that the moderation systems were not equipped to handle it. The response was inadequate.
+
+The pattern is consistent. Meta enters new markets aggressively. User growth is the priority. Advertising revenue follows. But the safety infrastructure — the moderators, the AI classifiers, the contextual expertise — does not keep pace. The company profits from growth in these markets but does not invest proportionally in keeping those markets safe.
+
+SENATOR MARKEY: How many content moderators does Meta employ for Ethiopian languages?
+
+MS. HAUGEN: Based on the documents I reviewed, the number of Amharic-speaking moderators was approximately 25. I want to put that in context. Ethiopia has roughly 50 million internet users. Facebook is one of the dominant platforms. During an active civil war, with content volumes spiking, Meta had about 25 people — based in Nairobi, not even in Ethiopia — reviewing content in the primary language of the conflict.
+
+For comparison, Meta employs thousands of English-language moderators. The disparity in investment per user is staggering.
+
+SENATOR MARKEY: And you're saying Meta knew this was insufficient?
+
+MS. HAUGEN: Yes. The internal research was clear. Meta's own Civic Integrity team produced reports showing the inadequacy of moderation in Ethiopian languages. These reports were shared with senior management. The company made a business decision about how to allocate resources, and African markets were not prioritised.
+
+I want to be clear about what this means in practice. When a post calling for violence against a specific person appears on Facebook in English, it has a reasonable chance of being detected by AI, flagged by users, and reviewed by a moderator within hours. When the same post appears in Amharic, it may never be detected by AI, reports from users may sit in a queue for days, and when a moderator finally reviews it, that moderator may be processing hundreds of other items and may lack the specific contextual knowledge to recognise the threat.
+
+The result is that Facebook is meaningfully safer for English speakers than for Amharic speakers, for Americans than for Ethiopians. That is a choice Meta made.

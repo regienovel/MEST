@@ -1,0 +1,41 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+META ETHIOPIA CONTENT MODERATION FAILURE — HUMAN RIGHTS REPORT
+
+The Role of Social Media in the Tigray Conflict: Platform Accountability and the Right to Life
+
+Published by the Ethiopian Human Rights Commission (EHRC) in collaboration with international observers, 2022
+
+EXECUTIVE SUMMARY
+
+The armed conflict in Tigray, which began in November 2020 and resulted in an estimated 300,000-500,000 deaths, was accompanied by an unprecedented use of social media platforms — primarily Facebook — to spread hate speech, incite ethnic violence, coordinate attacks, and dehumanise civilian populations. This report examines Meta's failure to prevent its platform from being used as an instrument of mass atrocity and assesses the human rights implications of inadequate content moderation in African language contexts.
+
+FINDINGS ON CONTENT MODERATION CAPACITY
+
+Facebook is the dominant social media platform in Ethiopia, with approximately 30 million users as of 2021 — roughly 25% of the population. For many Ethiopians, Facebook is synonymous with the internet itself, as the platform is accessible on low-cost smartphones and benefits from zero-rating agreements with Ethiopian telecommunications providers.
+
+Despite Ethiopia's designation as a high-risk country in Meta's own internal assessments, the company's content moderation capacity for Ethiopian languages was profoundly inadequate:
+
+Amharic, the country's primary federal language spoken by approximately 30 million people, was covered by an estimated 25 content moderators — a ratio of approximately one moderator per 1.2 million users. By comparison, English-language content moderation at Meta employed thousands of moderators for markets with comparable user bases.
+
+Tigrinya, spoken by approximately 7 million Tigrayans and central to the conflict, had virtually no dedicated moderation capacity. Content in Tigrinya was reviewed, if at all, by Amharic-speaking moderators who may have had limited Tigrinya proficiency and limited understanding of Tigrayan cultural and political context.
+
+Afan Oromo, spoken by approximately 40 million Ethiopians, similarly lacked adequate moderation resources despite being the most widely spoken language in the country.
+
+The report found that this disparity was not unique to Ethiopia. Across the African continent, Meta served over 500 million users with content moderation teams that were a fraction of those deployed for comparable English-speaking markets. Internal Meta documents obtained through legal discovery and whistleblower disclosures revealed that the company allocated approximately 87% of its global content moderation spending to English-language content, despite English speakers comprising less than 10% of the global population.
+
+DOCUMENTED HARMS
+
+This report documents 47 specific instances where Facebook content containing explicit calls for ethnic violence against Tigrayans, Amhara, or Oromo communities remained on the platform for more than 48 hours after being reported through Facebook's own reporting mechanism. In 12 of these cases, the content remained online for more than two weeks.
+
+The most common forms of violating content included: dehumanising language comparing ethnic groups to animals, vermin, or diseases; explicit calls to kill members of specific ethnic groups; doxxing of individuals — sharing names, photographs, and locations of people identified by ethnicity; and coordination posts organising attacks on specific communities or neighbourhoods.
+
+In multiple documented cases, Facebook groups with tens of thousands of members served as coordination platforms for militia activities. These groups operated openly, with names explicitly referencing ethnic conflict, for months before being removed — often only after international media attention.
+
+RECOMMENDATIONS TO META
+
+1. Meta must invest in content moderation capacity proportional to the risk profile of each market, not proportional to the advertising revenue generated.
+2. Automated content moderation tools must achieve minimum performance thresholds in local languages before a platform launches or scales in a new market.
+3. Meta should establish regional advisory councils with binding authority to flag and escalate content during active conflicts.
+4. The company must implement "circuit breaker" mechanisms that can slow the viral spread of content during declared emergencies, including reducing algorithmic amplification of inflammatory content.
+5. Meta should publish transparent reports on content moderation staffing, spending, and performance by language and country.

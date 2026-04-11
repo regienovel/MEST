@@ -1,0 +1,35 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+WESTERN CAPE HEALTHCARE TRIAGE MODEL — ETHICAL REVIEW
+
+Independent Ethics Committee Assessment
+
+Prepared for the Western Cape Department of Health, August 2022
+
+This ethical review was commissioned following the suspension of the ML-assisted triage prioritisation pilot at eight Western Cape district hospitals. The review panel comprised medical ethicists from Stellenbosch University, data scientists from the University of Cape Town, and community health representatives from the Khayelitsha Health Forum.
+
+FINDING 1: VIOLATION OF THE PRINCIPLE OF JUSTICE
+The South African National Health Act and the Batho Pele principles require that healthcare resources be distributed equitably, with particular attention to historically disadvantaged communities. The triage model's systematic under-prioritisation of township patients represents a direct violation of distributive justice. By using postcode as a predictive feature, the model encoded apartheid-era spatial inequality into clinical decision-making, effectively automating historical discrimination.
+
+The panel notes that this violation was unintentional. The development team included no community health representatives and conducted no health equity impact assessment prior to deployment. The team's focus on predictive accuracy without fairness evaluation reflects a gap in South Africa's regulatory framework for health AI, which currently provides no mandatory equity assessment requirements.
+
+FINDING 2: INADEQUATE INFORMED CONSENT
+Patients processed by the triage system were not informed that a machine learning model was influencing their priority classification. The system was presented to clinical staff as a "decision support tool," but in practice, clinical staff followed the algorithmic recommendation in approximately 89% of cases. When a tool is followed this consistently, it functions as a decision-maker, not merely a support. Patients have a right under the National Health Act Section 6 to be informed about the nature of their care, including algorithmic components.
+
+FINDING 3: FEEDBACK LOOP AMPLIFICATION OF DISADVANTAGE
+The most ethically concerning aspect of the model is its feedback loop structure. Patients deprioritised by the model receive less timely care. Those who experience adverse outcomes due to delayed care generate training data that further associates their demographic profile with poor outcomes. Those who disengage from the health system due to frustration with deprioritisation generate lower adherence rates, which the model interprets as reduced benefit from intervention. Each cycle deepens the disparity.
+
+This is not a static bias that can be corrected once. It is a dynamic system that actively worsens inequality over time. The panel considers this the most serious finding, as it means the model would have become progressively more discriminatory the longer it operated.
+
+FINDING 4: INSUFFICIENT HUMAN OVERRIDE MECHANISMS
+While clinical staff could override the model's recommendations, the override process required documenting a clinical justification and was subject to departmental review. This created a soft deterrent against overrides, particularly for junior clinicians. In resource-constrained settings where staff are managing high patient volumes, the path of least resistance is to accept the algorithmic recommendation.
+
+RECOMMENDATIONS
+1. The triage model should not be redeployed in its current form.
+2. Any future health AI deployment in the Western Cape must undergo a mandatory Health Equity Impact Assessment, modelled on the Canadian approach, before clinical use.
+3. The Department of Health should establish a standing Health AI Ethics Committee with community representation.
+4. Patients must be informed when algorithmic tools influence their care, and override mechanisms must be frictionless.
+5. The development team should publish the model's training methodology and bias audit results to enable peer review and prevent similar failures elsewhere.
+6. Community health workers from affected townships should be included in the design process for any replacement system.
+
+The panel emphasises that the goal is not to prevent the use of AI in healthcare — the Western Cape's resource constraints make decision-support tools valuable. The goal is to ensure these tools reduce inequality rather than entrench it.

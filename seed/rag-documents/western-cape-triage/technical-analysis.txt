@@ -1,48 +1,21 @@
 SOURCE DOCUMENT — ILLUSTRATIVE
 
-PROXY VARIABLE COLLAPSE IN HEALTHCARE AI: THE WESTERN CAPE TRIAGE MODEL
-South African Medical Journal, Vol. 113, No. 2 — February 2023
+WESTERN CAPE HEALTHCARE TRIAGE MODEL — TECHNICAL ANALYSIS
 
-ABSTRACT
+Algorithmic Bias in Postcode-Proxied Socioeconomic Features
 
-We examine a machine learning triage model deployed in Western Cape emergency departments that was found to systematically under-prioritise patients from township areas. We identify the mechanism as proxy variable collapse — the model's use of geographic and demographic features as proxies for clinical severity, reflecting historical patterns of unequal care rather than genuine differences in patient acuity.
+The Western Cape triage model was a gradient-boosted decision tree (XGBoost) trained on approximately 180,000 emergency department encounters from 2018-2021 across eight district hospitals. The target variable was a composite outcome score reflecting 30-day mortality, ICU admission, and hospital readmission within 7 days. The model was intended to predict which patients would benefit most from early specialist intervention.
 
-BACKGROUND
+Feature engineering included 47 input variables grouped into four categories: clinical presentation (vital signs, complaint codes, Glasgow Coma Scale), patient demographics (age, sex, recorded comorbidities), healthcare utilisation history (number of prior ED visits, appointment adherence rate, time since last visit), and geographic indicators (residential postcode, distance to facility, facility load at time of presentation).
 
-South Africa's healthcare system operates under a dual burden: the clinical needs of a population with high rates of infectious disease, violence-related trauma, and non-communicable disease, and the structural legacy of apartheid-era resource allocation that concentrated healthcare infrastructure in historically white and affluent areas.
+The inclusion of postcode as a feature was the primary vector for bias introduction. In the Western Cape, residential postcode is a near-perfect proxy for race and socioeconomic status, a legacy of apartheid-era spatial planning that persists in contemporary settlement patterns. Khayelitsha (7784), Gugulethu (7750), Mitchells Plain (7785), and Nyanga (7764) are predominantly Black African and Coloured communities with lower average incomes, while Bellville (7530), Durbanville (7550), and the Southern Suburbs (7700-series) are wealthier and historically white.
 
-In this context, the Western Cape Department of Health piloted an ML-based triage model in 2021 to assist emergency departments in prioritising patients. The model was trained on five years of historical patient data from public hospitals in the Cape Town metropolitan area.
+Feature importance analysis showed that postcode ranked as the 6th most influential variable in the model, ahead of several clinical indicators. When postcode was removed, the model's AUC dropped by only 0.02 (from 0.81 to 0.79), suggesting it contributed marginal predictive value while introducing substantial fairness costs.
 
-THE PROXY VARIABLE MECHANISM
+The utilisation history features compounded the problem. Appointment adherence rate — the percentage of scheduled follow-up appointments a patient actually attended — was the 3rd most important feature. Patients from township postcodes had an average adherence rate of 47%, compared to 78% for suburban patients. This gap reflected transport barriers (a return trip from Khayelitsha to Tygerberg Hospital can cost R120 and take 3 hours by public transit), inflexible employment (many township residents work in informal or hourly-paid jobs without sick leave), and clinic-side factors (average wait times at township health centres exceed 4 hours).
 
-The model used postcode as one of approximately 40 input features. While postcode was intended to capture distance-to-hospital (relevant for estimating ambulance response times), it also served as a near-perfect proxy for race and socioeconomic status in the Cape Town context, where residential segregation remains stark.
+The model treated low adherence as a patient-level risk factor indicating lower likelihood of benefiting from specialist referral. In reality, it was a system-level access barrier that the healthcare system itself had failed to address. By encoding this barrier as a patient characteristic, the model effectively punished patients for being poor.
 
-The proxy operated through a multi-step causal chain:
+Recommended technical remediation includes: (1) removing postcode and all geographic features from the model entirely, (2) replacing appointment adherence with clinically-derived acuity scores only, (3) implementing fairness constraints during training that enforce equal Tier 1 assignment rates across postcode groups for patients with equivalent clinical presentations, and (4) requiring human clinician review for all Tier 2 and Tier 3 assignments, with the algorithmic score presented as advisory only, never determinative.
 
-1. Postcode → Socioeconomic status → Historical care patterns
-2. Historical care patterns → Model's learned association between postcode and "typical" resource utilisation
-3. "Typical" resource utilisation → Predicted severity/priority score
-
-Because township patients had historically received less intensive care (due to overcrowding, resource constraints, and implicit bias in clinical settings), the model learned to predict that they would need less intensive care. This is the proxy variable collapse: a feature that should be irrelevant to clinical severity becomes a dominant predictor because it encodes structural inequality.
-
-QUANTITATIVE FINDINGS
-
-Our analysis of the model's predictions on a held-out test set revealed:
-
-- Patients from Khayelitsha received priority scores averaging 0.34 standard deviations lower than patients from the Southern Suburbs presenting with matched clinical features (same chief complaint, similar vital signs, comparable age)
-- The effect was strongest for conditions requiring subjective severity assessment (abdominal pain, chest pain, headache) and weakest for conditions with clear objective markers (fractures, lacerations)
-- Removing postcode from the model reduced but did not eliminate the disparity, as other features (employment status, insurance status, facility of presentation) also served as proxies for the same underlying variable
-
-COMPARISON WITH US FINDINGS
-
-Our findings parallel the 2019 discovery by Obermeyer et al. (published in Science) that a widely used US healthcare algorithm discriminated against Black patients by using healthcare costs as a proxy for healthcare needs. Because Black patients had historically incurred lower costs — due to less access to care, not less need for it — the algorithm systematically under-predicted their severity.
-
-The mechanism is identical: historical inequality in access to care is encoded in historical data, which becomes training data for a model that then perpetuates the inequality.
-
-RECOMMENDATIONS
-
-1. Remove geographic and socioeconomic features from triage models, or at minimum test their causal relationship to clinical outcomes
-2. Use clinical-only features (vital signs, symptoms, laboratory values) for severity prediction
-3. Conduct mandatory disparity testing across racial, geographic, and socioeconomic groups before deploying any healthcare AI
-4. Establish clinical override protocols that empower clinicians to override algorithmic recommendations without administrative burden
-5. Publish model performance metrics disaggregated by patient demographics
+The model was never intended to discriminate. Its developers at a Cape Town health-tech startup had tested for accuracy but not for equity. They had measured aggregate performance (AUC, precision, recall) without stratifying by postcode or socioeconomic group. This is a common failure pattern in health AI — optimising for average performance while allowing disparate impact on vulnerable subgroups.

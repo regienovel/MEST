@@ -1,0 +1,21 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+KENYA DIGITAL LENDING CRISIS — NEWS REPORT
+
+Nairobi, Kenya — September 2021
+
+A wave of complaints from Kenyan borrowers has exposed predatory practices by digital lending applications, with platforms like Tala, Branch, Okash, and dozens of smaller apps accused of charging annualised interest rates exceeding 600%, harvesting personal contact lists, and publicly shaming borrowers who miss payments by sending threatening SMS messages to their family, friends, and employers.
+
+The Kenya digital lending market exploded between 2018 and 2021, with over 100 mobile lending apps available on Google Play Store targeting Kenyan consumers. The appeal was speed and accessibility: Tala advertised loans approved in "under 7 seconds," while Branch promised "no paperwork, no collateral, no branch visits." For millions of Kenyans excluded from traditional banking, these apps offered unprecedented access to credit.
+
+But the convenience came at an extraordinary cost. A typical digital loan of KSh 5,000 (approximately USD 45) carried fees and interest that, when annualised, reached 300% to 600% APR. Repayment periods were often 14 to 30 days, with late fees compounding daily. A borrower who took KSh 5,000 and missed a single repayment deadline could owe KSh 12,000 within two months.
+
+The most disturbing practice was "digital shaming." Upon installation, most lending apps requested access to the borrower's full contact list, SMS messages, and call logs. When borrowers fell behind on payments, the apps sent automated SMS messages to contacts in their phone — parents, pastors, employers, business clients — informing them of the outstanding debt and requesting they pressure the borrower to repay.
+
+Grace Wanjiku, a 28-year-old hairdresser in Eastlands, told reporters that after missing a KSh 3,000 payment to Okash, the app sent messages to over 40 of her contacts, including clients at her salon. "Some of my clients stopped coming," she said. "The message said I was a defaulter and they should tell me to pay. I wanted to die of shame." Her story was one of thousands shared on Kenyan social media under the hashtag #StopDigitalShaming.
+
+The Central Bank of Kenya (CBK) had limited regulatory authority over digital lenders, as most operated under general business licenses rather than banking licenses. This regulatory gap allowed apps to set interest rates without caps, collect personal data without meaningful consent processes, and employ collection practices that would violate banking regulations if applied by licensed institutions.
+
+In March 2022, President Kenyatta signed the CBK Amendment Act, bringing digital lenders under central bank supervision for the first time. The law required digital lenders to obtain CBK licenses, submit to interest rate disclosure requirements, and prohibited the practice of contacting borrowers' associates for debt collection. By June 2022, the CBK had received applications from 288 digital lenders; it approved only 32, effectively shutting down over 250 unlicensed operations.
+
+The crisis highlighted a painful irony: technology designed to bring financial inclusion to underserved populations had instead created a new form of financial exploitation, powered by the same smartphones that were supposed to be tools of empowerment.

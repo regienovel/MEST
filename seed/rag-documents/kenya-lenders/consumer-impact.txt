@@ -1,0 +1,35 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+KENYA DIGITAL LENDING — CONSUMER IMPACT ASSESSMENT
+
+Social and Economic Effects of Predatory Digital Lending on Kenyan Borrowers
+
+This assessment draws on survey data from the Financial Sector Deepening Kenya (FSD Kenya) 2021 FinAccess household survey, complaints filed with the CBK and ODPC, and qualitative research conducted by the Consumers Federation of Kenya (COFEK).
+
+SCALE OF THE PROBLEM
+
+By mid-2021, approximately 10 million Kenyans — roughly one in five adults — had borrowed from a digital lending platform at least once. The FSD Kenya survey found that 2.3 million Kenyans were actively indebted to digital lenders at any given time, with an average outstanding balance of KSh 7,200 (approximately USD 65). Among active digital borrowers, 56% reported having borrowed from three or more platforms simultaneously, a practice known as "loan stacking" where borrowers take new loans to service existing ones.
+
+The demographic profile of digital borrowers skewed young, urban, and economically precarious. The median digital borrower was 26 years old, earned less than KSh 30,000 per month (USD 270), and worked in the informal sector. Women comprised 44% of digital borrowers but accounted for 58% of those who reported being subjected to digital shaming — suggesting either that women were more frequently targeted for aggressive collection or more willing to report the practice.
+
+MENTAL HEALTH AND SOCIAL CONSEQUENCES
+
+The most devastating impacts were psychological and social. A 2021 survey by the Kenya Red Cross Society found that 14% of respondents who had experienced digital shaming reported suicidal ideation. While causation cannot be established from survey data alone, the association was striking and consistent across demographic groups.
+
+Digital shaming was particularly destructive in community-oriented Kenyan culture, where personal reputation and social standing carry enormous weight. Borrowers reported being ostracised from church groups, losing customers for their businesses, experiencing marital conflict, and being denied informal credit from family and friends — the traditional safety net that digital lending was supposed to supplement, not destroy.
+
+James Odhiambo, a boda-boda rider in Kisumu, described the cascading effects: "I borrowed KSh 2,000 from Okash for a tire repair. When I was three days late, they messaged my mother, my wife, and my pastor. My wife thought I was hiding debts. My pastor asked me to step back from the finance committee. My mother sent me money she could not afford because she was ashamed. One tire cost me my reputation."
+
+NEGATIVE CREDIT LISTING
+
+Digital lenders reported defaulting borrowers to Credit Reference Bureaus (CRBs), resulting in negative credit listings that persisted for years. Many borrowers were unaware that a KSh 500 (USD 4.50) loan default could result in a negative CRB listing that would prevent them from accessing formal bank credit, mobile money overdrafts, or even employment (some Kenyan employers check CRB status during hiring).
+
+By October 2021, the Kenya Bankers Association reported that 14 million Kenyans had been negatively listed on CRBs, a significant portion due to digital loan defaults. President Kenyatta ordered a temporary CRB listing amnesty in October 2021 for loans under KSh 5 million, effectively clearing millions of negative listings — but this was a one-time measure that did not address the underlying lending practices.
+
+FINANCIAL INCLUSION PARADOX
+
+The digital lending crisis presented a painful paradox for Kenya's celebrated financial inclusion story. Kenya had been held up globally as a model of mobile money-driven financial inclusion, with M-Pesa transforming access to payments and savings. Digital lending was seen as the next frontier — extending credit to the "unbanked" population.
+
+Instead, for millions of Kenyans, their first experience of formal credit was predatory, exploitative, and damaging. Research by the Consultative Group to Assist the Poor (CGAP) found that among first-time digital borrowers who defaulted, 67% said the experience made them less likely to engage with formal financial services in the future. Rather than building a bridge to financial inclusion, predatory digital lending burned it.
+
+The lesson for technology entrepreneurs across Africa is clear: access without protection is not inclusion. Speed and convenience mean nothing if the product itself causes harm. The 7-second loan approval was a technical achievement. It was also, for millions, a 7-second decision that led to months of financial and social distress.

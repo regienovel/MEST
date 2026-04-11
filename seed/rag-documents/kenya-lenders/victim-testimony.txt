@@ -1,0 +1,46 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+"THEY TOLD MY WHOLE VILLAGE I WAS A DEBTOR": TESTIMONIES FROM KENYA'S DIGITAL LENDING CRISIS
+Microsave Consulting — Field Research Report, August 2021
+
+METHODOLOGY
+
+Between May and July 2021, Microsave researchers conducted in-depth interviews with 86 digital loan borrowers across Nairobi, Kisumu, and Mombasa who had experienced adverse outcomes from digital lending. Participants were recruited through consumer protection organisations and community referrals. All names have been changed.
+
+SELECTED TESTIMONIES
+
+Grace M., 34, hairdresser, Nairobi
+"I borrowed KES 3,000 from Tala to buy supplies for my salon. The interest was 15% for 30 days — they said KES 450. I paid on time. Then they offered me KES 8,000. Then KES 15,000. Each time the fees got bigger. I took the KES 15,000 loan when my daughter got sick and I needed to pay hospital bills. I couldn't repay on time because the hospital bill was bigger than expected.
+
+On day 3 of being late, I got an SMS saying 'Final warning. Your contacts will be notified.' On day 7, my mother received a message saying: 'Grace M. has defaulted on a loan with Tala. Please advise her to pay immediately.' My mother called me crying. She thought I was in trouble.
+
+The next day, my pastor received the same message. He called me into his office. I wanted to disappear."
+
+Peter K., 26, boda boda driver, Kisumu
+"I had loans from three apps at the same time — Branch, Okash, and one called iPesa. Each one was small, maybe KES 2,000-5,000. But the fees added up. I was borrowing from one app to pay another. The apps didn't talk to each other, so each one thought I only had one loan.
+
+When I fell behind on all three, all three apps sent messages to my contacts on the same day. My wife's mother, my brother, my friends — everyone got messages saying I was a defaulter. Some of the messages said 'legal action will be taken.' My wife was ashamed to go to church. My brother stopped lending me his tools.
+
+I was making KES 800 a day driving boda boda. The total I owed across all three apps, with fees, was KES 28,000. That's more than a month's income. And the fees kept growing."
+
+Mary W., 42, market trader, Mombasa
+"Okash gave me KES 5,000 in January. By March, with fees and penalties, I owed KES 12,000. I called the number in the app — no answer. I went to their office — there is no office. There is nobody to talk to. It's just the app and the messages. And the messages to my friends.
+
+The worst part is the CRB listing. Because I was listed as a defaulter, I cannot get a loan from my SACCO now. The SACCO loan had 12% annual interest. The app loan was 180%. The app ruined my ability to borrow at a fair rate."
+
+PATTERNS OBSERVED
+
+Across the 86 interviews:
+- 78% reported receiving inadequate or misleading information about interest rates and fees
+- 71% experienced contact-list messaging ("digital shaming")
+- 54% reported borrowing from multiple apps simultaneously, with no cross-platform visibility
+- 47% reported reducing food purchases to service digital loans
+- 38% reported significant damage to personal relationships as a result of contact-list messages
+- 23% reported being listed with Credit Reference Bureaus for amounts under KES 1,000
+- 12% reported suicidal ideation related to digital debt stress
+
+CONCLUSION
+
+The digital lending model in Kenya represents a system optimised for one metric — loan volume and recovery — at the expense of all others. The absence of human judgment at every stage means there is no point in the system where someone asks: "Is this loan appropriate for this person?" or "Is this collection method proportionate?"
+
+The algorithm does not ask these questions because it was not designed to. And there is no human in the loop to ask them on its behalf.

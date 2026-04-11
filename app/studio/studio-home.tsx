@@ -5,7 +5,7 @@ import { ModuleCard } from '@/components/studio/module-card';
 import { ActivityFeed } from '@/components/studio/activity-feed';
 import { DailyChallenge } from '@/components/studio/daily-challenge';
 import { BroadcastBanner } from '@/components/studio/broadcast-banner';
-import { MessageSquare, Mic, Eye, Workflow, LayoutGrid, BookOpen } from 'lucide-react';
+import { MessageSquare, Mic, Eye, Workflow, LayoutGrid, BookOpen, HeartPulse } from 'lucide-react';
 
 interface StudioHomeProps {
   teamName: string;
@@ -57,6 +57,13 @@ export function StudioHome({ teamName, xp }: StudioHomeProps) {
       href: '/studio/rag',
       icon: BookOpen,
       borderColor: 'border-l-4 border-l-purple-500',
+    },
+    {
+      title: t('health.title'),
+      description: 'Monitor your team\'s AI usage, latency, errors, and trust scorecard.',
+      href: '/studio/health',
+      icon: HeartPulse,
+      borderColor: 'border-l-4 border-l-pink-500',
     },
   ];
 

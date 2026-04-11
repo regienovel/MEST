@@ -1,46 +1,32 @@
 SOURCE DOCUMENT — ILLUSTRATIVE
 
-CONTEXT-BLIND OPTIMISATION: WHEN ALGORITHMS FAIL TO READ THE ROOM
-Lagos Business School — Case Study LBS-TECH-2021-04
+LAGOS SURGE PRICING CRISIS — TECHNICAL ANALYSIS
 
-OVERVIEW
+Surge Pricing Algorithm Mechanics and Failure Mode
 
-On October 20, 2020, during the EndSARS protests that culminated in the shooting of demonstrators at the Lekki toll gate, a ride-hailing platform's dynamic pricing algorithm automatically imposed surge multipliers of up to 10x in Lagos. This case examines the failure as an instance of context-blind optimisation — a system that optimised effectively for its designed metric but catastrophically failed to account for the context in which it was operating.
+Ride-hailing surge pricing algorithms operate on a geographically partitioned supply-demand model. The city is divided into hexagonal zones (typically using Uber's H3 indexing system or a proprietary equivalent). Each zone maintains a real-time ratio of ride requests to available drivers. When demand exceeds supply beyond a configurable threshold, a multiplier is applied to the base fare. This multiplier increases dynamically as the ratio worsens.
 
-THE ALGORITHM'S LOGIC
+Under normal conditions, surge pricing serves two economic functions: it incentivises drivers to enter high-demand areas by offering higher earnings, and it moderates demand by discouraging price-sensitive riders. In theory, this reaches a market-clearing equilibrium within 10-15 minutes.
 
-Dynamic pricing in ride-hailing operates on a simple economic principle: when demand exceeds supply, raise prices. This achieves two goals:
-1. Demand moderation: Higher prices discourage discretionary rides, preserving supply for those who need it most
-2. Supply incentive: Higher fares encourage more drivers to go online and enter high-demand areas
+The Lagos EndSARS scenario exposed three critical failure modes in this design:
 
-Both mechanisms assume that the demand is elastic — that riders can choose to wait, take an alternative mode, or forgo the trip entirely. They also assume that drivers can safely enter the high-demand area.
+1. SUPPLY COLLAPSE WITHOUT RECOVERY
+Standard surge models assume that higher prices will attract drivers into the surge zone. During the Lekki incident, drivers were actively leaving the area due to personal safety concerns. No fare multiplier could compensate for the risk of driving into an active military operation. The algorithm kept raising prices searching for a supply response that could never arrive. In economic terms, the supply curve had become perfectly inelastic — no price would increase the quantity of rides supplied.
 
-THE OCTOBER 20 REALITY
+2. DEMAND INELASTICITY IN EMERGENCIES
+Surge pricing assumes some riders will opt out when prices rise, reducing demand to match available supply. During an emergency evacuation, demand is almost perfectly inelastic — people will pay any price to reach safety. The algorithm interpreted this willingness to pay as a signal to raise prices further, creating a feedback loop where prices spiralled with no moderating mechanism.
 
-Neither assumption held on October 20:
+3. GEOGRAPHIC SPILLOVER EFFECTS
+As the crisis spread across Lagos, surge zones cascaded outward. Drivers leaving Lekki caused supply drops in adjacent zones (Victoria Island, Ikoyi, Surulere), triggering secondary surge events. The algorithm treated each zone independently, failing to recognise that the entire urban system was in crisis.
 
-Inelastic demand: People were fleeing violence. Their demand for transportation was not a matter of convenience — it was a matter of safety. Raising prices did not cause them to "choose to wait." It forced them to choose between paying extortionate fares and remaining in danger.
+The technical solution is straightforward but requires deliberate engineering. Several approaches are available:
 
-Inaccessible supply: Drivers were also fleeing the violence or avoiding the area entirely. Higher fares could not incentivise drivers to enter areas where they risked being shot. The supply-side mechanism of surge pricing was non-functional.
+Emergency Mode Override: A manual or automated trigger that caps the surge multiplier at 1.0x-1.5x during declared emergencies. Uber implemented a version of this in the United States following criticism during Hurricane Sandy in 2012, but it was not consistently deployed in African markets.
 
-The result: maximum prices with minimum supply. The algorithm achieved the opposite of its intended purpose — it made transportation more expensive without making it more available.
+Context-Aware Demand Classification: Using external signals — news APIs, government emergency alerts, abnormal cancellation rates, driver safety reports — to classify demand spikes as emergency versus routine. This requires integration with local data sources that may not exist or may not be reliable in all markets.
 
-WHY CONTEXT MATTERS
+Geofenced Price Caps: Regulatory requirement for platforms to maintain price ceilings within defined geographic areas during government-declared states of emergency. This shifts the decision from algorithmic to regulatory but introduces latency — governments may not declare emergencies fast enough.
 
-The failure is not that the algorithm was poorly designed for its intended context. It is that the algorithm was designed for one context (routine demand fluctuations) and deployed in another (emergency displacement) without any mechanism to detect the difference.
+Baseline Fare Guarantee: Rather than capping surge, guarantee that emergency rides are charged at the average fare for that route over the preceding 30 days. This removes the need for real-time classification while ensuring fair pricing.
 
-A context-aware system would need:
-1. Emergency detection: Integration with news feeds, social media signals, government emergency alerts, or internal anomaly detection that could identify when a demand surge is driven by an emergency rather than routine factors
-2. Emergency response: Pre-defined policies for emergency situations, such as capping surge multipliers, waiving cancellation fees, or activating emergency-only mode
-3. Geographic intelligence: Understanding that a demand surge concentrated around a known protest site during a period of reported violence is categorically different from a demand surge near a stadium after a football match
-4. Manual override capability: The ability for local operations teams to immediately disable or cap surge pricing when they become aware of an emergency
-
-PRECEDENTS
-
-This was not the first time dynamic pricing caused controversy during emergencies. Uber faced intense criticism for surge pricing during Hurricane Sandy in New York City in 2012, during the Sydney hostage crisis in 2014, and during London terror attacks in 2017. After each incident, Uber announced emergency surge caps.
-
-The Lagos incident demonstrated that these lessons had either not been learned by all platforms or had not been consistently applied across all markets — with emerging markets potentially receiving less attention than US and European markets.
-
-BROADER LESSON
-
-Algorithms are context-free by default. They do not know why demand is spiking — they only know that it is. Building context-awareness into automated systems is not a nice-to-have; it is essential for any system that operates in environments where the stakes can suddenly shift from inconvenience to life-and-death.
+The Lagos case demonstrates that algorithms optimised for one context (routine urban mobility in developed markets) can cause harm when deployed in contexts with fundamentally different risk profiles. The technical failure was not a bug — the algorithm performed exactly as specified. The failure was in the specification itself, which assumed conditions that do not hold during civil unrest in a megacity with limited public transit alternatives.

@@ -1,0 +1,59 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+CENTRAL BANK OF KENYA
+THE CENTRAL BANK OF KENYA (AMENDMENT) ACT, 2021 — DIGITAL CREDIT PROVIDERS REGULATIONS
+Gazette Notice No. 3456 — March 2022
+
+BACKGROUND
+
+The Central Bank of Kenya (CBK) has observed the rapid growth of digital credit providers (DCPs) operating in Kenya. As of December 2021, an estimated 288 digital lending applications were available to Kenyan consumers, with approximately 10 million Kenyans having taken at least one digital loan.
+
+The CBK has received over 10,000 consumer complaints regarding digital lending practices, including:
+- Non-disclosure or misleading disclosure of interest rates and fees
+- Predatory collection practices, including the sharing of borrower information with third parties (contacts, employers, family members)
+- Excessive interest rates and fees
+- Unauthorised access to and use of personal data from borrowers' mobile devices
+- Listing of borrowers with credit reference bureaus without adequate notice
+
+REGULATORY FRAMEWORK
+
+The Central Bank of Kenya (Amendment) Act, 2021, which came into effect on December 7, 2021, empowers the CBK to license and supervise digital credit providers. Under this authority, the following regulations are hereby issued:
+
+1. LICENSING
+
+All digital credit providers operating in Kenya must obtain a license from the CBK. Unlicensed operation is an offence carrying penalties of up to KES 5 million and/or imprisonment of up to three years.
+
+2. DISCLOSURE REQUIREMENTS
+
+Digital credit providers must clearly and prominently disclose:
+a) The annualised percentage rate (APR) of all loans, including all fees and charges
+b) The total cost of the loan in Kenya shillings
+c) The repayment schedule
+d) Late payment penalties and their method of calculation
+e) The consequences of default
+
+3. DATA PROTECTION AND COLLECTION PRACTICES
+
+a) Digital credit providers are prohibited from accessing borrowers' phone contacts, call logs, SMS messages, or social media accounts for the purpose of debt collection.
+
+b) Digital credit providers are prohibited from contacting any person other than the borrower for the purpose of debt collection, except for a co-guarantor who has provided explicit written consent.
+
+c) Digital credit providers must comply with the Data Protection Act, 2019, regarding the collection, processing, and storage of personal data.
+
+d) The practice of sending debt collection messages to borrowers' contacts ("digital shaming") is expressly prohibited and constitutes grounds for license revocation.
+
+4. INTEREST RATE TRANSPARENCY
+
+While the CBK has not imposed an interest rate cap on digital loans, all providers must report their effective APRs to the CBK quarterly. The CBK reserves the right to impose rate ceilings if market practices warrant intervention.
+
+5. CREDIT INFORMATION SHARING
+
+Digital credit providers must provide borrowers with at least 30 days' written notice before listing them with a credit reference bureau (CRB) for amounts below KES 1,000. Borrowers must be given an opportunity to dispute the listing before it is submitted.
+
+6. COMPLIANCE TIMELINE
+
+All existing digital credit providers must apply for licensing within 6 months of the effective date of these regulations. Providers that fail to obtain a license must cease operations.
+
+ENFORCEMENT
+
+As of September 2022, the CBK had received 383 license applications. Of these, 32 were approved, 10 were rejected, and the remainder were under review. Approximately 50 digital lending apps ceased operations in Kenya rather than submit to regulatory oversight.
