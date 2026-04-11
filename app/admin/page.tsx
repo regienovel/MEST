@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { NativeSelect } from '@/components/ui/native-select';
-import { LogOut, ArrowLeft, Star, Trash2 } from 'lucide-react';
+import { LogOut, ArrowLeft, Star, Trash2, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
 interface TeamUsage {
@@ -223,6 +223,27 @@ export default function AdminPage() {
     fetchData();
   }
 
+  const [seedingScenarios, setSeedingScenarios] = useState(false);
+  async function seedAllScenarios() {
+    if (!confirm('Seed scenario starter models for all 11 teams? This will embed documents and may take 2-3 minutes.')) return;
+    setSeedingScenarios(true);
+    try {
+      const res = await fetch('/api/admin/seed-scenarios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ force: false }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        alert(`Scenarios seeded! ${JSON.stringify(data.results?.map((r: { team: string; seeded: boolean }) => `${r.team}: ${r.seeded ? 'seeded' : 'already exists'}`))}`);
+      } else {
+        alert(`Seeding failed: ${data.error}`);
+      }
+    } catch { alert('Seeding request failed'); }
+    setSeedingScenarios(false);
+    fetchData();
+  }
+
   async function toggleFeatured(id: string) {
     await fetch(`/api/admin/gallery/${id}`, { method: 'POST' });
     fetchData();
@@ -309,6 +330,23 @@ export default function AdminPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+
+        {/* Seed Scenarios */}
+        <div className="bg-white rounded-xl border-2 border-purple-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-serif text-xl text-mest-ink">Scenario Seeding</h2>
+              <p className="text-sm text-mest-grey-500 mt-1">Pre-load each team&apos;s RAG Lab with their assigned AI failure scenario, documents, and starter model.</p>
+            </div>
+            <Button
+              onClick={seedAllScenarios}
+              disabled={seedingScenarios}
+              className="bg-purple-600 hover:bg-purple-700 text-white gap-2"
+            >
+              {seedingScenarios ? <><Loader2 size={14} className="animate-spin" /> Seeding...</> : '🌱 Seed All Scenarios'}
+            </Button>
           </div>
         </div>
 

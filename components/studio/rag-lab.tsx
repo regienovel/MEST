@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { VectorSpace } from './vector-space';
 import { ConfigureTab } from './rag-configure';
+import { ScenarioBrief } from './scenario-brief';
 
 interface RagLabProps {
   teamId: string;
@@ -102,6 +103,7 @@ export function RagLab({ teamId, teamName, xp }: RagLabProps) {
       )}
 
       <div className="flex-1 max-w-6xl mx-auto w-full px-4 py-6">
+        <ScenarioBrief />
         {activeTab === 'documents' && <DocumentsTab teamId={teamId} />}
         {activeTab === 'configure' && <ConfigureTab teamId={teamId} onActiveModelChange={setActiveModelName} />}
         {activeTab === 'pipeline' && <PipelineTab teamId={teamId} />}
