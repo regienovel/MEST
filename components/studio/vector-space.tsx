@@ -343,9 +343,9 @@ export function VectorSpace({
           );
         })()}
 
-        {/* Enhancement #8: Axis labels */}
-        <text x={12} y={CANVAS_H - 8} fill="white" fillOpacity={0.6} fontSize={10}>← less similar</text>
-        <text x={CANVAS_W - 100} y={CANVAS_H - 8} fill="white" fillOpacity={0.6} fontSize={10}>more similar →</text>
+        {/* Enhancement #8: Axis labels — edges=less similar, centre=more similar */}
+        <text x={12} y={CANVAS_H - 8} fill="white" fillOpacity={0.4} fontSize={9}>← less similar (edge)</text>
+        <text x={CENTER_X - 40} y={CENTER_Y + 24} fill="#B8860B" fillOpacity={0.5} fontSize={9}>centre = most similar</text>
       </svg>
 
       {/* Enhancement #7: Hover preview card */}
