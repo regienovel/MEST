@@ -24,18 +24,27 @@ export async function POST(req: NextRequest) {
   let text = '';
   const fileName = file.name;
 
-  if (fileName.endsWith('.pdf')) {
-    try {
+  try {
+    if (fileName.endsWith('.pdf')) {
       const buffer = Buffer.from(await file.arrayBuffer());
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const pdfParse = require('pdf-parse');
-      const parsed = await pdfParse(buffer);
-      text = parsed.text;
-    } catch (err) {
-      return NextResponse.json({ error: 'Failed to parse PDF' }, { status: 400 });
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const pdfParse = require('pdf-parse');
+        const parsed = await pdfParse(buffer);
+        text = parsed.text;
+      } catch {
+        // pdf-parse may not work on Vercel — try reading as raw text
+        text = buffer.toString('utf-8').replace(/[^\x20-\x7E\n\r\t]/g, ' ').replace(/\s+/g, ' ');
+        if (text.trim().length < 50) {
+          return NextResponse.json({ error: 'PDF parsing failed on this server. Try uploading as .txt instead — copy-paste the PDF content into a text file.' }, { status: 400 });
+        }
+      }
+    } else {
+      text = await file.text();
     }
-  } else {
-    text = await file.text();
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    return NextResponse.json({ error: `File read failed: ${msg}` }, { status: 400 });
   }
 
   if (!text.trim()) return NextResponse.json({ error: 'File is empty' }, { status: 400 });

@@ -109,6 +109,7 @@ function DocumentsTab({ teamId }: { teamId: string }) {
   const [chunkSize, setChunkSize] = useState('500');
   const [overlap, setOverlap] = useState('50');
   const [embeddingDocId, setEmbeddingDocId] = useState<string | null>(null);
+  const [error, setError] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
 
   const fetchDocs = useCallback(() => {
@@ -129,13 +130,18 @@ function DocumentsTab({ teamId }: { teamId: string }) {
     formData.append('chunkSize', chunkSize);
     formData.append('overlap', overlap);
 
+    setError('');
     try {
       const res = await fetch('/api/rag/upload', { method: 'POST', body: formData });
       const data = await res.json();
       if (data.ok) {
         setDocs(prev => [...prev, { ...data.document, embedded: false }]);
+      } else {
+        setError(data.error || 'Upload failed');
       }
-    } catch {}
+    } catch (err) {
+      setError(`Upload failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
     setUploading(false);
   };
 
@@ -172,6 +178,7 @@ function DocumentsTab({ teamId }: { teamId: string }) {
         <Upload size={32} className="mx-auto text-mest-grey-300 mb-3" />
         <p className="text-mest-grey-500">{t('rag.upload.drop')}</p>
         {uploading && <p className="text-sm text-mest-blue mt-2 animate-pulse">{t('rag.processing')}</p>}
+        {error && <p className="text-sm text-mest-rust mt-2">{error}</p>}
       </div>
 
       {/* Chunking strategy */}
