@@ -23,23 +23,34 @@ export async function POST(req: NextRequest) {
 
   let text = '';
   const fileName = file.name;
+  const isPdf = fileName.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf';
 
   try {
-    if (fileName.endsWith('.pdf')) {
-      const buffer = Buffer.from(await file.arrayBuffer());
+    if (isPdf) {
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
       try {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const pdfParse = require('pdf-parse');
-        const parsed = await pdfParse(buffer);
-        text = parsed.text;
-      } catch {
-        // pdf-parse may not work on Vercel — try reading as raw text
-        text = buffer.toString('utf-8').replace(/[^\x20-\x7E\n\r\t]/g, ' ').replace(/\s+/g, ' ');
-        if (text.trim().length < 50) {
-          return NextResponse.json({ error: 'PDF parsing failed on this server. Try uploading as .txt instead — copy-paste the PDF content into a text file.' }, { status: 400 });
-        }
+        const data = await pdfParse(buffer);
+        text = data.text;
+      } catch (err) {
+        console.error('[rag-upload] PDF parsing failed:', err);
+        return NextResponse.json({
+          error: 'PDF text extraction failed. Please copy-paste the PDF content into a .txt file and upload that instead.'
+        }, { status: 400 });
+      }
+
+      // Sanity check: if the extracted text still contains PDF metadata, extraction failed
+      if (text.includes('%PDF-') || text.includes('endobj') || text.includes('/MediaBox')) {
+        console.error('[rag-upload] PDF extraction produced raw PDF data instead of text');
+        return NextResponse.json({
+          error: 'PDF text extraction failed — the output contains PDF metadata instead of readable text. Please copy-paste the PDF content into a .txt file and upload that instead.'
+        }, { status: 400 });
       }
     } else {
+      // .txt, .md — read as plain text
       text = await file.text();
     }
   } catch (err) {
@@ -47,7 +58,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: `File read failed: ${msg}` }, { status: 400 });
   }
 
-  if (!text.trim()) return NextResponse.json({ error: 'File is empty' }, { status: 400 });
+  text = text.trim();
+  if (!text) return NextResponse.json({ error: 'File is empty or contains no extractable text' }, { status: 400 });
 
   // Chunk the text
   let chunkTexts: string[];
