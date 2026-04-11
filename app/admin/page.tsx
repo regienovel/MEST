@@ -223,6 +223,14 @@ export default function AdminPage() {
     fetchData();
   }
 
+  async function adminSetScore(teamId: string, property: string, status: string) {
+    await fetch('/api/admin/scorecard', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ teamId, property, status }),
+    });
+  }
+
   const [seedingScenarios, setSeedingScenarios] = useState(false);
   async function seedAllScenarios() {
     if (!confirm('Seed scenario starter models for all 11 teams? This will embed documents and may take 2-3 minutes.')) return;
@@ -326,6 +334,51 @@ export default function AdminPage() {
                         </Button>
                       </div>
                     </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Trust Scorecard — Admin controls */}
+        <div className="bg-white rounded-xl border-2 border-mest-gold/40 p-6">
+          <h2 className="font-serif text-xl text-mest-ink mb-2">Trust Scorecard</h2>
+          <p className="text-sm text-mest-grey-500 mb-4">Set trust property scores for each team. Teams see these on their Health Dashboard (read-only).</p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-mest-grey-50">
+                <tr>
+                  <th className="text-left px-3 py-2 font-medium">Team</th>
+                  <th className="text-center px-2 py-2 font-medium">Honest Uncertainty</th>
+                  <th className="text-center px-2 py-2 font-medium">Source Citation</th>
+                  <th className="text-center px-2 py-2 font-medium">Context Fit</th>
+                  <th className="text-center px-2 py-2 font-medium">Recoverability</th>
+                  <th className="text-center px-2 py-2 font-medium">Adversarial</th>
+                </tr>
+              </thead>
+              <tbody>
+                {teams.map(team => (
+                  <tr key={`score-${team.id}`} className="border-t border-mest-grey-300/30">
+                    <td className="px-3 py-2 font-medium">{team.name}</td>
+                    {['honest_uncertainty', 'source_citation', 'context_fit', 'recoverability', 'adversarial_robustness'].map(prop => (
+                      <td key={prop} className="px-2 py-2 text-center">
+                        <div className="flex gap-1 justify-center">
+                          <button
+                            onClick={() => adminSetScore(team.id, prop, 'pass')}
+                            className="px-1.5 py-0.5 rounded bg-mest-sage/20 text-mest-sage hover:bg-mest-sage/40"
+                          >✓</button>
+                          <button
+                            onClick={() => adminSetScore(team.id, prop, 'fail')}
+                            className="px-1.5 py-0.5 rounded bg-mest-rust/20 text-mest-rust hover:bg-mest-rust/40"
+                          >✗</button>
+                          <button
+                            onClick={() => adminSetScore(team.id, prop, 'untested')}
+                            className="px-1.5 py-0.5 rounded bg-mest-grey-100 text-mest-grey-500 hover:bg-mest-grey-300/50"
+                          >—</button>
+                        </div>
+                      </td>
+                    ))}
                   </tr>
                 ))}
               </tbody>

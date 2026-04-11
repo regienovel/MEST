@@ -59,15 +59,6 @@ export function HealthDashboard({ teamId, teamName, xp }: HealthDashboardProps) 
     return () => clearInterval(interval);
   }, [fetchMetrics]);
 
-  const updateScorecard = async (property: string, status: 'pass' | 'fail') => {
-    await fetch('/api/health/scorecard', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ property, status }),
-    });
-    fetchMetrics();
-  };
-
   const latencyColor = (ms: number) => ms < 1500 ? 'text-mest-sage' : ms < 3000 ? 'text-mest-gold' : 'text-mest-rust';
   const errorColor = (rate: number) => rate < 1 ? 'text-mest-sage' : rate < 5 ? 'text-mest-gold' : 'text-mest-rust';
 
@@ -151,9 +142,8 @@ export function HealthDashboard({ teamId, teamName, xp }: HealthDashboardProps) 
                       {new Date(score.lastTested).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   )}
-                  <div className="flex gap-1 mt-2 justify-center">
-                    <button onClick={() => updateScorecard(prop.key, 'pass')} className="text-xs px-2 py-0.5 rounded bg-mest-sage/20 text-mest-sage hover:bg-mest-sage/30">✓</button>
-                    <button onClick={() => updateScorecard(prop.key, 'fail')} className="text-xs px-2 py-0.5 rounded bg-mest-rust/20 text-mest-rust hover:bg-mest-rust/30">✗</button>
+                  <div className="mt-2 text-xs text-mest-grey-300 italic">
+                    {status === 'untested' ? 'Awaiting trainer evaluation' : 'Set by trainer'}
                   </div>
                 </div>
               );
