@@ -112,13 +112,23 @@ function DocumentsTab({ teamId }: { teamId: string }) {
   const [embeddingDocId, setEmbeddingDocId] = useState<string | null>(null);
   const [reprocessingDocId, setReprocessingDocId] = useState<string | null>(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  // Fetch documents from Redis on mount
   const fetchDocs = useCallback(() => {
-    fetch('/api/rag/visualize', { method: 'POST' }).catch(() => {});
-    // Get docs from a simple list endpoint — we'll derive from the visualize data
-    // Actually, let's add a docs list. For now, track locally after upload
+    fetch('/api/rag/documents')
+      .then(r => r.json())
+      .then(d => {
+        if (d.documents) setDocs(d.documents);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    fetchDocs();
+  }, [fetchDocs]);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -290,7 +300,13 @@ function DocumentsTab({ teamId }: { teamId: string }) {
         </div>
       )}
 
-      {docs.length === 0 && !uploading && (
+      {loading && (
+        <div className="text-center text-mest-grey-500 py-12 animate-pulse">
+          {t('common.loading')}
+        </div>
+      )}
+
+      {docs.length === 0 && !uploading && !loading && (
         <div className="text-center text-mest-grey-500 py-12 font-serif italic text-lg">
           {t('rag.noDocuments')}
         </div>
