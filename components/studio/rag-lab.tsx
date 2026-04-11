@@ -173,8 +173,19 @@ function DocumentsTab({ teamId }: { teamId: string }) {
     setUploading(false);
   };
 
+  const [embedProgress, setEmbedProgress] = useState<{ docName: string; chunks: number; stage: string } | null>(null);
+
   const handleEmbed = async (docId: string) => {
     setEmbeddingDocId(docId);
+    const doc = docs.find(d => d.id === docId);
+    const docName = doc?.name || 'Document';
+    const chunks = doc?.chunkCount || 0;
+
+    // Show progress stages
+    setEmbedProgress({ docName, chunks, stage: 'Preparing chunks...' });
+    await new Promise(r => setTimeout(r, 400));
+    setEmbedProgress({ docName, chunks, stage: `Converting ${chunks} text chunks to 1536-dimension vectors...` });
+
     try {
       const res = await fetch('/api/rag/embed', {
         method: 'POST',
@@ -183,10 +194,19 @@ function DocumentsTab({ teamId }: { teamId: string }) {
       });
       const data = await res.json();
       if (data.ok) {
+        setEmbedProgress({ docName, chunks, stage: `✓ ${chunks} chunks embedded into ${data.dimensions || 1536}-dimensional vector space` });
         setDocs(prev => prev.map(d => d.id === docId ? { ...d, embedded: true } : d));
+        await new Promise(r => setTimeout(r, 2000));
+      } else {
+        setEmbedProgress({ docName, chunks, stage: `✗ Embedding failed: ${data.error}` });
+        await new Promise(r => setTimeout(r, 3000));
       }
-    } catch {}
+    } catch {
+      setEmbedProgress({ docName, chunks, stage: '✗ Embedding failed. Try again.' });
+      await new Promise(r => setTimeout(r, 3000));
+    }
     setEmbeddingDocId(null);
+    setEmbedProgress(null);
   };
 
   const handleReprocess = async (docId: string) => {
@@ -322,7 +342,55 @@ function DocumentsTab({ teamId }: { teamId: string }) {
         </div>
       )}
 
-      {docs.length === 0 && !uploading && !loading && (
+      {/* Embedding progress visualization */}
+      {embedProgress && (
+        <div className="bg-[#0F2F44] rounded-xl p-5 text-white">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-3 h-3 bg-mest-gold rounded-full animate-pulse" />
+            <h4 className="text-sm font-semibold">Embedding: {embedProgress.docName}</h4>
+          </div>
+          <p className="text-xs text-white/70 mb-3">{embedProgress.stage}</p>
+
+          {/* Visual: text → vectors animation */}
+          <div className="flex items-center gap-4 py-3">
+            <div className="flex-1">
+              <div className="flex flex-wrap gap-1">
+                {Array.from({ length: Math.min(embedProgress.chunks, 12) }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-6 rounded bg-white/20 text-[8px] text-white/50 flex items-center px-1.5 overflow-hidden"
+                    style={{ width: `${40 + Math.random() * 40}px`, animationDelay: `${i * 100}ms` }}
+                  >
+                    chunk {i + 1}
+                  </div>
+                ))}
+              </div>
+              <p className="text-[10px] text-white/40 mt-1">Text chunks</p>
+            </div>
+
+            <div className="text-mest-gold text-lg animate-pulse">→</div>
+
+            <div className="flex-1">
+              <div className="flex flex-wrap gap-1">
+                {Array.from({ length: Math.min(embedProgress.chunks, 12) }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={`h-6 w-6 rounded-full flex items-center justify-center text-[7px] ${
+                      embeddingDocId ? 'bg-mest-gold/30 animate-pulse' : 'bg-mest-gold'
+                    }`}
+                    style={{ animationDelay: `${i * 150}ms` }}
+                  >
+                    {embeddingDocId ? '...' : '✓'}
+                  </div>
+                ))}
+              </div>
+              <p className="text-[10px] text-white/40 mt-1">1536-dim vectors</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {docs.length === 0 && !uploading && !loading && !embedProgress && (
         <div className="text-center text-mest-grey-500 py-12 font-serif italic text-lg">
           {t('rag.noDocuments')}
         </div>
