@@ -31,10 +31,10 @@ export async function POST(req: NextRequest) {
       const buffer = Buffer.from(arrayBuffer);
 
       try {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const pdfParse = require('pdf-parse');
-        const data = await pdfParse(buffer);
-        text = data.text;
+        // Use unpdf which works in serverless environments (no fs dependency)
+        const { extractText } = await import('unpdf');
+        const result = await extractText(new Uint8Array(arrayBuffer));
+        text = Array.isArray(result.text) ? result.text.join('\n') : String(result.text);
       } catch (err) {
         console.error('[rag-upload] PDF parsing failed:', err);
         return NextResponse.json({
