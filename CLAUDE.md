@@ -1,143 +1,155 @@
-# MEST AI Studio — Claude Code Build Guide
+# MEST AI Studio — Project Guide
 
-You are building the **MEST AI Studio**, a bilingual AI experimentation platform for 29 West African entrepreneurs-in-training (EITs) running their Day 1 programme tomorrow morning at 09:00. This is a real, time-critical deliverable. Your job is to build the entire platform autonomously without human intervention.
+## What This Is
 
-## The Operator
+**MEST AI Studio** is a bilingual (EN/FR) AI experimentation platform for West African entrepreneurs-in-training (EITs). It's deployed on Vercel at `mest-nine.vercel.app`.
 
-The human operator has stepped away. They will not answer questions. You must make every decision yourself, consulting this document and the spec files. When in doubt, choose the option that is:
-1. **Simpler** (fewer moving parts, less that can break)
-2. **More reliable** (battle-tested libraries over clever ones)
-3. **Faster to build** (ship working code, not perfect code)
-4. **Easier to debug** (clear error messages, readable code)
+## Current State: LIVE & IN USE
 
-Do not stop to ask questions. Do not leave TODO comments asking for input. Make the decision and proceed.
+All 10 build phases are complete. The platform has been deployed, tested, and iterated on through multiple rounds of live user testing. See `BUILD_STATUS.md` for full details.
 
-## Context Window Management — READ THIS FIRST
+## Architecture (Post-Deployment)
 
-Claude Code sessions have finite context. This project is too large to hold entirely in context. To handle this safely:
+### Stack
+- **Framework:** Next.js 14.2 (App Router), TypeScript, Tailwind CSS 3
+- **AI:** OpenAI SDK (GPT-4o, Whisper, TTS), Anthropic SDK (Claude Sonnet)
+- **Storage:** Upstash Redis via `@upstash/redis` (persistent KV)
+- **Auth:** Cookie-based (`mest_session`, `mest_team`, `mest_admin`)
+- **Hosting:** Vercel Pro
 
-1. **This file (CLAUDE.md) is your persistent brain.** Always keep it in context.
-2. **Read spec files on-demand per phase.** Do not read all specs at once.
-3. **Work in phases.** Complete one phase fully before starting the next.
-4. **After each phase, update `/BUILD_STATUS.md`** with what's done, what's next, and any decisions made.
-5. **If context feels tight, re-read CLAUDE.md + BUILD_STATUS.md + the current phase spec** to re-establish state.
-6. **If a session ends and a new one begins, read CLAUDE.md → BUILD_STATUS.md → the next phase spec.** This is enough to resume.
+### Key Architecture Decisions
+- **UI components:** shadcn/ui v4 components (Select, Dialog) were replaced with native `<select>` and a custom `Modal` component because shadcn v4 uses `@base-ui/react` which is incompatible with Tailwind CSS v3
+- **Auth:** Team info stored in `mest_team` cookie (JSON) so server components work across Vercel serverless instances without shared storage
+- **Login:** Validates against `seed/teams.json` directly (no Redis dependency for authentication)
+- **Static data:** Teams, templates, and default config read from seed JSON files at build time
+- **Persistent data:** Gallery items, chains, activity, XP, usage, admin config stored in Upstash Redis
+- **SSE streaming:** Chat, vision, and chain execution use Server-Sent Events with chunk buffering (split on `\n\n` boundaries to handle large base64 payloads)
+- **Function timeouts:** `maxDuration=60` on chat/vision/chain routes, `maxDuration=30` on transcribe/tts
 
-## Where Everything Lives
-
+### File Structure
 ```
-/CLAUDE.md                    ← This file. Your persistent brain.
-/BUILD_STATUS.md              ← You maintain this. Current state of the build.
-/specs/
-  00-overview.md              ← Project summary and goals
-  01-stack-and-setup.md       ← Exact tech stack and initial setup
-  02-design-system.md         ← Colors, fonts, components, aesthetic
-  03-data-model.md            ← Storage schema
-  04-auth-and-teams.md        ← Team login and seed data
-  05-module-chat-lab.md       ← Chat Lab feature spec
-  06-module-voice-lab.md      ← Voice Lab feature spec
-  07-module-vision-lab.md     ← Vision Lab feature spec
-  08-module-chain-builder.md  ← Chain Builder feature spec
-  09-module-gallery.md        ← Gallery feature spec
-  10-module-admin.md          ← Admin panel feature spec
-  11-i18n-strings.md          ← All EN/FR UI strings
-  12-chain-templates.md       ← 6 seed templates for Chain Builder
-  13-testing-plan.md          ← Functional tests to run after build
-  14-build-order.md           ← THE ORDER. Follow this exactly.
-/seed/
-  teams.json                  ← Team names and default passwords
-  templates.json              ← Chain templates as JSON
-  trust-failures.json         ← The 6 AI trust failure case studies
-/.env.example                 ← Required environment variables
+app/
+  page.tsx                    ← Landing page with login
+  layout.tsx                  ← Root layout with fonts + I18nProvider
+  studio/
+    page.tsx                  ← Studio home dashboard
+    chat/page.tsx             ← Chat Lab
+    voice/page.tsx            ← Voice Lab
+    vision/page.tsx           ← Vision Lab
+    chain/page.tsx            ← Chain Builder
+    gallery/page.tsx          ← Gallery
+  admin/page.tsx              ← Admin panel
+  api/
+    auth/login/route.ts       ← Login (validates vs seed file)
+    auth/logout/route.ts      ← Logout (clears cookies)
+    teams/route.ts            ← Team list (reads seed file)
+    chat/route.ts             ← Chat streaming (GPT/Claude/Both)
+    transcribe/route.ts       ← Whisper transcription
+    tts/route.ts              ← Text-to-Speech
+    vision/route.ts           ← Vision analysis (GPT/Claude/Both)
+    chain/run/route.ts        ← Chain executor (SSE streaming)
+    chain/save/route.ts       ← Save chain + outputs to gallery
+    chain/templates/route.ts  ← Templates (reads seed file)
+    gallery/route.ts          ← Gallery list + save
+    gallery/[id]/route.ts     ← Gallery detail + view count
+    gallery/[id]/fork/route.ts ← Fork chain
+    gallery/[id]/delete/route.ts ← Delete own items
+    config/route.ts           ← Config with defaults
+    activity/route.ts         ← Activity feed
+    admin/                    ← Admin API routes (usage, broadcast, etc.)
+components/
+  studio/                     ← All module UI components
+  ui/                         ← Base UI (button, input, modal, native-select, etc.)
+  admin/                      ← Admin components
+lib/
+  storage.ts                  ← Upstash Redis adapter
+  auth.ts                     ← Cookie-based auth helpers
+  seed.ts                     ← Seeds missing teams/config to Redis
+  i18n.ts                     ← Full EN/FR dictionary (~160 strings)
+  i18n-context.tsx            ← React context + localStorage persistence
+  openai.ts                   ← OpenAI client
+  anthropic.ts                ← Anthropic client
+  chain-executor.ts           ← Sequential block executor
+  rate-limit.ts               ← Per-team rate limiting
+  activity.ts                 ← Activity feed logger
+  usage.ts                    ← XP award helper
+  pricing.ts                  ← Cost estimation constants
+  languages.ts                ← Language code → name mapping
+  image-utils.ts              ← Client-side image resize
+  types.ts                    ← TypeScript interfaces
+  hooks/
+    use-chat-stream.ts        ← Chat streaming hook
+    use-audio-recorder.ts     ← MediaRecorder hook
+seed/
+  teams.json                  ← 11 teams + admin (West African dishes)
+  templates.json              ← 6 chain templates with block descriptions
+  trust-failures.json         ← AI trust failure case studies
 ```
 
-## The Build Order (Non-Negotiable)
+## Teams (11 + Admin)
 
-**Follow `/specs/14-build-order.md` exactly.** Do not skip ahead. Do not build in parallel. Each phase produces a deployable state so partial completion is still valuable.
+| Team | Password |
+|------|----------|
+| Ghana Jollof ⭐ | `jollof2026` |
+| Waakye | `waakye2026` |
+| Thiéboudienne | `thieb2026` |
+| Fufu & Light Soup | `fufu2026` |
+| Egusi Soup | `egusi2026` |
+| Kelewele | `kelewele2026` |
+| Attiéké | `attieke2026` |
+| Suya | `suya2026` |
+| Banku & Tilapia | `banku2026` |
+| Mafé | `mafe2026` |
+| Chinchinga | `chinchinga2026` |
+| Admin | `mest-operator-2026` |
 
-The high-level phases are:
-1. **Phase 0:** Foundation — Next.js scaffold, dependencies, env config
-2. **Phase 1:** Design System & Layout — MEST theme, base components, i18n
-3. **Phase 2:** Auth & Storage — Team login, file-based KV adapter
-4. **Phase 3:** Studio Home — Dashboard, module cards, activity feed
-5. **Phase 4:** Chat Lab — With Compare Mode (this is the flagship)
-6. **Phase 5:** Voice Lab — Record, transcribe, respond, speak
-7. **Phase 6:** Vision Lab — Image upload, preset prompts, compare
-8. **Phase 7:** Chain Builder — Block-based workflow editor
-9. **Phase 8:** Gallery — Cross-team showcase
-10. **Phase 9:** Admin Panel — Operator cockpit
-11. **Phase 10:** Polish, Testing, Commit, Push
+## Vercel Environment Variables
 
-## Core Principles (Apply Throughout)
+| Variable | Purpose |
+|----------|---------|
+| `OPENAI_API_KEY` | GPT-4o, Whisper, TTS |
+| `ANTHROPIC_API_KEY` | Claude Sonnet |
+| `ADMIN_PASSWORD` | Admin panel access |
+| `KV_REST_API_URL` | Upstash Redis (auto-set) |
+| `KV_REST_API_TOKEN` | Upstash Redis (auto-set) |
 
-### 1. Trust is the invisible theme
-Every feature must work well enough to be bold, AND have moments where AI limitations become visible. Compare Modes, language detection displays, and real-time error surfacing are essential. Do not hide AI failures — expose them clearly so learners can see them.
+## When Making Changes
 
-### 2. Bilingual from pixel one
-Every string the user sees must exist in English AND French. Use the `/specs/11-i18n-strings.md` dictionary. Never hardcode user-facing text in components. If you need a new string, add it to the dictionary in both languages.
+### Important patterns to follow:
+1. **Never use shadcn Select or Dialog** — use `NativeSelect` from `components/ui/native-select.tsx` and `Modal` from `components/ui/modal.tsx`
+2. **API routes read team from `mest_team` cookie** — not from storage sessions
+3. **Static data (teams, templates) comes from seed files** — not from Redis
+4. **Add `export const maxDuration = 60` to any new long-running API routes**
+5. **SSE parsers must buffer chunks and split on `\n\n`** — not `\n` — to handle large payloads
+6. **Use `!!value &&` instead of `value &&` in JSX** when value is typed as `unknown` to avoid ReactNode type errors
+7. **All user-facing strings must be in both EN and FR** — add to `lib/i18n.ts`
+8. **Chain block descriptions use `_desc` and `_descFr` fields** in config objects
 
-### 3. Mobile-responsive, laptop-first
-Primary experience is on 13-15" laptops. Voice Lab must also work on mobile (some learners may use phones). Use Tailwind responsive classes throughout.
+### Testing changes:
+```bash
+npx tsc --noEmit          # TypeScript check
+npx next build            # Production build
+npm run dev               # Dev server
+node scripts/test-endpoints.js  # Automated tests (requires running dev server)
+```
 
-### 4. Errors must be human-readable
-Never show raw API errors to users. Catch everything, return friendly messages in EN/FR. Loading states should have playful messages.
+### Deploying:
+```bash
+git add -A && git commit -m "description" && git push origin master:main
+```
+Vercel auto-deploys on push to main.
 
-### 5. Rate limiting is mandatory
-Every AI API route must check a per-team rate limit before calling. Default: 200 calls per team per hour. This prevents runaway costs.
+## Known Limitations
 
-### 6. No user data leaves the server except intentionally
-API keys live in environment variables only. Never expose them to the client. All AI calls go through `/api/*` server routes.
+- Chain executor runs blocks sequentially (not parallel)
+- Gallery stores metadata only for images (not the actual image data)
+- Whisper may misdetect West African languages (Twi → Yoruba/Italian)
+- OpenAI TTS doesn't officially support Twi (works with English, French, Spanish, Portuguese)
+- Uses polling for real-time features (no WebSockets)
+- Cost tracking in admin is approximate (use OpenAI/Anthropic dashboards for exact billing)
 
-### 7. Build it so it can be demoed at 9am tomorrow
-This is not a toy. 29 people will use it live. Prioritize reliability over features. Test every happy path.
+## Cost Tracking for Reimbursement
 
-## Design North Star
-
-The platform must look and feel like a **real, polished product** — not a hackathon prototype. The MEST cohort's first impression of the platform sets their expectations for what they can build. See `/specs/02-design-system.md` for the full aesthetic direction.
-
-Key choices already made:
-- **Colors:** MEST blue (#1B4F72), teal (#0E6B5C), gold accent (#B8860B), warm off-white backgrounds
-- **Typography:** Inter for UI, optional serif display for hero moments
-- **Feel:** Editorial-tech. Confident. African-contemporary, not stereotypical.
-- **Animations:** Subtle, purposeful. Never gratuitous.
-
-## What You Will NOT Do
-
-- **Do not ask the operator for clarification.** They are not available.
-- **Do not leave `// TODO: decide...` comments.** Decide and move on.
-- **Do not skip testing.** Phase 10 runs functional tests and is mandatory.
-- **Do not commit secrets.** `.env.local` is gitignored. Never write real API keys to any file except `.env.local` which you will not create (the operator creates it).
-- **Do not use tools the operator doesn't have.** Stick to: Next.js, React, TypeScript, Tailwind, shadcn/ui, OpenAI SDK, Anthropic SDK, and Node's built-in modules. No Supabase, no Firebase, no Postgres, no Redis.
-- **Do not deploy.** The operator deploys manually. Your job ends at commit + push to git.
-- **Do not over-engineer.** A JSON file for storage is fine. A simple cookie for auth is fine. Ship working code.
-
-## What You MUST Do
-
-- **Follow the build order exactly.**
-- **Update `/BUILD_STATUS.md` after each phase.**
-- **Run functional tests in Phase 10 and document results.**
-- **Commit after each phase with a clear message.**
-- **Push to `https://github.com/regienovel/MEST.git` at the end.** The remote is named `origin`. Branch is `main`.
-- **Leave a final status in `/BUILD_STATUS.md`** explaining what works, what to test manually, and how to run the dev server.
-
-## When You Start
-
-1. Read `/specs/00-overview.md` (one page — always read this first)
-2. Read `/specs/14-build-order.md` (the sequence)
-3. Begin Phase 0 by reading `/specs/01-stack-and-setup.md`
-4. Work through phases sequentially, reading the relevant spec file at the start of each phase
-5. After each phase, update `/BUILD_STATUS.md` and commit
-
-## Final Check Before You Start
-
-Before writing any code, verify:
-- [ ] `/specs/` folder exists with all 15 files
-- [ ] `/seed/` folder exists with teams.json, templates.json, trust-failures.json
-- [ ] `.env.example` exists at the project root
-- [ ] `.env.local` exists (created by operator) with OPENAI_API_KEY and ANTHROPIC_API_KEY
-
-If any of the above are missing, check the current directory carefully. Do not proceed until all spec files are present.
-
----
-
-**You have everything you need. Start with Phase 0. Build carefully. Test thoroughly. Ship on time.**
+Admin dashboard shows approximate per-team costs. For exact numbers:
+- **OpenAI:** platform.openai.com/usage
+- **Anthropic:** console.anthropic.com/settings/billing
