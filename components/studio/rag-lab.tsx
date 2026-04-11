@@ -109,6 +109,7 @@ function DocumentsTab({ teamId }: { teamId: string }) {
   const [chunkSize, setChunkSize] = useState('500');
   const [overlap, setOverlap] = useState('50');
   const [embeddingDocId, setEmbeddingDocId] = useState<string | null>(null);
+  const [reprocessingDocId, setReprocessingDocId] = useState<string | null>(null);
   const [error, setError] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -159,6 +160,42 @@ function DocumentsTab({ teamId }: { teamId: string }) {
       }
     } catch {}
     setEmbeddingDocId(null);
+  };
+
+  const handleReprocess = async (docId: string) => {
+    setReprocessingDocId(docId);
+    setError('');
+    try {
+      const res = await fetch('/api/rag/reprocess', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ documentId: docId, strategy, chunkSize: parseInt(chunkSize), overlap: parseInt(overlap) }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        setDocs(prev => prev.map(d => d.id === docId ? { ...d, chunkCount: data.chunkCount, embedded: false } : d));
+      } else {
+        setError(data.error || 'Reprocess failed');
+      }
+    } catch {
+      setError('Reprocess failed');
+    }
+    setReprocessingDocId(null);
+  };
+
+  const handleDelete = async (docId: string) => {
+    if (!confirm('Delete this document?')) return;
+    try {
+      const res = await fetch('/api/rag/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ documentId: docId }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        setDocs(prev => prev.filter(d => d.id !== docId));
+      }
+    } catch {}
   };
 
   return (
@@ -216,18 +253,37 @@ function DocumentsTab({ teamId }: { teamId: string }) {
                 <span className="text-sm font-medium text-mest-ink">{doc.name}</span>
                 <span className="text-xs text-mest-grey-500 ml-2">{doc.charCount} {t('rag.chars')} · {doc.chunkCount} {t('rag.chunks')}</span>
               </div>
-              {doc.embedded ? (
-                <span className="text-xs bg-mest-sage-light text-mest-sage px-2 py-0.5 rounded-full">{t('rag.embedded')}</span>
-              ) : (
+              <div className="flex items-center gap-2">
+                {doc.embedded ? (
+                  <span className="text-xs bg-mest-sage-light text-mest-sage px-2 py-0.5 rounded-full">{t('rag.embedded')}</span>
+                ) : (
+                  <Button
+                    size="sm"
+                    onClick={() => handleEmbed(doc.id)}
+                    disabled={embeddingDocId === doc.id}
+                    className="bg-mest-blue hover:bg-mest-blue/90 text-white gap-1.5"
+                  >
+                    {embeddingDocId === doc.id ? <><Loader2 size={12} className="animate-spin" /> {t('rag.embedding')}</> : t('rag.embed')}
+                  </Button>
+                )}
                 <Button
                   size="sm"
-                  onClick={() => handleEmbed(doc.id)}
-                  disabled={embeddingDocId === doc.id}
-                  className="bg-mest-blue hover:bg-mest-blue/90 text-white gap-1.5"
+                  variant="outline"
+                  onClick={() => handleReprocess(doc.id)}
+                  disabled={reprocessingDocId === doc.id}
+                  className="gap-1 text-xs"
                 >
-                  {embeddingDocId === doc.id ? <><Loader2 size={12} className="animate-spin" /> {t('rag.embedding')}</> : t('rag.embed')}
+                  {reprocessingDocId === doc.id ? <Loader2 size={12} className="animate-spin" /> : '🔄'}
+                  Rechunk
                 </Button>
-              )}
+                <button
+                  onClick={() => handleDelete(doc.id)}
+                  className="p-1.5 hover:bg-mest-rust-light rounded text-mest-grey-300 hover:text-mest-rust"
+                  title="Delete document"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
             </div>
           ))}
         </div>
