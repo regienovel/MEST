@@ -9,6 +9,7 @@ import { NativeSelect } from '@/components/ui/native-select';
 import { ArrowLeft, Upload, Trash2, FileText, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { VectorSpace } from './vector-space';
 
 interface RagLabProps {
   teamId: string;
@@ -463,74 +464,14 @@ function PipelineTab({ teamId }: { teamId: string }) {
 
       {/* Vector space visualization */}
       {chunkPoints.length > 0 && (
-        <div className="bg-[#0F2F44] rounded-2xl p-6">
-          <h3 className="text-white/80 text-sm font-semibold mb-4">Vector Space</h3>
-          <svg viewBox="0 0 400 300" className="w-full max-w-lg mx-auto">
-            {/* Chunk dots */}
-            {chunkPoints.map((chunk, i) => {
-              const cx = 20 + chunk.x * 360;
-              const cy = 20 + chunk.y * 260;
-              const isRetrieved = retrievedChunks.some(r => r.id === chunk.id);
-
-              return (
-                <motion.circle
-                  key={chunk.id}
-                  cx={cx}
-                  cy={cy}
-                  r={isRetrieved ? 6 : 3}
-                  fill={isRetrieved ? '#B8860B' : '#ffffff40'}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1, r: isRetrieved ? 6 : 3 }}
-                  transition={{ delay: i * 0.02 }}
-                >
-                  <title>{chunk.documentName}: {chunk.text}</title>
-                </motion.circle>
-              );
-            })}
-            {/* Query dot */}
-            {stageStatuses['embed_query']?.status === 'done' && (
-              <motion.circle
-                cx={200}
-                cy={150}
-                r={8}
-                fill="#B8860B"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: [1, 1.3, 1] }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
-                filter="url(#glow)"
-              />
-            )}
-            {/* Lines to retrieved chunks */}
-            {retrievedChunks.map(rc => {
-              const chunk = chunkPoints.find(c => c.id === rc.id);
-              if (!chunk) return null;
-              const cx = 20 + chunk.x * 360;
-              const cy = 20 + chunk.y * 260;
-              return (
-                <motion.line
-                  key={rc.id}
-                  x1={200} y1={150}
-                  x2={cx} y2={cy}
-                  stroke="#B8860B"
-                  strokeWidth={1.5}
-                  strokeOpacity={0.6}
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.5 }}
-                />
-              );
-            })}
-            <defs>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="3" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-          </svg>
-        </div>
+        <VectorSpace
+          chunkPoints={chunkPoints}
+          retrievedChunks={retrievedChunks}
+          rerankedChunks={rerankedChunks}
+          queryEmbedDone={stageStatuses['embed_query']?.status === 'done'}
+          retrieveDone={stageStatuses['retrieve']?.status === 'done'}
+          rerankDone={stageStatuses['rerank']?.status === 'done'}
+        />
       )}
 
       {/* Retrieved / Reranked chunks */}

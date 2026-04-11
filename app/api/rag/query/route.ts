@@ -70,12 +70,13 @@ export async function POST(req: NextRequest) {
         const queryVector = await embedText(query);
         emit({ stage: 'embed_query', status: 'done', elapsed_ms: Date.now() - t2, payload: { dimensions: queryVector.length } });
 
-        await delay(200);
+        await delay(300);
 
-        // Stage 3: Retrieve
+        // Stage 3: Retrieve — wait 1500ms total so search wave animation completes
         const t3 = Date.now();
         emit({ stage: 'retrieve', status: 'running', payload: { totalChunks: allChunks.length } });
         const topK = retrieveTopK(queryVector, allChunks, allEmbeddings, 5);
+        await delay(1500); // Allow search wave animation to complete on client
         emit({
           stage: 'retrieve', status: 'done', elapsed_ms: Date.now() - t3,
           payload: {
