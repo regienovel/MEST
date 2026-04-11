@@ -14,6 +14,7 @@ import { ConfigureTab } from './rag-configure';
 import { ScenarioBrief } from './scenario-brief';
 import { ScenarioTab } from './scenario-tab';
 import { EmbeddingVisualizer } from './embedding-visualizer';
+import { PipelineStages } from './pipeline-stages';
 
 interface RagLabProps {
   teamId: string;
@@ -497,58 +498,7 @@ function PipelineTab({ teamId }: { teamId: string }) {
       </div>
 
       {/* Pipeline stages */}
-      <div className="bg-[#0F2F44] rounded-2xl p-6 overflow-x-auto">
-        <div className="flex items-center gap-3 min-w-[700px]">
-          {STAGES.map((stage, i) => {
-            const stageData = stageStatuses[stage];
-            const status = stageData?.status || 'idle';
-            const label = STAGE_LABELS[stage];
-            const isActive = status === 'running' || status === 'streaming';
-            const isDone = status === 'done';
-
-            return (
-              <div key={stage} className="flex items-center gap-3 flex-1">
-                <motion.div
-                  className={`flex-1 rounded-xl p-4 border-2 transition-colors ${
-                    isActive ? 'bg-white border-[#B8860B] shadow-lg shadow-[#B8860B]/20' :
-                    isDone ? 'bg-white border-[#0E6B5C]' :
-                    'bg-white/10 border-white/20'
-                  }`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                >
-                  <div className="text-center">
-                    <span className="text-xl">{label.emoji}</span>
-                    <p className={`text-xs font-semibold mt-1 ${isDone || isActive ? 'text-mest-ink' : 'text-white/60'}`}>
-                      {locale === 'fr' ? label.fr : label.en}
-                    </p>
-                    {isActive && (
-                      <motion.div
-                        className="w-2 h-2 bg-[#B8860B] rounded-full mx-auto mt-2"
-                        animate={{ scale: [1, 1.3, 1] }}
-                        transition={{ repeat: Infinity, duration: 0.8 }}
-                      />
-                    )}
-                    {isDone && stageData?.elapsed_ms !== undefined && (
-                      <p className="text-xs text-[#0E6B5C] mt-1">{stageData.elapsed_ms}ms</p>
-                    )}
-                    {isDone && <span className="text-xs text-[#0E6B5C]">✓</span>}
-                  </div>
-                </motion.div>
-                {i < STAGES.length - 1 && (
-                  <motion.div
-                    className={`w-6 h-0.5 rounded ${isDone ? 'bg-[#B8860B]' : 'bg-white/20'}`}
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: isDone ? 1 : 0 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <PipelineStages stageStatuses={stageStatuses} query={query} locale={locale} />
 
       {/* Vector space visualization */}
       {chunkPoints.length > 0 && (
