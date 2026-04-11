@@ -46,6 +46,8 @@ export async function POST(req: NextRequest) {
       allEmbeddings.push(doc.embeddings![i]);
     }
   }
+  console.log(`[rag-query] ${allChunks.length} chunks from ${embeddedDocs.length} docs`);
+  allChunks.forEach((c, i) => console.log(`[rag-query] Chunk ${i}: "${c.text.slice(0, 60)}..."`));
 
   const encoder = new TextEncoder();
 

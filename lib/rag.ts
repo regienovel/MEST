@@ -44,7 +44,10 @@ export function chunkByFixedSize(text: string, size: number = 500, overlap: numb
     chunks.push(text.slice(start, end).trim());
     start += size - overlap;
   }
-  return chunks.filter(c => c.length > 20);
+  const filtered = chunks.filter(c => c.length > 20);
+  console.log(`[rag-chunk] Fixed-size: ${filtered.length} chunks from ${text.length} chars (size=${size}, overlap=${overlap})`);
+  filtered.forEach((c, i) => console.log(`[rag-chunk] Chunk ${i}: "${c.slice(0, 50)}..."`));
+  return filtered;
 }
 
 export async function chunkBySemantic(text: string): Promise<string[]> {
