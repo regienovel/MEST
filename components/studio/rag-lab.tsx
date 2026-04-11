@@ -598,6 +598,7 @@ function StrictModeTab({ teamId }: { teamId: string }) {
   const [isRunning, setIsRunning] = useState(false);
   const [strictResult, setStrictResult] = useState('');
   const [normalResult, setNormalResult] = useState('');
+  const [threshold, setThreshold] = useState(0.15);
 
   const runComparison = async () => {
     if (!query.trim()) return;
@@ -621,7 +622,7 @@ function StrictModeTab({ teamId }: { teamId: string }) {
       const res = await fetch('/api/rag/query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: q, strict }),
+        body: JSON.stringify({ query: q, strict, config: { strictThreshold: threshold } }),
       });
 
       const reader = res.body?.getReader();
@@ -663,8 +664,22 @@ function StrictModeTab({ teamId }: { teamId: string }) {
         <p className="text-sm text-mest-grey-500 mb-3">
           Compare how RAG responds with strict mode ON vs OFF. With strict mode, the system refuses to answer if no source documents are relevant enough.
         </p>
-        <div className="inline-flex items-center gap-2 bg-mest-gold-light text-mest-gold text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
-          <span>Strict mode threshold: 15% similarity</span>
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-xs font-semibold text-mest-gold bg-mest-gold-light px-3 py-1.5 rounded-full">
+            Strict threshold: {Math.round(threshold * 100)}%
+          </span>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.05}
+            value={threshold}
+            onChange={e => setThreshold(parseFloat(e.target.value))}
+            className="w-48"
+          />
+          <span className="text-xs text-mest-grey-500">
+            {threshold < 0.2 ? 'Very lenient' : threshold < 0.4 ? 'Lenient' : threshold < 0.6 ? 'Moderate' : threshold < 0.8 ? 'Strict' : 'Very strict'}
+          </span>
         </div>
         <div className="flex gap-3">
           <Textarea
