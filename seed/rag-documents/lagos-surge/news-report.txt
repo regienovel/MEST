@@ -1,0 +1,21 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+LAGOS SURGE PRICING CRISIS DURING ENDSARS PROTESTS — NEWS REPORT
+
+October 20, 2020 — Lagos, Nigeria
+
+As gunfire erupted at the Lekki toll gate on the evening of October 20, 2020, thousands of Lagosians attempted to flee the area using ride-hailing platforms. What they encountered was an algorithmic response designed for routine demand fluctuations — not for a humanitarian emergency. Bolt and Uber surge pricing multiplied fares by as much as 10x within minutes, turning a typical N1,500 ride into N15,000 or more.
+
+The EndSARS protests had been building for weeks. Young Nigerians, frustrated by years of police brutality at the hands of the Special Anti-Robbery Squad (SARS), took to the streets demanding reform. The movement was largely peaceful until the evening of October 20, when soldiers opened fire on unarmed protesters gathered at the Lekki toll gate. The incident was broadcast live on social media by DJ Switch, drawing international condemnation.
+
+In the immediate aftermath, as a military-enforced curfew descended on Lagos, residents scrambled to get home. Public transport — the danfo buses and BRT lines that carry millions of Lagosians daily — had already shut down in anticipation of the curfew. Many had no choice but to turn to app-based ride-hailing services.
+
+Social media quickly filled with screenshots of astronomical fare estimates. A ride from Lekki to Ikeja that normally cost around N2,000 was quoted at N18,000 to N22,000. Rides from Victoria Island to the mainland showed similar inflation. Users reported that even after accepting these fares, wait times exceeded 45 minutes as most drivers had also fled or refused to enter affected areas.
+
+Bolt Nigeria issued a statement the following day saying it had "worked to cap surge pricing during the crisis," though users disputed this timeline, noting that prices remained elevated well into the night. Uber's communication was slower, eventually stating that surge pricing is an automated system and that the company would review rides from the period for potential refunds.
+
+Consumer advocates pointed out that the surge pricing mechanism, designed for the San Francisco market where it originated, was never stress-tested against scenarios common in Lagos — military curfews, mass protests, or the sudden collapse of public transit during emergencies. The algorithm simply detected high demand and low supply and responded as programmed.
+
+The incident reignited a broader debate in Nigeria about the role of foreign technology platforms operating in African cities. Senator Oluremi Tinubu raised the issue in the National Assembly, asking whether ride-hailing companies should be required to disable surge pricing during declared emergencies. The Lagos State Consumer Protection Agency (LASCOPA) received over 200 formal complaints related to surge pricing during the EndSARS period.
+
+For many young Lagosians, the surge pricing episode became a parable about algorithmic indifference — a system built to optimize revenue that could not distinguish between a rainy Friday evening and a night of state violence. The technology worked exactly as designed. That was the problem.

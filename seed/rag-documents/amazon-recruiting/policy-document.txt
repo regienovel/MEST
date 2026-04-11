@@ -1,0 +1,31 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+NEW YORK CITY LOCAL LAW 144 OF 2021 — SUMMARY
+Automated Employment Decision Tools (AEDTs)
+Effective: July 5, 2023
+
+OVERVIEW
+
+Local Law 144 requires employers and employment agencies in New York City to conduct independent bias audits of Automated Employment Decision Tools (AEDTs) before using them to screen candidates or employees.
+
+DEFINITIONS
+
+An Automated Employment Decision Tool is any computational process, derived from machine learning, statistical modelling, data analytics, or artificial intelligence, that issues a simplified output — including a score, classification, or recommendation — that is used to substantially assist or replace discretionary decision-making for employment decisions.
+
+KEY REQUIREMENTS
+
+1. Bias Audit: Before using an AEDT, the employer must obtain an independent bias audit conducted no more than one year prior to use. The audit must assess the tool's disparate impact on candidates based on race, ethnicity, and sex.
+
+2. Public Notice: Employers must publish the results of the bias audit on their website, including the date of the audit, the distribution date of the tool, and the selection rates and impact ratios for each demographic category.
+
+3. Candidate Notice: Candidates must be notified at least 10 business days before an AEDT is used to evaluate them. The notice must describe the job qualifications and characteristics the AEDT will assess and explain how to request an alternative selection process.
+
+4. Data Transparency: Employers must disclose the type of data collected by the AEDT, the source of that data, and the employer's data retention policy.
+
+PENALTIES
+
+Violations carry civil penalties of $500 for the first violation, $500-$1,500 for each subsequent violation, with each day constituting a separate violation.
+
+CONTEXT
+
+This legislation was directly influenced by high-profile cases of AI bias in hiring, including Amazon's recruiting AI scandal of 2018. It represents the first US municipal legislation specifically targeting algorithmic bias in employment and has served as a model for similar proposals in other jurisdictions.

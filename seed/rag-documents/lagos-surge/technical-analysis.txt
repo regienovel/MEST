@@ -1,0 +1,46 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+CONTEXT-BLIND OPTIMISATION: WHEN ALGORITHMS FAIL TO READ THE ROOM
+Lagos Business School — Case Study LBS-TECH-2021-04
+
+OVERVIEW
+
+On October 20, 2020, during the EndSARS protests that culminated in the shooting of demonstrators at the Lekki toll gate, a ride-hailing platform's dynamic pricing algorithm automatically imposed surge multipliers of up to 10x in Lagos. This case examines the failure as an instance of context-blind optimisation — a system that optimised effectively for its designed metric but catastrophically failed to account for the context in which it was operating.
+
+THE ALGORITHM'S LOGIC
+
+Dynamic pricing in ride-hailing operates on a simple economic principle: when demand exceeds supply, raise prices. This achieves two goals:
+1. Demand moderation: Higher prices discourage discretionary rides, preserving supply for those who need it most
+2. Supply incentive: Higher fares encourage more drivers to go online and enter high-demand areas
+
+Both mechanisms assume that the demand is elastic — that riders can choose to wait, take an alternative mode, or forgo the trip entirely. They also assume that drivers can safely enter the high-demand area.
+
+THE OCTOBER 20 REALITY
+
+Neither assumption held on October 20:
+
+Inelastic demand: People were fleeing violence. Their demand for transportation was not a matter of convenience — it was a matter of safety. Raising prices did not cause them to "choose to wait." It forced them to choose between paying extortionate fares and remaining in danger.
+
+Inaccessible supply: Drivers were also fleeing the violence or avoiding the area entirely. Higher fares could not incentivise drivers to enter areas where they risked being shot. The supply-side mechanism of surge pricing was non-functional.
+
+The result: maximum prices with minimum supply. The algorithm achieved the opposite of its intended purpose — it made transportation more expensive without making it more available.
+
+WHY CONTEXT MATTERS
+
+The failure is not that the algorithm was poorly designed for its intended context. It is that the algorithm was designed for one context (routine demand fluctuations) and deployed in another (emergency displacement) without any mechanism to detect the difference.
+
+A context-aware system would need:
+1. Emergency detection: Integration with news feeds, social media signals, government emergency alerts, or internal anomaly detection that could identify when a demand surge is driven by an emergency rather than routine factors
+2. Emergency response: Pre-defined policies for emergency situations, such as capping surge multipliers, waiving cancellation fees, or activating emergency-only mode
+3. Geographic intelligence: Understanding that a demand surge concentrated around a known protest site during a period of reported violence is categorically different from a demand surge near a stadium after a football match
+4. Manual override capability: The ability for local operations teams to immediately disable or cap surge pricing when they become aware of an emergency
+
+PRECEDENTS
+
+This was not the first time dynamic pricing caused controversy during emergencies. Uber faced intense criticism for surge pricing during Hurricane Sandy in New York City in 2012, during the Sydney hostage crisis in 2014, and during London terror attacks in 2017. After each incident, Uber announced emergency surge caps.
+
+The Lagos incident demonstrated that these lessons had either not been learned by all platforms or had not been consistently applied across all markets — with emerging markets potentially receiving less attention than US and European markets.
+
+BROADER LESSON
+
+Algorithms are context-free by default. They do not know why demand is spiking — they only know that it is. Building context-awareness into automated systems is not a nice-to-have; it is essential for any system that operates in environments where the stakes can suddenly shift from inconvenience to life-and-death.

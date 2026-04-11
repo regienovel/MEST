@@ -5,7 +5,7 @@ import { ModuleCard } from '@/components/studio/module-card';
 import { ActivityFeed } from '@/components/studio/activity-feed';
 import { DailyChallenge } from '@/components/studio/daily-challenge';
 import { BroadcastBanner } from '@/components/studio/broadcast-banner';
-import { MessageSquare, Mic, Eye, Workflow, LayoutGrid } from 'lucide-react';
+import { MessageSquare, Mic, Eye, Workflow, LayoutGrid, BookOpen } from 'lucide-react';
 
 interface StudioHomeProps {
   teamName: string;
@@ -50,6 +50,13 @@ export function StudioHome({ teamName, xp }: StudioHomeProps) {
       href: '/studio/gallery',
       icon: LayoutGrid,
       borderColor: 'border-l-4 border-l-mest-sage',
+    },
+    {
+      title: t('rag.title'),
+      description: 'Build a RAG pipeline. See how AI retrieves and cites sources.',
+      href: '/studio/rag',
+      icon: BookOpen,
+      borderColor: 'border-l-4 border-l-purple-500',
     },
   ];
 

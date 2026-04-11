@@ -1,0 +1,24 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+AMAZON SCRAPPED A SECRET AI RECRUITING TOOL THAT SHOWED BIAS AGAINST WOMEN
+Reuters — October 10, 2018
+
+Amazon.com Inc abandoned an experimental artificial intelligence recruiting tool after discovering it systematically discriminated against women, according to five people familiar with the effort.
+
+The team, based in Amazon's Edinburgh engineering hub, had been working since 2014 to develop an AI system that could review resumes and identify top talent. The goal was to mechanise the search for candidates the way Amazon's recommendation engine suggests products to shoppers.
+
+"Everyone wanted this holy grail," one of the people said. "They literally wanted it to be an engine where I'm going to give you 100 resumes, it will spit out the top five, and we'll hire those."
+
+But by 2015, the team realised the system was not rating candidates in a gender-neutral way. The model had been trained on resumes submitted to Amazon over a 10-year period. Because the tech industry — and Amazon's own workforce — was predominantly male during that period, the system effectively learned that male candidates were preferable.
+
+The AI penalised resumes that contained the word "women's," as in "women's chess club captain" or "women's studies." It also downgraded graduates of two all-women's colleges, though Amazon did not disclose which ones.
+
+Amazon edited the program to make it neutral to these particular terms. But the company could not be confident that the model had not found other ways to discriminate that were less obvious.
+
+"If the model discovered that males were more likely to be hired, it would have 500 different ways to find proxies for gender," said Cynthia Dwork, a Harvard professor who specialises in algorithmic fairness.
+
+Amazon ultimately disbanded the team in 2017, and the tool was never used as the sole basis for hiring decisions, the company said. However, Reuters reported that recruiters did look at the tool's recommendations while evaluating candidates, meaning its biased assessments may have influenced actual hiring outcomes.
+
+The case became one of the most widely cited examples of AI bias, illustrating how historical inequities in training data can be amplified and perpetuated by machine learning systems. It also raised questions about the broader use of AI in human resources, an area where automated screening tools are increasingly common.
+
+Amazon declined to comment on the specifics of the project but said in a statement: "We are committed to workplace diversity and equality."

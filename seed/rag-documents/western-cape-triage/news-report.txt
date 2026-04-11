@@ -1,0 +1,22 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+HOSPITAL AI SYSTEM FOUND TO UNDER-PRIORITISE TOWNSHIP PATIENTS
+Daily Maverick — July 2022
+
+A machine learning triage model deployed in Western Cape public hospitals has been found to systematically under-prioritise patients from township areas, raising urgent questions about the use of AI in South Africa's already strained healthcare system.
+
+The model, introduced as a pilot in 2021, was designed to help emergency departments prioritise patients based on predicted severity and resource needs. It analysed patient data including vital signs, symptoms, medical history, and demographic information to assign priority scores that influenced how quickly patients were seen and what level of care they received.
+
+An internal review conducted by the Western Cape Department of Health found that patients from township postcodes — including Khayelitsha, Gugulethu, Nyanga, and Mitchells Plain — received systematically lower priority scores than patients from suburban areas presenting with similar symptoms and vital signs.
+
+"We noticed that patients from certain areas were consistently waiting longer, even when their clinical presentations were comparable," said a senior emergency medicine registrar who participated in the review but asked not to be named. "When we looked at the data, postcode was a significant predictor of the triage score — and it shouldn't have been."
+
+The root cause appears to be a classic case of proxy variable bias. The model was trained on historical patient data, which reflected decades of unequal healthcare access. Patients from township areas had historically received less aggressive treatment and had shorter hospital stays — not because their conditions were less serious, but because overcrowded facilities and resource constraints limited the care they received.
+
+The model interpreted this historical pattern as evidence that township patients had less serious conditions, when in reality it reflected systemic under-treatment.
+
+Dr. Sindiswa Nzuza, a public health researcher at the University of Cape Town, called the finding "disturbing but not surprising."
+
+"The model learned from a healthcare system that has never treated Black South Africans equally," Dr. Nzuza said. "When you train an AI on apartheid's legacy, you get an AI that perpetuates apartheid's logic."
+
+The Western Cape Department of Health suspended the model pending a comprehensive review and committed to developing guidelines for the ethical use of AI in public healthcare settings. The department emphasised that the model was used as a decision-support tool and that final triage decisions were made by clinical staff, though critics noted that time-pressed emergency staff often default to algorithmic recommendations.

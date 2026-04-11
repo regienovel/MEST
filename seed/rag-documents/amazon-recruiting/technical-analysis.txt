@@ -1,0 +1,42 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+LESSONS FROM AMAZON'S RECRUITING AI: HOW TRAINING DATA ENCODES HISTORICAL BIAS
+AI Now Institute — Annual Report 2019, Chapter 4 (Excerpt)
+
+THE PROBLEM OF LEARNING FROM THE PAST
+
+Amazon's AI recruiting tool, developed between 2014 and 2017, represents a textbook case of how machine learning systems can inherit and amplify the biases present in their training data.
+
+The system was trained on approximately 10 years of resume data — resumes submitted to Amazon between roughly 2004 and 2014. The model's task was to learn what a "successful" Amazon hire looked like by studying the characteristics of past candidates who were hired and performed well.
+
+The fundamental flaw: the tech industry's workforce during that period was overwhelmingly male. According to Amazon's own diversity reports, women represented only 37% of its global workforce in 2014, with the proportion significantly lower in technical roles (estimated at 15-20%). The model learned this pattern and treated it as a feature, not a bug.
+
+HOW BIAS MANIFESTED
+
+The system discriminated in both explicit and subtle ways:
+
+Explicit signals: The model directly penalised resumes containing gendered terms like "women's" (as in "women's rugby team" or "Society of Women Engineers"). It also downgraded graduates of at least two all-women's colleges.
+
+Implicit signals: Even after Amazon engineers corrected the explicit gender signals, the model likely continued to discriminate through proxy variables. Research in algorithmic fairness has shown that removing a protected attribute (like gender) from a model's inputs does not prevent discrimination if correlated features remain. For example, participation in certain extracurricular activities, attendance at certain universities, use of certain vocabulary, and even resume formatting conventions can all correlate with gender.
+
+THE PROXY VARIABLE PROBLEM
+
+Professor Solon Barocas of Cornell University has described this as the "proxy variable" problem. "You can remove gender from the model, but if the model has access to 500 other features, many of which correlate with gender, it will reconstruct a gender signal from those features. The bias doesn't disappear — it hides."
+
+This is particularly pernicious because it makes bias harder to detect. An obvious penalty for the word "women's" can be found and corrected. A complex interaction between resume length, verb choice, education formatting, and extracurricular listing that collectively serves as a gender proxy is nearly impossible to identify through manual inspection.
+
+WHY AMAZON COULDN'T FIX IT
+
+Amazon reportedly attempted to retrain the model multiple times, removing explicitly gendered features each time. The company ultimately concluded that there was no reliable way to guarantee the model would not find new proxy variables for gender.
+
+This conclusion has significant implications for the broader use of AI in hiring:
+
+1. Historical data reflects historical inequity. If your training data comes from a period of bias, your model will learn that bias.
+
+2. Fairness patches don't work. Removing individual biased features is a game of whack-a-mole. The model will find alternatives.
+
+3. The problem is structural. Fixing AI hiring requires fixing the data — which means fixing the underlying workplace inequity first.
+
+AFTERMATH
+
+Amazon disbanded the recruiting AI team in 2017 and stated the tool was never used as the sole basis for hiring decisions. However, the project's exposure in 2018 catalysed a broader reckoning with AI in HR, leading to legislation in several jurisdictions (notably New York City's Local Law 144 of 2021) requiring bias audits of automated hiring tools.

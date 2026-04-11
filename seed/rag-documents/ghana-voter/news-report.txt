@@ -1,0 +1,24 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+BIOMETRIC VERIFICATION FAILURES MAR GHANA'S 2020 ELECTIONS
+Ghana Web / AFP — December 8, 2020
+
+Ghana's 2020 general elections on December 7 were marred by reports of biometric verification failures at polling stations across the country, with legitimate voters turned away after fingerprint scanners failed to recognise them.
+
+The Electoral Commission of Ghana (EC) deployed biometric verification devices (BVDs) at all 38,622 polling stations to authenticate voters by matching their fingerprints against records captured during the voter registration exercise. The system was designed to prevent double voting and impersonation.
+
+However, voters across the country reported that the devices failed to verify their fingerprints despite being duly registered. Reports were particularly concentrated among:
+
+- Older women in farming communities, whose fingerprints had worn smooth from decades of manual agricultural work
+- Market women whose fingerprints were affected by years of handling produce, hot water, and cleaning chemicals
+- Manual labourers in construction and fishing communities
+
+"I have voted in every election since 1992. I registered with my fingerprint in June. And today the machine says I am not me," said Akua Donkor, a 67-year-old cassava farmer in Ejura, Ashanti Region. "They told me to try again and again. Ten times I put my finger on the machine. Nothing."
+
+The EC's official protocol for verification failures was a "manual override" process: the presiding officer could allow a voter to proceed after visual identification and comparison with the voter register photograph. However, implementation of this protocol was inconsistent.
+
+In some polling stations, presiding officers applied the manual override readily. In others, voters were told the machine's decision was final and were turned away. Election observers from the Coalition of Domestic Election Observers (CODEO) reported that at least 6% of voters across monitored stations experienced biometric verification failures, with the rate rising to 12-15% in rural farming communities.
+
+The EC acknowledged the issue in a post-election statement, attributing failures to "environmental factors affecting fingerprint quality" and affirming that all polling stations had been instructed to apply the manual override procedure. However, opposition parties alleged that the inconsistent application of overrides disproportionately affected their strongholds.
+
+Biometric verification technology has been used in Ghanaian elections since 2012, with each cycle bringing improvements but also persistent concerns about the technology's reliability across Ghana's diverse population.

@@ -1,0 +1,37 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+CONSUMER FINANCIAL PROTECTION BUREAU
+Circular 2022-03: Adverse Action Notification Requirements and the Use of Artificial Intelligence
+May 26, 2022
+
+BACKGROUND
+
+The Consumer Financial Protection Bureau (CFPB) issues this circular to clarify that creditors must provide specific and accurate reasons for adverse actions, even when those actions are based in whole or in part on credit decisions made by complex algorithms, including artificial intelligence and machine learning models.
+
+LEGAL FRAMEWORK
+
+The Equal Credit Opportunity Act (ECOA), 15 U.S.C. 1691 et seq., and its implementing regulation, Regulation B, 12 C.F.R. Part 1002, require creditors to notify applicants of adverse actions and to provide specific reasons for the action or disclose the applicant's right to request such reasons.
+
+The Fair Credit Reporting Act (FCRA), 15 U.S.C. 1681 et seq., imposes similar requirements when consumer report information is used in the decision.
+
+ANALYSIS
+
+The CFPB has observed a growing trend among creditors to use complex algorithmic models — including machine learning and AI systems — to make credit decisions. Some creditors have asserted that the complexity of these models makes it impractical to identify the specific reasons for adverse actions, as required by ECOA and FCRA.
+
+The CFPB rejects this assertion. The use of complex algorithms does not excuse creditors from their legal obligations. Creditors cannot justify non-compliance with adverse action requirements merely because the technology they use makes it difficult to explain the reasons for adverse decisions.
+
+Specifically:
+
+1. A creditor cannot satisfy its adverse action obligations by providing vague or generalised reasons (e.g., "the model's evaluation of your overall profile"). The reasons must be specific to the applicant and must accurately reflect the factors that influenced the decision.
+
+2. The fact that a creditor uses a "black box" model that the creditor itself cannot interpret does not provide a legal defence. Creditors choosing to use complex models are responsible for ensuring those models can support the explanations required by law.
+
+3. If a creditor's model relies on data that serves as a proxy for a prohibited basis (such as race, gender, or national origin), the use of that model may violate ECOA regardless of whether the creditor intentionally designed it to discriminate.
+
+IMPLICATIONS
+
+Creditors using AI-based credit models should ensure that:
+- Their models can generate specific, accurate adverse action reasons
+- Those reasons are tested against actual model behaviour, not merely assumed from model design
+- Regular fair lending testing is conducted to detect potential disparate impact
+- Model documentation includes a clear description of how adverse action reasons are derived from model outputs

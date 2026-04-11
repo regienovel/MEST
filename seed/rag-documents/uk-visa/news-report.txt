@@ -1,0 +1,22 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+UK HOME OFFICE SCRAPS 'RACIST' VISA ALGORITHM AFTER LEGAL CHALLENGE
+The Guardian — August 4, 2020
+
+The Home Office has abandoned an algorithm used to stream visa applications by nationality after a legal challenge exposed systemic racial discrimination in the system.
+
+The algorithm, introduced in 2015, assigned risk scores to visa applications and sorted them into a traffic-light system: green (fast-track approval), amber (standard processing), and red (intensive scrutiny). Applications from nationals of predominantly non-white countries were disproportionately assigned to the red stream, regardless of the individual applicant's circumstances.
+
+The Joint Council for the Welfare of Immigrants (JCWI) brought a judicial review in June 2020, arguing the system was unlawful under the Equality Act 2010 and the European Convention on Human Rights. The Home Office settled by agreeing to scrap the tool before the case reached a full hearing.
+
+Chai Patel, legal policy director at JCWI, said: "This was racism baked into the system. The algorithm took the Home Office's existing discriminatory practices, automated them, and scaled them up. What might previously have been the bias of an individual caseworker became the policy of the entire department."
+
+Documents obtained through Freedom of Information requests revealed that the algorithm used nationality as a primary input feature. Countries were ranked on a "suspect nationality" list, though the Home Office refused to disclose the full ranking. Nigerian applicants, among others, were consistently assigned to the highest-scrutiny stream.
+
+Foxglove, a digital rights organisation that supported the legal challenge, published analysis showing that applicants from countries with predominantly Black and Asian populations were between two and ten times more likely to be assigned to the red stream than applicants from predominantly white countries with similar visa overstay rates.
+
+"The system didn't just reflect existing bias — it amplified it," said Cori Crider, co-founder of Foxglove. "Once you automate discrimination and remove human judgment from the equation, it becomes invisible and unchallengeable. That's what makes algorithmic bias so dangerous."
+
+The Home Office said in a statement that it would redesign its visa processing approach "in a way that upholds the principles of fairness, equality, and transparency." A replacement system was expected to be developed, though details of its design have not been made public.
+
+Immigration lawyers warned that the algorithm's five years of operation may have resulted in thousands of legitimate visa applications being wrongly refused or subjected to excessive delays.

@@ -1,0 +1,125 @@
+{
+  "scenarios": [
+    {
+      "id": "air-canada-chatbot",
+      "team": "Ghana Jollof",
+      "title": "The Air Canada Chatbot",
+      "year": 2024,
+      "location": "Canada",
+      "headline": "The chatbot that made up a bereavement policy",
+      "summary": "Air Canada's customer service chatbot told a grieving customer he could book a full-fare ticket and apply for a bereavement discount retroactively. No such policy existed. The Canadian tribunal ruled the airline liable.",
+      "failure_mode": "Ungrounded generation — the model hallucinated policy from training data instead of retrieving from the actual policy database.",
+      "rebuild_techniques": ["RAG", "citation_mechanics", "grounded_response_guardrails", "i_dont_know_fallback"]
+    },
+    {
+      "id": "mpesa-fraud",
+      "team": "Waakye",
+      "title": "The M-Pesa Holiday Freeze",
+      "year": 2023,
+      "location": "Kenya",
+      "headline": "The fraud detection that froze mama mbogas at Christmas",
+      "summary": "Safaricom's automated fraud detection flagged thousands of legitimate small-business M-Pesa transactions as suspicious during the December holiday rush. Mama mbogas, boda boda drivers, and small traders had accounts frozen with no explanation.",
+      "failure_mode": "Training distribution mismatch — the model's idea of normal didn't include seasonal informal commerce surges.",
+      "rebuild_techniques": ["retrieval_evaluation", "context_aware_grounding", "health_dashboards", "rollback"]
+    },
+    {
+      "id": "uk-visa",
+      "team": "Thiéboudienne",
+      "title": "The UK Visa Streaming Tool",
+      "year": 2020,
+      "location": "UK / Nigeria",
+      "headline": "The 'racist algorithm' the UK Home Office had to scrap",
+      "summary": "The Home Office used an algorithmic visa risk scoring tool that gave Nigerian and other Global South applicants disproportionately high risk scores. The Joint Council for the Welfare of Immigrants sued. Scrapped August 2020.",
+      "failure_mode": "Historical bias inherited through training data.",
+      "rebuild_techniques": ["RAG_over_policy", "explicit_reasoning_chains", "transparency"]
+    },
+    {
+      "id": "amazon-recruiting",
+      "team": "Fufu & Light Soup",
+      "title": "The Amazon Recruiting Tool",
+      "year": 2018,
+      "location": "USA / Global",
+      "headline": "The hiring AI that learned to reject women",
+      "summary": "Amazon's experimental recruiting AI taught itself to penalise resumes containing 'women's'. Trained on a decade of male-dominated resumes, it inherited the imbalance. Scrapped in 2017.",
+      "failure_mode": "Encoded historical bias as a feature.",
+      "rebuild_techniques": ["structured_RAG", "explicit_citation", "grounded_response"]
+    },
+    {
+      "id": "apple-card",
+      "team": "Egusi Soup",
+      "title": "The Apple Card Credit Limit Scandal",
+      "year": 2019,
+      "location": "USA",
+      "headline": "The black box that gave husbands 20x more credit than wives",
+      "summary": "DHH and Wozniak both reported Apple Card gave them dramatically higher credit limits than their wives despite shared finances. Goldman Sachs's defence collapsed when investigators showed the model couldn't explain its decisions.",
+      "failure_mode": "Explainability collapse.",
+      "rebuild_techniques": ["traceable_runs", "citation_mechanics", "transparent_reasoning"]
+    },
+    {
+      "id": "ghana-voter",
+      "team": "Kelewele",
+      "title": "The Ghana Voter Verification Failure",
+      "year": 2020,
+      "location": "Ghana",
+      "headline": "The biometric system that couldn't read worn fingerprints",
+      "summary": "Ghana's 2020 election biometric verification failed for legitimate voters — particularly older women whose fingerprints had worn down from decades of farm and market work. Some were turned away before manual overrides.",
+      "failure_mode": "Model never tested on the population it would actually serve.",
+      "rebuild_techniques": ["retrieval_evaluation", "graceful_degradation", "human_escalation"]
+    },
+    {
+      "id": "zindi-cassava",
+      "team": "Attiéké",
+      "title": "The Zindi Cassava Disease Model",
+      "year": 2021,
+      "location": "Ghana / Multi-country",
+      "headline": "The 95% accurate model that failed in real fields",
+      "summary": "A computer vision model trained on a Zindi competition dataset for cassava disease achieved 95% accuracy on the test set. When farmers in northern Ghana used it via WhatsApp, real-world accuracy dropped below 40%. The model had learned the backgrounds of training photos as much as the diseases.",
+      "failure_mode": "Dataset / deployment gap.",
+      "rebuild_techniques": ["retrieval_evaluation", "model_selection", "confidence_thresholds", "fallback"]
+    },
+    {
+      "id": "lagos-surge",
+      "team": "Suya",
+      "title": "The Lagos Surge Pricing Trap",
+      "year": 2020,
+      "location": "Nigeria",
+      "headline": "The ride-hailing app that profited from terror",
+      "summary": "During the EndSARS protests, a major ride-hailing app's surge pricing charged users up to 10x normal fares as people fled dangerous areas. The algorithm responded to demand exactly as designed — but had no awareness the spike was caused by people fleeing violence.",
+      "failure_mode": "Context-blind optimisation.",
+      "rebuild_techniques": ["RAG_over_news", "grounded_reasoning", "emergency_overrides", "traceable_runs"]
+    },
+    {
+      "id": "western-cape-triage",
+      "team": "Banku & Tilapia",
+      "title": "The Western Cape Healthcare Triage Model",
+      "year": 2022,
+      "location": "South Africa",
+      "headline": "The model that under-triaged township patients",
+      "summary": "A machine learning model deployed in Western Cape hospitals systematically under-prioritised township patients. It used postcode as a proxy and learned that township patients had historically received less aggressive treatment.",
+      "failure_mode": "Proxy variable collapse.",
+      "rebuild_techniques": ["RAG_over_clinical_guidelines", "explicit_reasoning", "adversarial_testing"]
+    },
+    {
+      "id": "kenya-lenders",
+      "team": "Mafé",
+      "title": "The Kenya Digital Lenders",
+      "year": 2021,
+      "location": "Kenya",
+      "headline": "The 7-second loan that became algorithmic shaming at scale",
+      "summary": "Tala, Branch, Okash approved microloans in seconds based on phone data. When borrowers fell behind, the system SMS-blasted their entire contact list demanding payment. Annualised rates often exceeded 600%. The Central Bank of Kenya regulated in 2022.",
+      "failure_mode": "Speed and scale without recoverability or human-in-the-loop.",
+      "rebuild_techniques": ["human_in_the_loop", "traceable_runs", "rollback", "adversarial_testing", "refusal_patterns"]
+    },
+    {
+      "id": "meta-ethiopia",
+      "team": "Chinchinga",
+      "title": "The Meta Ethiopia Moderation Failure",
+      "year": 2022,
+      "location": "Ethiopia",
+      "headline": "Twenty-five Amharic moderators for a continent at war",
+      "summary": "During the Tigray war, a Tigrayan professor was named in a viral Facebook post and later murdered. Court filings revealed Meta had only 25 Amharic content moderators for over 500 million African users. The automated moderation had been trained primarily on English.",
+      "failure_mode": "Language and context blindness in the safety layer.",
+      "rebuild_techniques": ["multilingual_RAG", "retrieval_evaluation_local_languages", "grounded_refusal", "escalation", "health_dashboards_per_language"]
+    }
+  ]
+}

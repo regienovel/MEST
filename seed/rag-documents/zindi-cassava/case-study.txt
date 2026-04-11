@@ -1,0 +1,40 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+BRIDGING THE GAP: FROM COMPETITION ACCURACY TO FIELD ACCURACY IN AFRICAN AGRITECH AI
+Zindi Blog — Guest Post by Dr. Abena Owusu, KNUST — April 2022
+
+Zindi competitions have produced some impressive machine learning models for African challenges — from crop disease detection to wildlife conservation to financial inclusion. But the cassava disease classification experience in northern Ghana exposed a truth our community must confront: competition accuracy is not deployment accuracy.
+
+THE PROMISE
+
+Cassava is the primary food security crop for over 800 million people globally and is critical across West Africa. Disease accounts for annual losses estimated at $1-2 billion across the continent. Early detection allows farmers to remove infected plants before disease spreads, potentially saving entire harvests.
+
+When the winning Zindi model hit 95% accuracy, there was genuine excitement. Here was a tool that could put expert-level disease diagnosis in every farmer's pocket via WhatsApp — no extension officer visit required, no laboratory testing, just point your phone and get an answer.
+
+THE REALITY
+
+When 200 farmers in the Upper East Region of Ghana used the WhatsApp-based tool over three months, the model correctly diagnosed fewer than 40% of submissions. Worse, many of the incorrect diagnoses were confidently wrong — the model might declare a healthy leaf to be severely diseased, prompting a farmer to destroy healthy plants.
+
+After a few weeks, most farmers stopped using the tool. "If it's wrong more than it's right, what's the point?" one farmer told us.
+
+THE ROOT CAUSES
+
+Our post-mortem identified three interlocking problems:
+
+1. The training data didn't look like reality. Competition images were high quality, well lit, and carefully framed. Farmer photos were taken on cheap phones in bright sun with messy backgrounds.
+
+2. The model learned shortcuts. Instead of learning what cassava disease actually looks like, the model partially learned what the training photos looked like — including their backgrounds, lighting, and framing conventions.
+
+3. Nobody tested with real farmers first. The model went from competition leaderboard to deployment without anyone sending a photo from a real farmer's phone to see if it still worked.
+
+WHAT WE LEARNED
+
+The experience taught us several lessons that apply to any AI system being deployed in African contexts:
+
+First, the people who build the model must visit the field. Our data scientists had never been to a cassava farm in the Upper East Region. If they had, they would have immediately noticed the gap between training data and reality.
+
+Second, confidence scores matter as much as predictions. A model that says "I'm not sure — please consult an extension officer" is more useful than one that confidently gives the wrong answer. We should have set a confidence threshold below which the model refused to classify.
+
+Third, competitions should include a "deployment track." Zindi and similar platforms could require winning teams to demonstrate that their models work on data collected in realistic field conditions, not just on held-out test data from the same distribution.
+
+We are now rebuilding the cassava tool with images collected by farmers themselves, using their own phones, in their own fields. Early results are promising — accuracy is lower than the competition model on competition data, but dramatically higher on real-world data. That's the only metric that matters.

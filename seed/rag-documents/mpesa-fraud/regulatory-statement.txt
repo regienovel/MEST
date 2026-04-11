@@ -1,0 +1,42 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+COMMUNICATIONS AUTHORITY OF KENYA
+PUBLIC NOTICE ON MOBILE MONEY SERVICE DISRUPTIONS
+Ref: CA/CS/MOB/2024/001
+Date: January 15, 2024
+
+The Communications Authority of Kenya (CA) has received and reviewed a significant volume of consumer complaints regarding the suspension of M-Pesa accounts during the period of December 22-28, 2023.
+
+FINDINGS
+
+The Authority received 2,147 formal complaints during the affected period, compared to a weekly average of approximately 150 mobile money complaints. Analysis of complaints reveals:
+
+- 78% of complainants identified themselves as small business operators (market traders, transport operators, small retailers)
+- Average account freeze duration: 52 hours
+- 62% of complainants reported receiving no notification prior to or at the time of the freeze
+- 41% of complainants reported being unable to reach Safaricom customer service within 2 hours of attempting contact
+
+The Authority notes that the automated fraud detection systems employed by licensed mobile money operators serve an important consumer protection function. However, the Authority is concerned that the December 2023 event reveals deficiencies in:
+
+1. The calibration of automated systems to accommodate predictable seasonal trading patterns
+2. The notification and appeal processes available to affected users
+3. The disproportionate impact on vulnerable populations, particularly informal economy workers
+
+DIRECTIVES
+
+The Authority hereby directs all licensed mobile money operators to:
+
+a) Review and update automated fraud detection systems to incorporate seasonal and contextual factors, with particular attention to recognised peak trading periods.
+
+b) Implement immediate SMS notification to account holders when automated restrictions are applied, including a clear explanation of the reason and steps for resolution.
+
+c) Establish a dedicated rapid-review channel for business accounts flagged during high-volume periods, with a target resolution time of no more than 4 hours.
+
+d) Submit to the Authority, within 60 days of this notice, a report detailing the measures taken to prevent recurrence.
+
+The Authority will continue to monitor this matter and reserves the right to impose penalties for non-compliance with these directives.
+
+Signed,
+Ezra Chiloba
+Director General
+Communications Authority of Kenya

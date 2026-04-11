@@ -1,0 +1,56 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+COALITION OF DOMESTIC ELECTION OBSERVERS (CODEO)
+PRELIMINARY STATEMENT ON THE 2020 GENERAL ELECTIONS
+December 9, 2020
+
+BIOMETRIC VERIFICATION OBSERVATIONS
+
+CODEO deployed 4,000 trained observers to polling stations across all 16 regions of Ghana for the December 7, 2020 presidential and parliamentary elections. This section reports on observations related to the biometric verification process.
+
+OVERALL VERIFICATION SUCCESS RATE
+
+CODEO observers recorded the biometric verification process at 1,523 sampled polling stations:
+- Overall biometric verification success rate on first attempt: 87.3%
+- Success rate after multiple attempts: 93.6%
+- Voters who could not be verified biometrically and required manual override: 6.4%
+
+REGIONAL VARIATION
+
+Significant regional variation was observed in verification failure rates:
+- Greater Accra Region: 3.1% failure rate
+- Ashanti Region (urban stations): 4.2% failure rate
+- Ashanti Region (rural stations): 11.8% failure rate
+- Northern Region: 14.2% failure rate
+- Upper East Region: 12.7% failure rate
+- Upper West Region: 13.1% failure rate
+
+The pattern is clear: rural constituencies, particularly in farming-intensive regions, experienced verification failure rates 3-4 times higher than urban areas.
+
+DEMOGRAPHIC PATTERNS
+
+At stations where observers recorded demographic details of voters experiencing verification failures:
+- 68% were women
+- 72% appeared to be over age 50
+- When asked about occupation, the most common responses were: farming (41%), market trading (27%), and domestic work (12%)
+
+MANUAL OVERRIDE IMPLEMENTATION
+
+CODEO is concerned about the inconsistent application of the manual override procedure:
+- At 78% of stations where biometric failures occurred, the manual override was applied and affected voters were allowed to vote
+- At 22% of stations, observers reported that some or all voters who failed biometric verification were turned away without the manual override being applied
+
+CODEO observed that the inconsistency appeared to stem from:
+- Unclear training: Some presiding officers were uncertain about the circumstances under which manual override was permitted
+- Fear of liability: Some presiding officers expressed concern that they would be held personally responsible if they approved a voter who later turned out to be ineligible
+- Pressure: In some cases, party agents objected to manual overrides and presiding officers deferred to avoid confrontation
+
+RECOMMENDATIONS
+
+1. The Electoral Commission should conduct a comprehensive post-election review of biometric verification failures, disaggregated by region, age, gender, and occupation.
+
+2. The EC should explore multi-modal biometric verification (combining fingerprint with facial recognition) for future elections.
+
+3. Manual override protocols must be standardised, clearly documented, and reinforced through mandatory training for all presiding officers.
+
+4. The EC should consider proactive outreach to communities with known high rates of fingerprint degradation, offering pre-election verification testing and alternative ID documentation.

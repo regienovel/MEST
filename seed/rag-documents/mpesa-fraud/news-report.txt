@@ -1,0 +1,24 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+M-PESA FRAUD SYSTEM FREEZES THOUSANDS OF ACCOUNTS DURING HOLIDAY RUSH
+The Standard (Nairobi) — December 28, 2023
+
+Thousands of small business owners across Kenya reported their M-Pesa accounts were frozen without warning during the busy Christmas trading period, in what appears to be a mass false-positive event triggered by Safaricom's automated fraud detection system.
+
+The disruption hit hardest in Nairobi's Gikomba market, Mombasa's Old Town, and Kisumu's Kibuye market, where mama mbogas (vegetable sellers), boda boda drivers, and small-scale traders rely on M-Pesa as their primary — and often only — means of receiving payment.
+
+"I had customers standing in front of me wanting to pay, and my account just said 'suspended,'" said Mary Wanjiku, a vegetable seller in Gikomba who estimates she lost KES 15,000 (approximately $100) in sales over two days. "No message, no explanation. I called Safaricom and waited forty minutes. They told me it was 'under review.'"
+
+Safaricom confirmed in a brief statement that its "fraud prevention systems flagged an elevated number of transactions for review during the holiday period" but insisted the system was "working as designed to protect customers."
+
+Mobile money analysts say the issue likely stems from how the fraud detection model defines "normal" transaction patterns. During the December holiday season, informal traders experience a dramatic surge in both transaction volume and individual transaction sizes as Kenyans purchase food, gifts, and travel. For many small traders, December volumes can be 3-5 times their monthly average.
+
+"The model sees a mama mboga who normally processes 20 transactions a day suddenly doing 80, and it flags that as suspicious," explained Dr. Tonny Omwansa, a mobile money researcher at the University of Nairobi. "But that's completely normal seasonal behaviour. The model was trained on average patterns and doesn't understand that December is different."
+
+The Communications Authority of Kenya said it received over 2,000 complaints related to M-Pesa account freezes in the final week of December, compared to a typical weekly average of approximately 150.
+
+Several affected traders reported that their accounts remained frozen for 48-72 hours, with no clear process for expedited review. Some said they were told to visit a Safaricom shop with their national ID to have the freeze lifted, but shops were overcrowded and understaffed during the holidays.
+
+The Kenya National Chamber of Commerce and Industry called on Safaricom to implement seasonal adjustments to its fraud detection thresholds and to provide immediate notification and a rapid appeal process when accounts are frozen.
+
+Safaricom processes approximately 61 million M-Pesa transactions daily, and the platform handles roughly 50% of Kenya's GDP. For many informal economy workers, even a single day without M-Pesa access can mean the difference between eating and going hungry.

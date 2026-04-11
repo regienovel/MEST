@@ -1,0 +1,43 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+JOINT COUNCIL FOR THE WELFARE OF IMMIGRANTS
+PRE-ACTION PROTOCOL LETTER — R (JCWI) v. SECRETARY OF STATE FOR THE HOME DEPARTMENT
+June 2020 — Summary of Legal Grounds
+
+TO: The Secretary of State for the Home Department
+
+RE: The Visa Application Streaming Tool ("the Tool")
+
+1. THE CHALLENGED DECISION
+
+The JCWI challenges the Home Office's continued use of the Streaming Tool, an algorithmic system that assigns risk scores to visa applications and sorts them into processing streams based, in significant part, on the applicant's nationality.
+
+2. GROUNDS OF CHALLENGE
+
+Ground 1: Unlawful Discrimination
+
+The Tool assigns higher risk scores to nationals of predominantly non-white countries. This constitutes direct discrimination on the grounds of race and/or nationality, contrary to:
+- Section 29 of the Equality Act 2010 (discrimination in the provision of services)
+- Article 14 of the European Convention on Human Rights (prohibition of discrimination)
+
+Evidence obtained through FOI requests demonstrates that applicants from African and South Asian countries are between 2 and 10 times more likely to be assigned to the "red" (high scrutiny) stream than applicants from predominantly white countries with comparable visa overstay rates.
+
+Ground 2: Lack of Transparency
+
+The Home Office has refused to disclose the full list of nationality rankings used by the Tool, the weighting assigned to nationality relative to other factors, or any equality impact assessment conducted prior to the Tool's deployment in 2015. This opacity prevents meaningful scrutiny and renders the system incompatible with the rule of law.
+
+Ground 3: Failure to Conduct an Equality Impact Assessment
+
+The Public Sector Equality Duty (section 149 of the Equality Act 2010) requires the Home Office to have due regard to the need to eliminate discrimination. The Home Office has been unable to produce evidence that an adequate equality impact assessment was conducted before the Tool was deployed or at any subsequent point.
+
+3. REMEDY SOUGHT
+
+The JCWI seeks:
+a) An order that the Tool be withdrawn from use immediately
+b) A declaration that the Tool's use of nationality as a scoring factor constitutes unlawful discrimination
+c) Disclosure of the full methodology, including nationality rankings and weightings
+d) An order requiring an independent audit of visa decisions made using the Tool since 2015
+
+4. RESPONSE
+
+The JCWI requests a response within 14 days in accordance with the pre-action protocol for judicial review.

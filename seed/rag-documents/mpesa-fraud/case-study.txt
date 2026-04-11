@@ -1,0 +1,36 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+WHEN FRAUD DETECTION BECOMES THE FRAUD: M-PESA AND THE DECEMBER 2023 FREEZE
+Microsave Consulting — Case Study Brief, February 2024
+
+THE PLATFORM
+
+M-Pesa, launched by Safaricom in 2007, is the world's most successful mobile money platform. It processes approximately KES 35 trillion annually — roughly half of Kenya's GDP. Over 30 million Kenyans use M-Pesa, and for the country's vast informal economy, it functions as bank account, payment terminal, and savings vehicle combined.
+
+THE PROMISE OF AUTOMATED FRAUD DETECTION
+
+As M-Pesa's volume grew, so did fraud attempts. Safaricom invested in machine learning-based fraud detection that monitors transaction patterns in real time and automatically suspends accounts exhibiting suspicious behaviour. The system reportedly catches millions of dollars in fraudulent transactions each year and is considered essential to maintaining trust in the platform.
+
+THE FAILURE
+
+In late December 2023, the system turned against the very users it was designed to protect. Thousands of small traders — the backbone of Kenya's informal economy — found their accounts frozen during the busiest trading week of the year.
+
+Mary Wanjiku, a mama mboga in Gikomba market, described the experience: "My customers were ready to pay. I had fresh tomatoes, onions, everything ready for the holiday cooking. And then M-Pesa just stopped. I lost two days. Those tomatoes rotted."
+
+James Ochieng, a boda boda driver in Kisumu, had a similar story: "I couldn't receive payment for rides. I had to turn away passengers or ask for cash, and most people don't carry cash anymore."
+
+The common thread: these traders experienced a massive, legitimate surge in business during the holidays, and the fraud model interpreted the surge as suspicious.
+
+WHY IT MATTERS FOR AI IN AFRICA
+
+This case illustrates a pattern that recurs across AI deployments in African markets: systems designed and trained on one population's patterns being applied to a fundamentally different population.
+
+Kenya's informal economy operates differently from the formal banking sector. Transaction patterns are irregular by nature. Volumes spike during holidays, market days, and harvest seasons. Individual transactions are small but frequent. These patterns look "abnormal" to a model trained on formal-sector norms — but they are entirely normal for the 83% of Kenya's workforce that operates in the informal economy.
+
+The lesson is not that fraud detection is bad. It is that fraud detection must be trained on — and tested against — the actual population it serves. When the training data does not reflect the lived reality of users, the model becomes a tool of exclusion rather than protection.
+
+SAFARICOM'S RESPONSE
+
+Safaricom acknowledged the incident in January 2024 and stated it was "reviewing its fraud detection parameters to better accommodate seasonal trading patterns." The company committed to implementing an expedited review process for flagged small-business accounts and exploring SMS-based verification as an alternative to account freezes.
+
+As of February 2024, affected traders reported that their accounts had been restored, but none had received compensation for lost revenue.

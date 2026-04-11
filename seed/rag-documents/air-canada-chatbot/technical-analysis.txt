@@ -1,0 +1,49 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+TECHNICAL POST-MORTEM: WHY THE AIR CANADA CHATBOT HALLUCINATED A POLICY
+AI Incident Database — Case Study #2024-AC-01
+Published: March 2024
+
+OVERVIEW
+
+In February 2024, a Canadian tribunal held Air Canada liable after its customer-service chatbot fabricated a bereavement fare policy. This technical analysis examines the likely failure modes based on publicly available information about the system.
+
+THE SYSTEM ARCHITECTURE
+
+Air Canada deployed a chatbot on its website powered by a large language model (LLM). Based on reporting from The Verge and Ars Technica, the chatbot appears to have been a retrieval-augmented generation (RAG) system, designed to pull information from Air Canada's knowledge base and present it conversationally.
+
+However, critical details about the implementation reveal where the system failed.
+
+FAILURE MODE: UNGROUNDED GENERATION
+
+The chatbot's response about bereavement fares contained specific, confident, and entirely fabricated details — namely, that passengers could apply for a bereavement discount retroactively within 90 days. This pattern is characteristic of what researchers call "hallucination" or "ungrounded generation."
+
+In a well-implemented RAG system, the model should:
+1. Retrieve relevant documents from a curated knowledge base
+2. Generate a response grounded strictly in those documents
+3. Refuse to answer or escalate to a human when no relevant document is found
+4. Cite its sources so that accuracy can be verified
+
+The Air Canada chatbot appears to have failed at steps 2 and 3. When it could not find a clear, retrievable answer about retroactive bereavement fare applications, it generated a plausible-sounding policy from its parametric knowledge — that is, from patterns in its training data rather than from Air Canada's actual policy documents.
+
+WHY THIS HAPPENS
+
+Large language models are trained to produce fluent, helpful responses. When a user asks a direct question, the model's training incentivises it to provide a direct answer. Without explicit guardrails, the model will prefer generating a confident (but potentially wrong) answer over saying "I don't know."
+
+This is especially dangerous in customer-service contexts where:
+- Users expect authoritative answers
+- The chatbot presents with the same visual authority as the company's official website
+- There is no visible distinction between retrieved facts and generated text
+- The user has no reason or ability to verify the chatbot's claims
+
+WHAT SHOULD HAVE BEEN DIFFERENT
+
+1. Strict grounding: The chatbot should have been constrained to respond only with information verifiably present in retrieved documents.
+2. Citation requirement: Every factual claim should have been linked to a source document, making it immediately visible when the model was generating without a source.
+3. "I don't know" fallback: When no relevant policy document was retrieved, the chatbot should have said "I don't have that information — please contact our reservations team."
+4. Human escalation: For sensitive topics like bereavement, the system should have routed to a human agent rather than attempting to answer autonomously.
+5. Regular testing: Air Canada should have tested the chatbot with questions about its own policies to catch hallucinations before customers encountered them.
+
+BROADER IMPLICATIONS
+
+The Air Canada case is not unique. Any organisation deploying an LLM-based chatbot without robust grounding mechanisms faces the same risk. The model will always try to be helpful. The question is whether the system around it prevents helpfulness from becoming harmfulness.

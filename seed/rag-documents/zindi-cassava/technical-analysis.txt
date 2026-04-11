@@ -1,0 +1,56 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+DATASET-DEPLOYMENT GAP IN AGRICULTURAL AI: LESSONS FROM CASSAVA DISEASE CLASSIFICATION
+Proceedings of the African Conference on Machine Learning — November 2022
+
+ABSTRACT
+
+We present a systematic analysis of why a cassava disease classification model that achieved 95% accuracy on a competition test set performed below 40% when deployed via a WhatsApp-based interface with farmers in northern Ghana. We identify three categories of failure — distribution shift, spurious correlation, and confidence calibration — and propose guidelines for agricultural AI deployment in sub-Saharan Africa.
+
+1. THE COMPETITION DATASET
+
+The training dataset consisted of approximately 21,000 images of cassava leaves photographed in controlled conditions:
+- Camera: DSLR or high-quality smartphone cameras
+- Lighting: Natural daylight, consistent exposure
+- Background: Typically a hand holding the leaf, or the leaf placed on a neutral surface
+- Resolution: 800x600 pixels minimum
+- Labelling: Expert-annotated by plant pathologists
+
+2. THE DEPLOYMENT ENVIRONMENT
+
+Images submitted by farmers via WhatsApp were captured under markedly different conditions:
+- Camera: Low-to-mid-range smartphone cameras, often with scratched lenses
+- Lighting: Variable — harsh midday sun, overcast skies, late afternoon shadow
+- Background: Leaves photographed in situ on the plant, with soil, other plants, sky, and human hands visible
+- Resolution: Variable, often compressed by WhatsApp
+- Framing: Leaves partially obscured, multiple leaves in frame, variable distance
+
+3. SPURIOUS CORRELATION ANALYSIS
+
+Using gradient-weighted class activation mapping (Grad-CAM), we visualised what regions of the image the model attended to when making classifications. Key findings:
+
+- For 34% of correctly classified competition test images, the model's highest-activation regions were in the background or at image edges, not on the leaf itself
+- The five disease categories in the training set had statistically different background colour distributions (p < 0.01), suggesting images for different categories were photographed in systematically different settings
+- When we artificially replaced the backgrounds of test images with random textures, the model's accuracy dropped from 95% to 71% — confirming that background features contributed significantly to classification
+
+4. CONFIDENCE CALIBRATION FAILURE
+
+The model was not only inaccurate on field images but confidently inaccurate:
+- Mean confidence score on correct classifications: 0.87
+- Mean confidence score on incorrect classifications: 0.79
+
+The model expressed high confidence even when wrong, providing no signal to the user or to the system that its predictions should be treated with caution. A well-calibrated model would express lower confidence when presented with out-of-distribution inputs.
+
+5. RECOMMENDATIONS
+
+For researchers and practitioners deploying agricultural AI:
+
+a) Train on deployment-representative data. Competition datasets are useful for benchmarking but insufficient for deployment. Collect additional training images using the same devices, in the same conditions, as the intended deployment environment.
+
+b) Test for spurious correlations. Apply interpretability techniques (Grad-CAM, LIME, SHAP) to verify the model is attending to disease-relevant features, not background artifacts.
+
+c) Implement confidence thresholds. Set a minimum confidence threshold below which the model declines to classify and instead recommends consulting an extension officer.
+
+d) Include a "none of the above" class. If the image quality is too poor for reliable classification, or the image does not clearly show a cassava leaf, the model should say so.
+
+e) Test with real users before deployment. A pilot with even 20 farmers using their own phones would have revealed the accuracy gap before the system was launched.

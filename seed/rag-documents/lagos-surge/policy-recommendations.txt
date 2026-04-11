@@ -1,0 +1,39 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+LAGOS SURGE PRICING CRISIS — POLICY RECOMMENDATIONS
+
+Regulatory and Industry Framework for Emergency Pricing in Ride-Hailing Markets
+
+Following the October 2020 EndSARS surge pricing incident, several Nigerian regulatory bodies, consumer advocacy organisations, and technology policy researchers developed recommendations for preventing algorithmic price exploitation during emergencies. This document synthesises the key proposals.
+
+RECOMMENDATION 1: MANDATORY EMERGENCY PRICING PROTOCOLS
+
+All ride-hailing platforms operating in Nigeria should be required to implement automated emergency pricing caps. When the National Emergency Management Agency (NEMA) or state-level emergency management agencies declare an emergency, platforms must cap surge multipliers at no more than 1.5x the base fare within the affected local government areas and all adjacent LGAs.
+
+This follows the precedent set by New York City's Administrative Code Section 20-706, which prohibits unconscionably excessive pricing during declared emergencies. Several US states adopted similar rules after ride-hailing surge pricing during hurricanes and mass shootings. Nigeria's Consumer Protection Council Act provides a foundation for similar regulation, though specific provisions for algorithmic pricing do not yet exist.
+
+RECOMMENDATION 2: PLATFORM-INITIATED SAFETY MODE
+
+Platforms should develop internal triggers that activate a "safety mode" independent of government declarations. Indicators could include: sudden driver exodus from a zone (more than 60% of active drivers going offline within 15 minutes), abnormally high cancellation rates (above 70%), or multiple driver-reported safety incidents. When safety mode activates, surge pricing should be suspended and riders should be warned of potential delays and safety risks.
+
+Bolt Nigeria has indicated willingness to implement such a system. Uber has pointed to its existing "disaster response" feature but acknowledged it was not activated during the EndSARS period due to the lack of a formal government emergency declaration — highlighting the gap between automated systems and the realities of African governance.
+
+RECOMMENDATION 3: TRANSPARENCY AND REPORTING REQUIREMENTS
+
+Platforms should be required to publish quarterly reports on surge pricing events, including: the number of times surge exceeded 3x in each city, the average and maximum surge multiplier applied, the total additional revenue collected from surge pricing, and the number of rides completed during surge versus the number of ride requests that went unfulfilled or were cancelled.
+
+This data would allow regulators and the public to assess whether surge pricing is functioning as intended — balancing supply and demand — or simply extracting premium revenue from captive consumers. The Lagos State Residents Registration Agency (LASRRA) could serve as the repository for this data.
+
+RECOMMENDATION 4: DRIVER INCENTIVE ALTERNATIVES
+
+Rather than passing surge costs to riders during emergencies, platforms should fund driver incentives from their own margins. A "hero driver" bonus funded by the platform — for example, a flat N5,000 bonus per completed ride during an emergency period — would maintain the supply incentive without exploiting vulnerable riders. This cost could be partially offset by tax incentives for platforms that participate in emergency mobility programmes.
+
+RECOMMENDATION 5: INTEGRATION WITH PUBLIC TRANSIT EMERGENCY PLANS
+
+The Lagos Metropolitan Area Transport Authority (LAMATA) should establish data-sharing agreements with ride-hailing platforms. When public transit is suspended — as the BRT was during the curfew — platforms should be notified automatically and emergency pricing protocols should activate. This integration would close the gap between public transport shutdowns and private sector response.
+
+RECOMMENDATION 6: CONSUMER REDRESS MECHANISM
+
+A fast-track complaint resolution process should be established for emergency pricing disputes. During the EndSARS period, riders who filed complaints with LASCOPA waited weeks for responses. A 72-hour resolution window, with automatic refunds for rides where surge exceeded 3x during a confirmed emergency, would provide immediate consumer relief while maintaining longer-term accountability.
+
+These recommendations aim to balance the legitimate business interests of ride-hailing platforms with the duty not to profit from human suffering. The technology exists to implement every recommendation listed here. What is needed is the regulatory will and industry cooperation to make it happen.

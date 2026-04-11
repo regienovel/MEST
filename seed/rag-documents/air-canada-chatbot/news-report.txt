@@ -1,0 +1,28 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+AIR CANADA ORDERED TO PAY CUSTOMER WHO WAS MISLED BY AIRLINE'S CHATBOT
+CBC News — February 15, 2024
+
+A British Columbia tribunal has ruled that Air Canada must compensate a passenger who was given incorrect bereavement fare information by the airline's AI-powered chatbot, in a case that raises significant questions about corporate liability for artificial intelligence systems.
+
+Jake Moffatt of Vancouver was looking for information about bereavement travel in November 2022 after the death of his grandmother. He visited the Air Canada website, where an AI chatbot told him he could purchase a full-price ticket and later apply for a bereavement discount within 90 days.
+
+That information was entirely fabricated by the chatbot. Air Canada's actual bereavement policy requires travellers to request the reduced fare before booking. There is no provision for retroactive applications.
+
+"I relied on the chatbot because it was on Air Canada's website," Moffatt told CBC. "Why would I assume the airline's own tool was giving me wrong information?"
+
+Air Canada attempted to distance itself from the chatbot, arguing in its defence that the chatbot was effectively a separate entity responsible for its own actions. The airline also suggested Moffatt should have double-checked the information by reading the full bereavement policy page, which the chatbot had linked to.
+
+The Civil Resolution Tribunal rejected both arguments. Member Christopher Rivers ruled that Air Canada bears full responsibility for the accuracy of information provided through any tool on its website.
+
+"Air Canada does not explain why the webpage titled 'Bereavement Travel' should be trusted over its chatbot," Rivers wrote in the decision.
+
+The ruling has attracted international attention from AI policy researchers, consumer protection advocates, and businesses deploying customer-facing AI systems. Legal experts say it establishes an important principle: companies cannot deploy AI tools and then disclaim responsibility when those tools provide inaccurate information.
+
+Professor Gillian Hadfield at the University of Toronto's Schwartz Reisman Institute said the ruling was "common sense, but also landmark."
+
+"If you put a tool on your website that interacts with customers, you own what it says. The fact that it's AI doesn't change that basic principle," Hadfield said.
+
+Air Canada later updated its chatbot with disclaimers and is reported to have implemented additional safeguards, though the airline declined to comment on the specifics of its AI strategy.
+
+The case has prompted several major airlines and large retailers to review their own chatbot deployments, with some temporarily pulling AI-powered customer service tools until accuracy safeguards could be verified.

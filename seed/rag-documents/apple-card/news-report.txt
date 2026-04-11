@@ -1,0 +1,22 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+APPLE CARD INVESTIGATED AFTER CLAIMS OF GENDER BIAS IN CREDIT LIMITS
+The New York Times — November 10, 2019
+
+New York's Department of Financial Services opened an investigation into Goldman Sachs after a viral Twitter thread from tech entrepreneur David Heinemeier Hansson alleged that Apple Card's credit limit algorithm discriminated against women.
+
+Hansson, the creator of the Ruby on Rails programming framework, tweeted on November 7 that Apple Card gave him a credit limit 20 times higher than his wife's, despite the couple filing joint tax returns and his wife having a higher credit score.
+
+"My wife and I file joint tax returns, live in the same house, and she has a higher credit score. But Apple's 'black box' algorithm gave me 20x the credit limit," Hansson wrote. "No appeals process. No one can explain why. This is just straight up discrimination."
+
+The thread quickly went viral, and Apple co-founder Steve Wozniak responded: "The same thing happened to us. I got 10x the credit limit. We have no separate bank accounts or assets or anything. Hard to get to a human for a+]correction. It's big tech in 2019."
+
+Goldman Sachs, which issues Apple Card, responded in a statement: "Our credit decisions are based on a customer's creditworthiness and not on factors like gender, race, age, sexual orientation, or any other basis prohibited by law." The bank said each applicant is evaluated individually based on their income, credit history, and existing debt obligations.
+
+However, neither Goldman Sachs nor Apple could explain why Hansson and his wife — or Wozniak and his wife — received such dramatically different credit limits despite similar or identical financial profiles.
+
+Linda Lacewell, then-superintendent of the New York Department of Financial Services, announced the investigation, stating: "Any algorithm that intentionally or not results in discriminatory treatment of women or any other protected class of people violates New York law."
+
+The investigation highlighted a growing concern about the use of opaque AI systems in financial services. Unlike traditional credit decisions, where a denial letter must include specific reasons, Apple Card's algorithm produced no explanation for its credit limit decisions. Applicants who felt they received an unfairly low limit had no meaningful avenue for appeal.
+
+Consumer advocates noted that the issue extended beyond Apple Card. Algorithmic credit decisions are increasingly common across the financial industry, and few institutions provide transparent explanations of how their models arrive at specific credit limits.

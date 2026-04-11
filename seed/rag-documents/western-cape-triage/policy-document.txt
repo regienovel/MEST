@@ -1,0 +1,47 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+WESTERN CAPE DEPARTMENT OF HEALTH
+INTERIM GUIDELINES ON THE USE OF ARTIFICIAL INTELLIGENCE IN CLINICAL DECISION SUPPORT
+Circular H97/2022 — August 2022
+
+1. PURPOSE
+
+These interim guidelines are issued following the suspension of the ML-based triage decision support tool and establish minimum requirements for the development, testing, and deployment of AI systems in Western Cape public healthcare facilities.
+
+2. SCOPE
+
+These guidelines apply to all AI and machine learning systems used in any capacity to support, inform, or automate clinical decisions in facilities operated by or contracted to the Western Cape Department of Health.
+
+3. PRINCIPLES
+
+3.1 Clinical authority: AI systems serve as decision support tools only. Final clinical decisions must be made by qualified healthcare professionals. No AI system may override clinical judgment.
+
+3.2 Equity: AI systems must not produce systematically different outcomes for patients based on race, ethnicity, socioeconomic status, geographic location, or any other non-clinical factor. Where historical data reflects systemic inequities, the AI system must not perpetuate those inequities.
+
+3.3 Transparency: The logic of any AI system used in clinical settings must be explainable to the clinicians who use it and to the patients it affects. "Black box" models that cannot provide interpretable reasoning are not acceptable for clinical decision support.
+
+3.4 Accountability: A named clinical lead must be designated as responsible for every AI system deployed in a clinical setting. This individual is accountable for monitoring the system's performance and authorising its continued use.
+
+4. PRE-DEPLOYMENT REQUIREMENTS
+
+Before any AI system is deployed in a clinical setting, the following must be completed and documented:
+
+4.1 Disparity testing: The system must be tested for disparate impact across racial, geographic, socioeconomic, age, and gender groups. Testing must use data representative of the actual patient population of the facility where the system will be deployed.
+
+4.2 Feature audit: All input features must be reviewed for potential proxy relationships with protected characteristics. Features that serve as proxies for race, ethnicity, or socioeconomic status must be removed or their inclusion must be justified with evidence of a direct causal relationship to the clinical outcome being predicted.
+
+4.3 Clinical validation: The system's predictions must be validated against expert clinical assessments by at least three independent clinicians on a sample of at least 500 cases.
+
+4.4 Override protocol: A clear, low-friction process must be established for clinicians to override AI recommendations. Overrides must not require additional documentation or justification beyond standard clinical notes.
+
+5. POST-DEPLOYMENT MONITORING
+
+5.1 Monthly disparity reports: Facility-level reports must be generated monthly showing the system's recommendations disaggregated by patient demographics.
+
+5.2 Override tracking: The rate at which clinicians override AI recommendations must be monitored. A sustained override rate above 20% triggers a mandatory review.
+
+5.3 Annual re-validation: All deployed AI systems must undergo full re-validation annually.
+
+6. INCIDENT REPORTING
+
+Any suspected case of an AI system producing a clinically harmful recommendation must be reported through the existing clinical incident reporting system and must additionally be reported to the Deputy Director-General: Health Programmes within 48 hours.

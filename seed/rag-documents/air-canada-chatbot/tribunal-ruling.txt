@@ -1,0 +1,36 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+CIVIL RESOLUTION TRIBUNAL OF BRITISH COLUMBIA
+Decision No. CRT-2024-00345
+Date: February 14, 2024
+
+Jake Moffatt v. Air Canada
+
+BACKGROUND
+
+The applicant, Jake Moffatt, filed a claim against Air Canada for $812.02 in damages arising from misleading information provided by the airline's website chatbot regarding its bereavement travel policy.
+
+In November 2022, Mr. Moffatt's grandmother passed away. He visited the Air Canada website seeking information about bereavement fares for travel from Vancouver to Toronto to attend the funeral. The airline's chatbot — powered by a large language model integrated into the customer service portal — told Mr. Moffatt that he could book a full-fare ticket immediately and then apply for a bereavement discount retroactively within 90 days of the ticket purchase.
+
+FACTS
+
+Mr. Moffatt relied on this information, booked a full-fare round-trip ticket, attended his grandmother's funeral, and subsequently applied for the bereavement discount. Air Canada denied the application, stating that its actual bereavement travel policy requires passengers to contact the airline's reservations team BEFORE booking the flight, and that retroactive applications are not accepted under any circumstances.
+
+When Mr. Moffatt pointed out that the chatbot had explicitly told him he could apply retroactively, Air Canada argued that the chatbot was a "separate legal entity" and that the airline could not be held responsible for information provided by it. Air Canada further argued that the chatbot's response included a link to the airline's official bereavement policy page, and that Mr. Moffatt should have verified the information himself.
+
+ANALYSIS
+
+Member Christopher Rivers found Air Canada's position untenable. The Tribunal held:
+
+1. Air Canada is responsible for all information on its website, whether provided by a static page or by a chatbot.
+2. There is no basis for the suggestion that a chatbot is a separate legal entity.
+3. Air Canada did not take reasonable care to ensure the chatbot's accuracy.
+4. Mr. Moffatt had no reason to doubt the chatbot, which presented its response with the same authority as any other information on the airline's website.
+
+The Tribunal noted that Air Canada had not implemented any mechanism for the chatbot to verify its statements against the airline's actual policies before presenting them to customers.
+
+DECISION
+
+Air Canada is ordered to pay Mr. Moffatt $812.02, consisting of the difference between the full fare paid and the bereavement fare, plus tribunal fees and interest.
+
+This case marks one of the first known rulings holding a company liable for the hallucinated output of an AI chatbot used in customer-facing operations.

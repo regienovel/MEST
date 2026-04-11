@@ -1,0 +1,26 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+THE AI THAT COULD SPOT CASSAVA DISEASE — BUT ONLY IN THE LAB
+Rest of World — March 2022
+
+A computer vision model developed through a Zindi data science competition achieved 95% accuracy at identifying cassava diseases from leaf photographs. But when farmers in northern Ghana tried to use it through a WhatsApp-based interface, accuracy plummeted to below 40%.
+
+The gap between laboratory performance and field performance exposed a fundamental challenge in deploying AI for agriculture in Africa: the conditions under which models are trained bear little resemblance to the conditions under which they are used.
+
+The Zindi Cassava Leaf Disease Challenge, hosted on the African data science competition platform, attracted hundreds of data scientists across the continent. Participants were given a dataset of approximately 21,000 labelled images of cassava leaves, classified into five categories: Cassava Bacterial Blight (CBB), Cassava Brown Streak Disease (CBSD), Cassava Green Mottle (CGM), Cassava Mosaic Disease (CMD), and Healthy.
+
+The winning models achieved classification accuracies above 95% on the held-out test set — an impressive result that suggested the technology was ready for deployment.
+
+An agricultural NGO in the Upper East Region of Ghana developed a WhatsApp bot that allowed farmers to send photographs of their cassava leaves and receive an automated disease diagnosis. The bot, deployed as a pilot in late 2021, connected to the competition-winning model via an API.
+
+The results were sobering. In a three-month pilot with 200 farmers, the model correctly identified the disease in fewer than 40% of submissions. In many cases, it confidently classified healthy leaves as diseased, or misidentified the specific disease.
+
+"The farmers were telling me, 'This app says my cassava has mosaic disease, but I can see with my eyes it is fine,'" said Emmanuel Asante, the NGO programme manager. "After a few wrong answers, they stopped using it. Trust was gone."
+
+Analysis by researchers at KNUST (Kwame Nkrumah University of Science and Technology) identified several factors driving the accuracy gap:
+
+The training images were taken with high-quality cameras in controlled lighting, with leaves held against neutral backgrounds. Farmers' WhatsApp photos were taken with smartphone cameras in variable outdoor lighting, often showing leaves still attached to the plant with soil, other vegetation, and shadows in the background.
+
+More critically, the researchers found evidence that the model had learned to classify images partly based on background features — the colour and texture of the surface behind the leaf — rather than solely on the leaf itself. Training images for different disease categories had been photographed in slightly different settings, and the model exploited these spurious correlations.
+
+"The model didn't just learn what cassava disease looks like," said Dr. Abena Owusu of KNUST's Computer Science department. "It learned what the training photos looked like. And the training photos looked nothing like real life."

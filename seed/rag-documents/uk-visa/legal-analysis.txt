@@ -1,0 +1,48 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+AUTOMATING IMMIGRATION CONTROL: THE UK VISA STREAMING TOOL AND ALGORITHMIC DISCRIMINATION
+Oxford Internet Institute — Working Paper, November 2020
+
+1. INTRODUCTION
+
+In August 2020, the UK Home Office withdrew its Streaming Tool — an algorithmic system that had been used since 2015 to triage visa applications. The tool assigned risk scores to applicants based on a combination of factors that included, prominently, nationality. This paper examines the technical design choices that enabled systemic discrimination and explores what a lawful, transparent alternative might look like.
+
+2. HOW THE SYSTEM WORKED
+
+The Streaming Tool sorted incoming visa applications into three categories:
+- Green: low risk, fast-tracked for approval
+- Amber: standard processing
+- Red: high risk, subject to enhanced scrutiny
+
+The tool used a rules-based algorithm — not a machine learning model — that assigned points based on applicant characteristics. Nationality was weighted heavily. A leaked internal document from 2017 referenced a "suspect nationalities" list that included most African and South Asian countries.
+
+The effect was that a Nigerian software engineer applying for a conference visa and a Swedish tourist applying for the same type of visa would be sorted into entirely different processing streams before a human caseworker had read a single word of either application.
+
+3. THE DISCRIMINATION MECHANISM
+
+The system discriminated through two compounding mechanisms:
+
+a) Direct discrimination: Nationality served as a direct proxy for race and ethnicity. Assigning higher risk scores to nationals of predominantly non-white countries constitutes direct racial discrimination under the Equality Act 2010.
+
+b) Feedback loop: Applications routed to the red stream received more intensive scrutiny, leading to higher refusal rates. These higher refusal rates were then used to justify the original risk classification, creating a self-reinforcing cycle.
+
+4. THE NIGERIAN EXPERIENCE
+
+Nigeria provides a particularly stark example. In 2019, Nigerian nationals submitted approximately 180,000 UK visa applications. Freedom of Information data showed that Nigerian applications were routed to the red stream at a rate of approximately 4.5 times the global average.
+
+Nigerian applicants reported prolonged processing times (averaging 28 days versus 7 for green-stream applicants), more frequent requests for additional documentation, and interview rates three times higher than the overall average. Refusal rates for Nigerian applicants were approximately 35%, compared to a global average of 12%.
+
+5. WHY TRANSPARENCY MATTERS
+
+The Home Office operated the Streaming Tool for five years without public disclosure of the nationality rankings or the scoring methodology. It was only through persistent FOI requests by campaign groups and journalists that the system's discriminatory nature was exposed.
+
+This case demonstrates that algorithmic transparency is not merely a technical nicety — it is a prerequisite for accountability. Systems that make consequential decisions about people's lives must be open to scrutiny.
+
+6. WHAT A LAWFUL ALTERNATIVE WOULD REQUIRE
+
+Any replacement system should:
+- Exclude nationality as a direct input feature
+- Use only factors with a demonstrable, evidence-based connection to actual risk
+- Provide applicants with a clear explanation of how their application was assessed
+- Be subject to regular independent audits for disparate impact across protected characteristics
+- Include an accessible appeals mechanism with human decision-makers

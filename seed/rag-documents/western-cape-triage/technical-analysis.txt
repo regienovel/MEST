@@ -1,0 +1,48 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+PROXY VARIABLE COLLAPSE IN HEALTHCARE AI: THE WESTERN CAPE TRIAGE MODEL
+South African Medical Journal, Vol. 113, No. 2 — February 2023
+
+ABSTRACT
+
+We examine a machine learning triage model deployed in Western Cape emergency departments that was found to systematically under-prioritise patients from township areas. We identify the mechanism as proxy variable collapse — the model's use of geographic and demographic features as proxies for clinical severity, reflecting historical patterns of unequal care rather than genuine differences in patient acuity.
+
+BACKGROUND
+
+South Africa's healthcare system operates under a dual burden: the clinical needs of a population with high rates of infectious disease, violence-related trauma, and non-communicable disease, and the structural legacy of apartheid-era resource allocation that concentrated healthcare infrastructure in historically white and affluent areas.
+
+In this context, the Western Cape Department of Health piloted an ML-based triage model in 2021 to assist emergency departments in prioritising patients. The model was trained on five years of historical patient data from public hospitals in the Cape Town metropolitan area.
+
+THE PROXY VARIABLE MECHANISM
+
+The model used postcode as one of approximately 40 input features. While postcode was intended to capture distance-to-hospital (relevant for estimating ambulance response times), it also served as a near-perfect proxy for race and socioeconomic status in the Cape Town context, where residential segregation remains stark.
+
+The proxy operated through a multi-step causal chain:
+
+1. Postcode → Socioeconomic status → Historical care patterns
+2. Historical care patterns → Model's learned association between postcode and "typical" resource utilisation
+3. "Typical" resource utilisation → Predicted severity/priority score
+
+Because township patients had historically received less intensive care (due to overcrowding, resource constraints, and implicit bias in clinical settings), the model learned to predict that they would need less intensive care. This is the proxy variable collapse: a feature that should be irrelevant to clinical severity becomes a dominant predictor because it encodes structural inequality.
+
+QUANTITATIVE FINDINGS
+
+Our analysis of the model's predictions on a held-out test set revealed:
+
+- Patients from Khayelitsha received priority scores averaging 0.34 standard deviations lower than patients from the Southern Suburbs presenting with matched clinical features (same chief complaint, similar vital signs, comparable age)
+- The effect was strongest for conditions requiring subjective severity assessment (abdominal pain, chest pain, headache) and weakest for conditions with clear objective markers (fractures, lacerations)
+- Removing postcode from the model reduced but did not eliminate the disparity, as other features (employment status, insurance status, facility of presentation) also served as proxies for the same underlying variable
+
+COMPARISON WITH US FINDINGS
+
+Our findings parallel the 2019 discovery by Obermeyer et al. (published in Science) that a widely used US healthcare algorithm discriminated against Black patients by using healthcare costs as a proxy for healthcare needs. Because Black patients had historically incurred lower costs — due to less access to care, not less need for it — the algorithm systematically under-predicted their severity.
+
+The mechanism is identical: historical inequality in access to care is encoded in historical data, which becomes training data for a model that then perpetuates the inequality.
+
+RECOMMENDATIONS
+
+1. Remove geographic and socioeconomic features from triage models, or at minimum test their causal relationship to clinical outcomes
+2. Use clinical-only features (vital signs, symptoms, laboratory values) for severity prediction
+3. Conduct mandatory disparity testing across racial, geographic, and socioeconomic groups before deploying any healthcare AI
+4. Establish clinical override protocols that empower clinicians to override algorithmic recommendations without administrative burden
+5. Publish model performance metrics disaggregated by patient demographics

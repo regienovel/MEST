@@ -1,0 +1,49 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+TRAINING DISTRIBUTION MISMATCH IN MOBILE MONEY FRAUD DETECTION: A CASE STUDY
+FSD Kenya Working Paper — March 2024
+
+ABSTRACT
+
+This paper examines the December 2023 M-Pesa false-positive event in which Safaricom's automated fraud detection system incorrectly froze thousands of legitimate small-business accounts during the holiday trading surge. We analyse the incident as a case of training distribution mismatch — a well-documented failure mode in machine learning systems deployed in environments with strong seasonal or contextual variation.
+
+1. BACKGROUND
+
+M-Pesa serves over 30 million active users in Kenya. For millions of informal economy workers — market traders, boda boda operators, small-scale farmers — it is the sole financial infrastructure. Safaricom employs automated fraud detection models that monitor transaction patterns and flag anomalies for account suspension or review.
+
+2. THE INCIDENT
+
+During the period of December 22-28, 2023, an estimated 4,000-8,000 accounts belonging to small business operators were frozen by the automated system. The common profile of affected accounts:
+- High transaction volume (3-5x normal daily average)
+- Small individual transaction amounts (KES 50-500 per transaction)
+- Concentrated activity during market hours (6am-8pm)
+- Location clusters around known market areas
+
+All of these patterns are consistent with normal holiday trading behaviour, not fraud.
+
+3. ROOT CAUSE ANALYSIS
+
+The fraud detection model appears to define "normal" based on rolling averages of each account's transaction history. When holiday-period activity exceeded the model's learned thresholds, the system classified the divergence as potentially fraudulent.
+
+Key contributing factors:
+
+a) Training data bias: The model's training data likely under-represented extreme seasonal peaks, or treated them as outliers to be excluded.
+
+b) No seasonal adjustment: Unlike traditional banking fraud systems, which incorporate calendar-aware features (holiday periods, payroll cycles, festival seasons), the M-Pesa model appears to have treated all periods uniformly.
+
+c) Informal economy blindness: The model was likely optimised for patterns typical of formal-economy users (salaried individuals with predictable monthly cycles). Informal traders have inherently variable transaction patterns that are poorly captured by standard statistical models.
+
+d) No graduated response: The system applied a binary freeze rather than a graduated response (e.g., flag for review, temporarily limit transaction size, send an SMS verification for large transactions).
+
+4. IMPACT ASSESSMENT
+
+The economic impact on affected traders was disproportionate to the duration of the freeze. For a mama mboga operating on thin daily margins, losing two days of sales during the highest-revenue week of the year can represent 5-10% of annual income. The reputational impact is also significant — customers who experienced failed payments may switch to competing traders.
+
+5. RECOMMENDATIONS
+
+- Incorporate calendar-aware features into the fraud model, with specific attention to culturally significant trading periods (December holidays, Eid, back-to-school January).
+- Build user archetypes that reflect informal economy patterns, not just formal-sector banking behaviour.
+- Implement graduated responses rather than binary account freezes.
+- Provide instant SMS notification when an account is flagged, with a self-service appeal mechanism.
+- Establish a rapid-review queue for small-business accounts during known peak periods.
+- Conduct regular "seasonal stress tests" on the fraud model using historical peak-period data.

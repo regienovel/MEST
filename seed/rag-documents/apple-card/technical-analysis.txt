@@ -1,0 +1,40 @@
+SOURCE DOCUMENT — ILLUSTRATIVE
+
+EXPLAINABILITY COLLAPSE: WHAT THE APPLE CARD CASE REVEALS ABOUT BLACK-BOX CREDIT MODELS
+Brookings Institution — TechTank Blog, December 2019
+
+THE CORE PROBLEM
+
+The Apple Card credit limit controversy is fundamentally not a story about gender discrimination — or at least, not only. It is a story about explainability collapse: what happens when a financial institution deploys a model so complex that no one — not the bank, not the regulator, not the consumer — can explain why it produces the outputs it does.
+
+When David Heinemeier Hansson asked Goldman Sachs why his wife received a credit limit 20 times lower than his, the bank could not provide a coherent answer. When Steve Wozniak reported the same pattern — a 10x disparity with his wife despite shared finances — the bank repeated its standard statement about individual creditworthiness.
+
+The inability to explain is the problem.
+
+HOW CREDIT DECISIONS TRADITIONALLY WORK
+
+Under the Equal Credit Opportunity Act (ECOA) and the Fair Credit Reporting Act (FCRA), lenders are required to provide "adverse action notices" when they deny credit or offer less favourable terms. These notices must include specific reasons, drawn from a standardised list: "insufficient credit history," "high debt-to-income ratio," "too many recent inquiries," and so forth.
+
+These requirements were designed for an era of simple, interpretable credit models — models where a human could trace the path from inputs to outputs. A traditional credit scorecard might use 10-20 variables with clearly defined weights. A loan officer could look at the scorecard and say: "Your income is X, your debt is Y, your credit history shows Z, and that's why your limit is $5,000."
+
+THE BLACK BOX ERA
+
+Modern machine learning credit models can use hundreds or thousands of features, with complex non-linear interactions between them. Goldman Sachs's model for Apple Card reportedly considered factors including income, debt, credit history, payment patterns, and other financial indicators — but the specific model architecture and feature interactions were not disclosed.
+
+The result is a system that may comply with the letter of fair lending law (it does not explicitly use gender as an input) while potentially violating the spirit of it (it may use features that correlate with gender, producing discriminatory outcomes).
+
+More fundamentally, the system cannot explain itself. When the output appears discriminatory, neither the bank nor the consumer has the tools to determine whether the discrimination is real or coincidental.
+
+WHY THIS MATTERS
+
+The Apple Card case exposes a gap in financial regulation. Existing fair lending frameworks assume that credit decisions can be explained and audited. Machine learning models undermine both assumptions:
+
+1. Explanation: Complex models cannot be meaningfully summarised in the adverse-action-notice format required by ECOA. Saying "the model considered 400 features and their interactions" is technically accurate but practically useless.
+
+2. Audit: Traditional fair lending audits test whether protected characteristics (race, gender, age) predict credit outcomes after controlling for legitimate creditworthiness factors. But when the model uses hundreds of features, many of which may correlate with protected characteristics, the audit becomes a statistical nightmare.
+
+THE REGULATORY RESPONSE
+
+The New York DFS investigation ultimately concluded in 2021 with Goldman Sachs receiving no penalty, as regulators found that the model did not use gender as an input and that individual outcomes could be explained by differences in credit history and income reporting. However, the investigation prompted Goldman Sachs to implement a "reconsideration" process allowing applicants to request credit limit reviews.
+
+The case nonetheless catalysed regulatory attention to algorithmic explainability, contributing to the CFPB's 2022 guidance requiring lenders to provide specific, accurate reasons for adverse credit decisions even when using complex models.
