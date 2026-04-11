@@ -216,7 +216,7 @@ function DocumentsTab({ teamId }: { teamId: string }) {
           await new Promise(r => setTimeout(r, 400));
         }
 
-        // Done
+        // Done — keep visualization visible (no auto-clear)
         setEmbedViz(prev => prev ? {
           ...prev, stage: 'done',
           activeChunkIndex: data.chunkPreviews.length,
@@ -224,17 +224,13 @@ function DocumentsTab({ teamId }: { teamId: string }) {
           dimensions: data.dimensions || 1536,
         } : null);
         setDocs(prev => prev.map(d => d.id === docId ? { ...d, embedded: true } : d));
-        await new Promise(r => setTimeout(r, 4000));
       } else {
         setEmbedViz(prev => prev ? { ...prev, stage: 'error', errorMessage: data.error || 'Failed' } : null);
-        await new Promise(r => setTimeout(r, 3000));
       }
     } catch {
       setEmbedViz(prev => prev ? { ...prev, stage: 'error', errorMessage: 'Embedding failed' } : null);
-      await new Promise(r => setTimeout(r, 3000));
     }
     setEmbeddingDocId(null);
-    setEmbedViz(null);
   };
 
   const handleReprocess = async (docId: string) => {
