@@ -22,7 +22,8 @@ interface Stats {
 }
 
 interface GalleryItem {
-  id: string; title: string; type: string; teamName: string; featured: boolean;
+  id: string; title: string; type: string; teamId: string; teamName: string;
+  featured: boolean; createdAt: string; data: Record<string, unknown>;
 }
 
 export default function AdminPage() {
@@ -247,6 +248,43 @@ export default function AdminPage() {
           </div>
         </div>
 
+        {/* Team Work */}
+        {galleryItems.length > 0 && (
+          <div>
+            <h2 className="font-serif text-xl text-mest-ink mb-4">Team Work</h2>
+            {(() => {
+              // Group items by team
+              const byTeam: Record<string, GalleryItem[]> = {};
+              for (const item of galleryItems) {
+                const key = item.teamName || 'Unknown';
+                if (!byTeam[key]) byTeam[key] = [];
+                byTeam[key].push(item);
+              }
+              return Object.entries(byTeam).map(([teamName, items]) => (
+                <div key={teamName} className="mb-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="px-3 py-1 rounded-full bg-mest-blue-light text-mest-blue text-sm font-semibold">
+                      {teamName}
+                    </span>
+                    <span className="text-xs text-mest-grey-500">{items.length} item{items.length !== 1 ? 's' : ''}</span>
+                    <div className="flex gap-1">
+                      {items.some(i => i.type === 'chat') && <span className="text-xs bg-green-50 text-green-700 px-1.5 py-0.5 rounded">Chat</span>}
+                      {items.some(i => i.type === 'voice') && <span className="text-xs bg-violet-50 text-violet-700 px-1.5 py-0.5 rounded">Voice</span>}
+                      {items.some(i => i.type === 'vision') && <span className="text-xs bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded">Vision</span>}
+                      {items.some(i => i.type === 'chain') && <span className="text-xs bg-rose-50 text-rose-700 px-1.5 py-0.5 rounded">Chain</span>}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {items.map(item => (
+                      <TeamWorkCard key={item.id} item={item} onFeature={() => toggleFeatured(item.id)} onDelete={() => deleteGalleryItem(item.id)} />
+                    ))}
+                  </div>
+                </div>
+              ));
+            })()}
+          </div>
+        )}
+
         {/* Broadcast */}
         <div className="bg-white rounded-xl border border-mest-grey-300/60 p-6">
           <h2 className="font-serif text-xl text-mest-ink mb-4">{t('admin.broadcast.title')}</h2>
@@ -371,6 +409,129 @@ function StatCard({ label, value }: { label: string; value: string }) {
     <div className="bg-white rounded-xl border border-mest-grey-300/60 p-4">
       <p className="text-xs text-mest-grey-500">{label}</p>
       <p className="text-2xl font-semibold text-mest-ink mt-1">{value}</p>
+    </div>
+  );
+}
+
+const TYPE_EMOJI: Record<string, string> = {
+  chat: '💬', voice: '🎤', vision: '👁️', chain: '🔗',
+};
+
+const BLOCK_LABELS: Record<string, { label: string; emoji: string; color: string }> = {
+  'input-text': { label: 'Text Input', emoji: '📝', color: 'bg-blue-50 border-blue-200 text-blue-800' },
+  'input-image': { label: 'Image Upload', emoji: '📸', color: 'bg-amber-50 border-amber-200 text-amber-800' },
+  'input-audio': { label: 'Audio Input', emoji: '🎤', color: 'bg-violet-50 border-violet-200 text-violet-800' },
+  'process-chat-gpt': { label: 'Ask GPT-4o', emoji: '🤖', color: 'bg-green-50 border-green-200 text-green-800' },
+  'process-chat-claude': { label: 'Ask Claude', emoji: '🧠', color: 'bg-purple-50 border-purple-200 text-purple-800' },
+  'process-transcribe': { label: 'Transcribe', emoji: '🎧', color: 'bg-sky-50 border-sky-200 text-sky-800' },
+  'process-tts': { label: 'Generate Speech', emoji: '🔊', color: 'bg-pink-50 border-pink-200 text-pink-800' },
+  'process-vision-gpt': { label: 'Vision (GPT)', emoji: '👁️', color: 'bg-emerald-50 border-emerald-200 text-emerald-800' },
+  'process-vision-claude': { label: 'Vision (Claude)', emoji: '👁️', color: 'bg-indigo-50 border-indigo-200 text-indigo-800' },
+  'process-translate': { label: 'Translate', emoji: '🌍', color: 'bg-cyan-50 border-cyan-200 text-cyan-800' },
+  'process-extract-json': { label: 'Extract JSON', emoji: '{ }', color: 'bg-orange-50 border-orange-200 text-orange-800' },
+  'process-summarize': { label: 'Summarize', emoji: '✂️', color: 'bg-teal-50 border-teal-200 text-teal-800' },
+  'output-text': { label: 'Display Text', emoji: '📄', color: 'bg-slate-50 border-slate-200 text-slate-800' },
+  'output-audio': { label: 'Play Audio', emoji: '🎵', color: 'bg-rose-50 border-rose-200 text-rose-800' },
+  'output-image': { label: 'Display Image', emoji: '🖼️', color: 'bg-lime-50 border-lime-200 text-lime-800' },
+};
+
+function TeamWorkCard({ item, onFeature, onDelete }: { item: GalleryItem; onFeature: () => void; onDelete: () => void }) {
+  const [expanded, setExpanded] = useState(false);
+  const emoji = TYPE_EMOJI[item.type] || '📦';
+  const timeStr = item.createdAt ? new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+
+  return (
+    <div className="bg-white rounded-xl border border-mest-grey-300/60 overflow-hidden">
+      <div
+        className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-mest-grey-50"
+        onClick={() => setExpanded(!expanded)}
+      >
+        <span className="text-xl">{emoji}</span>
+        <div className="flex-1 min-w-0">
+          <h4 className="text-sm font-semibold text-mest-ink truncate">{item.title}</h4>
+          <div className="flex items-center gap-2 mt-0.5">
+            <span className="text-xs text-mest-grey-500 capitalize">{item.type}</span>
+            <span className="text-xs text-mest-grey-300">{timeStr}</span>
+            {item.featured && <Star size={10} className="text-mest-gold fill-mest-gold" />}
+          </div>
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          <button onClick={e => { e.stopPropagation(); onFeature(); }} className="p-1 hover:bg-mest-gold-light rounded" title="Toggle featured">
+            <Star size={14} className={item.featured ? 'text-mest-gold fill-mest-gold' : 'text-mest-grey-300'} />
+          </button>
+          <button onClick={e => { e.stopPropagation(); onDelete(); }} className="p-1 hover:bg-mest-rust-light rounded" title="Delete">
+            <Trash2 size={14} className="text-mest-grey-300 hover:text-mest-rust" />
+          </button>
+        </div>
+      </div>
+
+      {expanded && (
+        <div className="border-t border-mest-grey-300/30 px-4 py-3">
+          {item.type === 'chain' && item.data?.blocks ? (
+            <div className="space-y-1.5">
+              {(item.data.blocks as Array<{ type: string; config: Record<string, unknown> }>).map((block, i) => {
+                const info = BLOCK_LABELS[block.type] || { label: block.type, emoji: '⚙️', color: 'bg-gray-50 border-gray-200 text-gray-800' };
+                const prompt = (block.config?.prompt || block.config?.value || '') as string;
+                return (
+                  <div key={i} className={`flex items-start gap-2 border rounded-lg px-3 py-2 text-xs ${info.color}`}>
+                    <span>{info.emoji}</span>
+                    <div className="flex-1 min-w-0">
+                      <span className="font-semibold">Step {i + 1}: {info.label}</span>
+                      {!!block.config?.targetLanguage && <span className="ml-2 opacity-70">→ {String(block.config.targetLanguage)}</span>}
+                      {!!block.config?.voice && <span className="ml-2 opacity-70">voice: {String(block.config.voice)}</span>}
+                      {prompt && (
+                        <p className="mt-1 opacity-70 truncate">{prompt.length > 100 ? prompt.slice(0, 100) + '...' : prompt}</p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : item.type === 'chat' ? (
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {((item.data?.messages || item.data?.gptMessages || []) as Array<{ role: string; content: string }>).map((msg, i) => (
+                <div key={i} className={`rounded-lg px-3 py-2 text-xs ${msg.role === 'user' ? 'bg-mest-blue text-white ml-6' : 'bg-mest-grey-50 mr-6'}`}>
+                  <span className="font-semibold opacity-70">{msg.role === 'user' ? 'User' : '🤖 AI'}</span>
+                  <p className="mt-0.5 whitespace-pre-wrap">{msg.content?.length > 200 ? msg.content.slice(0, 200) + '...' : msg.content}</p>
+                </div>
+              ))}
+            </div>
+          ) : item.type === 'voice' ? (
+            <div className="space-y-2 text-xs">
+              {!!item.data?.transcription && (
+                <div className="bg-mest-teal-light rounded-lg p-2">
+                  <span className="font-semibold text-mest-teal">🎤 Transcription</span>
+                  {!!item.data?.detectedLang && <span className="ml-2 text-mest-teal opacity-70">({String(item.data.detectedLang)})</span>}
+                  <p className="mt-1">{String(item.data.transcription)}</p>
+                </div>
+              )}
+              {!!item.data?.aiResponse && (
+                <div className="bg-mest-grey-50 rounded-lg p-2">
+                  <span className="font-semibold">🤖 AI Response</span>
+                  <p className="mt-1 whitespace-pre-wrap">{typeof item.data.aiResponse === 'string' ? (item.data.aiResponse.length > 200 ? item.data.aiResponse.slice(0, 200) + '...' : item.data.aiResponse) : 'Compare mode'}</p>
+                </div>
+              )}
+            </div>
+          ) : item.type === 'vision' ? (
+            <div className="space-y-2 text-xs">
+              {!!item.data?.prompt && (
+                <div className="bg-mest-gold-light rounded-lg p-2">
+                  <span className="font-semibold text-mest-gold">Prompt</span>
+                  <p className="mt-1">{String(item.data.prompt)}</p>
+                </div>
+              )}
+              {!!item.data?.response && (
+                <div className="bg-mest-grey-50 rounded-lg p-2">
+                  <span className="font-semibold">Response</span>
+                  <p className="mt-1 whitespace-pre-wrap">{typeof item.data.response === 'string' ? (item.data.response.length > 200 ? item.data.response.slice(0, 200) + '...' : item.data.response) : 'Compare mode'}</p>
+                </div>
+              )}
+            </div>
+          ) : (
+            <pre className="text-xs text-mest-grey-500">{JSON.stringify(item.data, null, 2)}</pre>
+          )}
+        </div>
+      )}
     </div>
   );
 }
