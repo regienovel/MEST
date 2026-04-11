@@ -1,0 +1,22 @@
+CUSTOMER SERVICE CHATBOT TRANSCRIPT
+Date: November 11, 2022
+Channel: Air Canada website chat assistant
+Customer: Jake Moffatt
+
+[10:42] Customer: My grandmother just passed away and I need to fly from Vancouver to Toronto for the funeral. What is your bereavement policy?
+
+[10:42] Assistant: I'm so sorry for your loss, Jake. Air Canada offers reduced bereavement fares for passengers travelling due to the death of an immediate family member. To proceed, please book your flight and then submit a refund request within 90 days of travel to receive the bereavement discount.
+
+[10:43] Customer: So I can book any flight now and then claim the discount afterward?
+
+[10:43] Assistant: Yes, that's correct. You can book any available flight at the regular fare. After you have completed your travel, submit a refund claim with documentation of the bereavement (such as a death certificate or letter from the funeral home), and Air Canada will process a partial refund reflecting the bereavement discount. The bereavement refund must be claimed within 90 days of the date of travel.
+
+[10:44] Customer: Okay, thank you. I'll book the flight now.
+
+[10:44] Assistant: You're welcome, Jake. Please accept our condolences. If you need any further assistance, I'm here to help.
+
+[End of transcript]
+
+Note: This transcript was submitted as evidence in Moffatt v. Air Canada at the British Columbia Civil Resolution Tribunal. Following this conversation, Mr. Moffatt booked full-fare round-trip flights from Vancouver to Toronto for his grandmother's funeral. When he subsequently submitted a refund claim with supporting documentation, Air Canada denied the claim, stating that bereavement fares cannot be applied retroactively and must be booked through the call centre at the time of booking. Mr. Moffatt then filed a complaint with the tribunal.
+
+[Illustrative document for MEST AI Studio training purposes — based on publicly reported facts of Moffatt v. Air Canada, 2024 BCCRT 149.]
