@@ -5,6 +5,7 @@ import {
   embedText, retrieveTopK, rerankChunks, generateGrounded,
   type RagDocument, type Chunk
 } from '@/lib/rag';
+import { logApiCall } from '@/lib/health-metrics';
 
 export const maxDuration = 60;
 
@@ -13,6 +14,7 @@ function delay(ms: number): Promise<void> {
 }
 
 export async function POST(req: NextRequest) {
+  const startTime = Date.now();
   await ensureSeeded();
 
   const teamCookie = req.cookies.get('mest_team')?.value;
@@ -22,6 +24,7 @@ export async function POST(req: NextRequest) {
 
   const { query, strict = false } = await req.json();
   if (!query) return new Response('Missing query', { status: 400 });
+  logApiCall(team.id, 'rag', `${strict ? '[strict] ' : ''}${query.slice(0, 60)}`, startTime, true).catch(() => {});
 
   const docs = (await storage.get<RagDocument[]>(`rag:docs:${team.id}`)) || [];
   const embeddedDocs = docs.filter(d => d.embedded && d.embeddings);

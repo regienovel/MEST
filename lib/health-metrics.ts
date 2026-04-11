@@ -21,6 +21,30 @@ export interface TeamMetrics {
   trustScorecard: Record<string, { status: 'pass' | 'fail' | 'untested'; lastTested?: string }>;
 }
 
+// Quick helper to log from API routes with minimal code
+export async function logApiCall(
+  teamId: string,
+  module: string,
+  inputSummary: string,
+  startTime: number,
+  success: boolean,
+  errorMessage?: string
+): Promise<void> {
+  try {
+    await logCall(teamId, {
+      id: crypto.randomUUID(),
+      timestamp: new Date().toISOString(),
+      module,
+      inputSummary: inputSummary.slice(0, 80),
+      status: success ? 'success' : 'error',
+      latencyMs: Date.now() - startTime,
+      errorMessage,
+    });
+  } catch {
+    // Never let logging break the actual request
+  }
+}
+
 export async function logCall(teamId: string, call: CallRecord): Promise<void> {
   const key = `health:calls:${teamId}`;
   const existing = (await storage.get<CallRecord[]>(key)) || [];

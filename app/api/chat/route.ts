@@ -5,10 +5,12 @@ import { ensureSeeded } from '@/lib/seed';
 
 export const maxDuration = 60;
 import { checkRateLimit, incrementUsage } from '@/lib/rate-limit';
+import { logApiCall } from '@/lib/health-metrics';
 
 const DEFAULT_SYSTEM = 'You are a helpful assistant. Respond in the language the user is writing in.';
 
 export async function POST(req: NextRequest) {
+  const startTime = Date.now();
   await ensureSeeded();
 
   const teamCookie = req.cookies.get('mest_team')?.value;
@@ -29,6 +31,10 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const { model, messages, temperature = 0.7, maxTokens = 1024 } = body;
+  const inputSummary = messages?.find((m: { role: string }) => m.role === 'user')?.content?.slice(0, 80) || 'chat';
+
+  // Log the call (non-blocking)
+  logApiCall(teamId, 'chat', `[${model}] ${inputSummary}`, startTime, true).catch(() => {});
 
   const encoder = new TextEncoder();
 

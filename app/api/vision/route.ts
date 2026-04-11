@@ -5,8 +5,10 @@ import { ensureSeeded } from '@/lib/seed';
 
 export const maxDuration = 60;
 import { checkRateLimit, incrementUsage } from '@/lib/rate-limit';
+import { logApiCall } from '@/lib/health-metrics';
 
 export async function POST(req: NextRequest) {
+  const startTime = Date.now();
   await ensureSeeded();
 
   const teamCookie = req.cookies.get('mest_team')?.value;
@@ -27,6 +29,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { model, images, prompt } = await req.json();
+  logApiCall(teamId, 'vision', `[${model}] ${(prompt || '').slice(0, 60)}`, startTime, true).catch(() => {});
   const encoder = new TextEncoder();
 
   if (model === 'both') {

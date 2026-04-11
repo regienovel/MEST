@@ -6,8 +6,10 @@ export const maxDuration = 30;
 import { checkRateLimit, incrementUsage } from '@/lib/rate-limit';
 import { getLanguageName } from '@/lib/languages';
 import { toFile } from 'openai';
+import { logApiCall } from '@/lib/health-metrics';
 
 export async function POST(req: NextRequest) {
+  const startTime = Date.now();
   await ensureSeeded();
 
   const teamCookie = req.cookies.get('mest_team')?.value;
@@ -48,6 +50,7 @@ export async function POST(req: NextRequest) {
 
     const language = (transcription as unknown as { language?: string }).language || 'en';
 
+    logApiCall(teamId, 'voice', `transcribe (${getLanguageName(language)})`, startTime, true).catch(() => {});
     return NextResponse.json({
       ok: true,
       text: transcription.text,
@@ -59,6 +62,7 @@ export async function POST(req: NextRequest) {
     const errorMessage = err instanceof Error ? err.message : String(err);
     const errorDetails = (err as { status?: number; error?: { message?: string } })?.error?.message || errorMessage;
     console.error('[transcribe] error:', errorDetails, err);
+    logApiCall(teamId, 'voice', 'transcribe', startTime, false, errorDetails).catch(() => {});
     return NextResponse.json({
       ok: false,
       error: `Transcription failed: ${errorDetails}`

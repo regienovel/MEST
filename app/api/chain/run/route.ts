@@ -2,11 +2,13 @@ import { NextRequest } from 'next/server';
 import { ensureSeeded } from '@/lib/seed';
 import { checkRateLimit, incrementUsage } from '@/lib/rate-limit';
 import { executeChain } from '@/lib/chain-executor';
+import { logApiCall } from '@/lib/health-metrics';
 
 // Allow up to 60 seconds for chain execution (default is 10s on Vercel Hobby)
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
+  const startTime = Date.now();
   await ensureSeeded();
 
   const teamCookie = req.cookies.get('mest_team')?.value;
@@ -28,7 +30,7 @@ export async function POST(req: NextRequest) {
 
   const { blocks } = await req.json();
   const encoder = new TextEncoder();
-  const startTime = Date.now();
+  logApiCall(teamId, 'chain', `run (${blocks?.length || 0} blocks)`, startTime, true).catch(() => {});
 
   const stream = new ReadableStream({
     async start(controller) {
