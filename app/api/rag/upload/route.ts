@@ -93,10 +93,19 @@ export async function POST(req: NextRequest) {
     embedded: false,
   };
 
-  // Get existing docs for this team
+  // Get existing docs for this team — replace any doc with the same filename
   const existing = (await storage.get<RagDocument[]>(`rag:docs:${team.id}`)) || [];
-  existing.push(doc);
-  await storage.set(`rag:docs:${team.id}`, existing);
+  const oldDoc = existing.find(d => d.name === fileName);
+  if (oldDoc) {
+    console.log(`[rag-upload] Replacing existing document "${fileName}" (id: ${oldDoc.id}) for team ${team.id}`);
+    // Clean up old standalone keys
+    await storage.delete(`rag:chunks:${team.id}:${oldDoc.id}`);
+    await storage.delete(`rag:embeddings:${team.id}:${oldDoc.id}`);
+    await storage.delete(`rag:doc:${team.id}:${oldDoc.id}`);
+  }
+  const filtered = existing.filter(d => d.name !== fileName);
+  filtered.push(doc);
+  await storage.set(`rag:docs:${team.id}`, filtered);
 
   return NextResponse.json({ ok: true, document: { id: docId, name: fileName, charCount: text.length, chunkCount: chunks.length } });
 }

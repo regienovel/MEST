@@ -162,6 +162,16 @@ export default function AdminPage() {
     fetchData();
   }
 
+  async function purgeRag(teamId: string) {
+    if (!confirm(`Purge ALL RAG data for this team? Documents, chunks, and embeddings will be deleted.`)) return;
+    await fetch('/api/admin/rag', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ teamId }),
+    });
+    fetchData();
+  }
+
   async function toggleFeatured(id: string) {
     await fetch(`/api/admin/gallery/${id}`, { method: 'POST' });
     fetchData();
@@ -235,6 +245,9 @@ export default function AdminPage() {
                         </Button>
                         <Button size="sm" variant="ghost" onClick={() => resetXp(team.id)}>
                           {t('admin.teams.resetXp')}
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => purgeRag(team.id)} className="text-purple-600">
+                          Purge RAG
                         </Button>
                         <Button size="sm" variant="ghost" onClick={() => deleteTeam(team.id)} className="text-mest-rust">
                           <Trash2 size={14} />
