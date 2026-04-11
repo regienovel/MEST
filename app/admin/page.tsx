@@ -467,71 +467,101 @@ function TeamWorkCard({ item, onFeature, onDelete }: { item: GalleryItem; onFeat
 
       {expanded && (
         <div className="border-t border-mest-grey-300/30 px-4 py-3">
-          {item.type === 'chain' && item.data?.blocks ? (
-            <div className="space-y-1.5">
-              {(item.data.blocks as Array<{ type: string; config: Record<string, unknown> }>).map((block, i) => {
-                const info = BLOCK_LABELS[block.type] || { label: block.type, emoji: '⚙️', color: 'bg-gray-50 border-gray-200 text-gray-800' };
-                const prompt = (block.config?.prompt || block.config?.value || '') as string;
-                return (
-                  <div key={i} className={`flex items-start gap-2 border rounded-lg px-3 py-2 text-xs ${info.color}`}>
-                    <span>{info.emoji}</span>
-                    <div className="flex-1 min-w-0">
-                      <span className="font-semibold">Step {i + 1}: {info.label}</span>
-                      {!!block.config?.targetLanguage && <span className="ml-2 opacity-70">→ {String(block.config.targetLanguage)}</span>}
-                      {!!block.config?.voice && <span className="ml-2 opacity-70">voice: {String(block.config.voice)}</span>}
-                      {prompt && (
-                        <p className="mt-1 opacity-70 truncate">{prompt.length > 100 ? prompt.slice(0, 100) + '...' : prompt}</p>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : item.type === 'chat' ? (
-            <div className="space-y-2 max-h-48 overflow-y-auto">
-              {((item.data?.messages || item.data?.gptMessages || []) as Array<{ role: string; content: string }>).map((msg, i) => (
-                <div key={i} className={`rounded-lg px-3 py-2 text-xs ${msg.role === 'user' ? 'bg-mest-blue text-white ml-6' : 'bg-mest-grey-50 mr-6'}`}>
-                  <span className="font-semibold opacity-70">{msg.role === 'user' ? 'User' : '🤖 AI'}</span>
-                  <p className="mt-0.5 whitespace-pre-wrap">{msg.content?.length > 200 ? msg.content.slice(0, 200) + '...' : msg.content}</p>
-                </div>
-              ))}
-            </div>
-          ) : item.type === 'voice' ? (
-            <div className="space-y-2 text-xs">
-              {!!item.data?.transcription && (
-                <div className="bg-mest-teal-light rounded-lg p-2">
-                  <span className="font-semibold text-mest-teal">🎤 Transcription</span>
-                  {!!item.data?.detectedLang && <span className="ml-2 text-mest-teal opacity-70">({String(item.data.detectedLang)})</span>}
-                  <p className="mt-1">{String(item.data.transcription)}</p>
-                </div>
-              )}
-              {!!item.data?.aiResponse && (
-                <div className="bg-mest-grey-50 rounded-lg p-2">
-                  <span className="font-semibold">🤖 AI Response</span>
-                  <p className="mt-1 whitespace-pre-wrap">{typeof item.data.aiResponse === 'string' ? (item.data.aiResponse.length > 200 ? item.data.aiResponse.slice(0, 200) + '...' : item.data.aiResponse) : 'Compare mode'}</p>
-                </div>
-              )}
-            </div>
-          ) : item.type === 'vision' ? (
-            <div className="space-y-2 text-xs">
-              {!!item.data?.prompt && (
-                <div className="bg-mest-gold-light rounded-lg p-2">
-                  <span className="font-semibold text-mest-gold">Prompt</span>
-                  <p className="mt-1">{String(item.data.prompt)}</p>
-                </div>
-              )}
-              {!!item.data?.response && (
-                <div className="bg-mest-grey-50 rounded-lg p-2">
-                  <span className="font-semibold">Response</span>
-                  <p className="mt-1 whitespace-pre-wrap">{typeof item.data.response === 'string' ? (item.data.response.length > 200 ? item.data.response.slice(0, 200) + '...' : item.data.response) : 'Compare mode'}</p>
-                </div>
-              )}
-            </div>
-          ) : (
-            <pre className="text-xs text-mest-grey-500">{JSON.stringify(item.data, null, 2)}</pre>
-          )}
+          <AdminItemDetail item={item} />
         </div>
       )}
     </div>
   );
+}
+
+function AdminItemDetail({ item }: { item: GalleryItem }) {
+  if (item.type === 'chain' && item.data?.blocks) {
+    const blocks = item.data.blocks as Array<{ id: string; type: string; config: Record<string, unknown> }>;
+    const outputs = (item.data.blockOutputs || {}) as Record<string, { status?: string; output?: unknown }>;
+    return (
+      <div className="space-y-1.5">
+        {blocks.map((block, i) => {
+          const info = BLOCK_LABELS[block.type] || { label: block.type, emoji: '⚙️', color: 'bg-gray-50 border-gray-200 text-gray-800' };
+          const prompt = (block.config?.prompt || block.config?.value || '') as string;
+          const result = outputs[block.id];
+          const output = result?.output;
+          return (
+            <div key={i} className={`border rounded-lg px-3 py-2 text-xs ${info.color}`}>
+              <div className="flex items-start gap-2">
+                <span>{info.emoji}</span>
+                <div className="flex-1 min-w-0">
+                  <span className="font-semibold">Step {i + 1}: {info.label}</span>
+                  {!!block.config?.targetLanguage && <span className="ml-2 opacity-70">→ {String(block.config.targetLanguage)}</span>}
+                  {!!block.config?.voice && <span className="ml-2 opacity-70">voice: {String(block.config.voice)}</span>}
+                  {result?.status && <span className="ml-2">{result.status === 'done' ? '✅' : '❌'}</span>}
+                  {prompt && <p className="mt-1 opacity-70 truncate">{prompt.length > 100 ? prompt.slice(0, 100) + '...' : prompt}</p>}
+                  {output !== undefined && output !== null && output !== '' && typeof output === 'string' && !output.startsWith('data:') && (
+                    <div className="mt-1.5 bg-white/70 rounded p-2 whitespace-pre-wrap max-h-24 overflow-y-auto">{output.length > 300 ? output.slice(0, 300) + '...' : output}</div>
+                  )}
+                  {typeof output === 'string' && output.startsWith('data:audio/') && (
+                    <audio controls src={output} className="mt-1.5 w-full h-7" />
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (item.type === 'chat') {
+    const messages = ((item.data?.messages || item.data?.gptMessages || []) as Array<{ role: string; content: string }>);
+    return (
+      <div className="space-y-2 max-h-48 overflow-y-auto">
+        {messages.map((msg, i) => (
+          <div key={i} className={`rounded-lg px-3 py-2 text-xs ${msg.role === 'user' ? 'bg-mest-blue text-white ml-6' : 'bg-mest-grey-50 mr-6'}`}>
+            <span className="font-semibold opacity-70">{msg.role === 'user' ? 'User' : '🤖 AI'}</span>
+            <p className="mt-0.5 whitespace-pre-wrap">{msg.content?.length > 200 ? msg.content.slice(0, 200) + '...' : msg.content}</p>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (item.type === 'voice') {
+    return (
+      <div className="space-y-2 text-xs">
+        {!!item.data?.transcription && (
+          <div className="bg-mest-teal-light rounded-lg p-2">
+            <span className="font-semibold text-mest-teal">🎤 Transcription</span>
+            {!!item.data?.detectedLang && <span className="ml-2 text-mest-teal opacity-70">({String(item.data.detectedLang)})</span>}
+            <p className="mt-1">{String(item.data.transcription)}</p>
+          </div>
+        )}
+        {!!item.data?.aiResponse && (
+          <div className="bg-mest-grey-50 rounded-lg p-2">
+            <span className="font-semibold">🤖 AI Response</span>
+            <p className="mt-1 whitespace-pre-wrap">{typeof item.data.aiResponse === 'string' ? (item.data.aiResponse.length > 200 ? item.data.aiResponse.slice(0, 200) + '...' : item.data.aiResponse) : 'Compare mode'}</p>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  if (item.type === 'vision') {
+    return (
+      <div className="space-y-2 text-xs">
+        {!!item.data?.prompt && (
+          <div className="bg-mest-gold-light rounded-lg p-2">
+            <span className="font-semibold text-mest-gold">Prompt</span>
+            <p className="mt-1">{String(item.data.prompt)}</p>
+          </div>
+        )}
+        {!!item.data?.response && (
+          <div className="bg-mest-grey-50 rounded-lg p-2">
+            <span className="font-semibold">Response</span>
+            <p className="mt-1 whitespace-pre-wrap">{typeof item.data.response === 'string' ? (item.data.response.length > 200 ? item.data.response.slice(0, 200) + '...' : item.data.response) : 'Compare mode'}</p>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return <pre className="text-xs text-mest-grey-500">{JSON.stringify(item.data, null, 2)}</pre>;
 }

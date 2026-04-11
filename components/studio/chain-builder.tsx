@@ -264,7 +264,7 @@ export function ChainBuilder({ teamName, xp }: ChainBuilderProps) {
       const res = await fetch('/api/chain/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: chainName, blocks }),
+        body: JSON.stringify({ name: chainName, blocks, blockOutputs: blockStatuses }),
       });
       const data = await res.json();
       if (data.ok) {

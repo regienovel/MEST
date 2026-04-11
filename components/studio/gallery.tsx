@@ -342,6 +342,7 @@ function DetailContent({ item }: { item: GalleryItem }) {
 
 function ChainDetailView({ data }: { data: Record<string, unknown> }) {
   const blocks = (data.blocks || []) as Array<{ id: string; type: string; config: Record<string, unknown> }>;
+  const blockOutputs = (data.blockOutputs || {}) as Record<string, { status?: string; output?: unknown; error?: string }>;
 
   return (
     <div className="space-y-3">
@@ -354,6 +355,9 @@ function ChainDetailView({ data }: { data: Record<string, unknown> }) {
             const desc = block.config._desc as string || '';
             const prompt = (block.config.prompt || block.config.value || '') as string;
             const hasPrompt = prompt && prompt.length > 0;
+            const blockResult = blockOutputs[block.id];
+            const output = blockResult?.output;
+            const hasOutput = output !== undefined && output !== null && output !== '';
 
             return (
               <div key={block.id || i}>
@@ -370,6 +374,11 @@ function ChainDetailView({ data }: { data: Record<string, unknown> }) {
                     {!!block.config.maxWords && (
                       <span className="text-xs bg-white/60 px-2 py-0.5 rounded-full">{String(block.config.maxWords)} words</span>
                     )}
+                    {blockResult?.status && (
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${blockResult.status === 'done' ? 'bg-green-200 text-green-800' : blockResult.status === 'error' ? 'bg-red-200 text-red-800' : 'bg-gray-200'}`}>
+                        {blockResult.status === 'done' ? '✓' : blockResult.status === 'error' ? '✗' : blockResult.status}
+                      </span>
+                    )}
                   </div>
                   {desc && (
                     <p className="text-xs mt-1 opacity-75 italic">{desc}</p>
@@ -378,6 +387,24 @@ function ChainDetailView({ data }: { data: Record<string, unknown> }) {
                     <div className="mt-2 bg-white/50 rounded p-2 text-xs font-mono whitespace-pre-wrap max-h-24 overflow-y-auto">
                       {prompt.length > 200 ? prompt.slice(0, 200) + '...' : prompt}
                     </div>
+                  )}
+                  {/* Block output */}
+                  {hasOutput && (
+                    <div className="mt-2 bg-white rounded-lg p-3 border border-white/80">
+                      <span className="text-xs font-semibold text-mest-ink opacity-60 block mb-1">Output:</span>
+                      {typeof output === 'string' && output.startsWith('data:audio/') ? (
+                        <audio controls src={output} className="w-full h-8" />
+                      ) : typeof output === 'string' && output.startsWith('data:image/') ? (
+                        <img src={output} alt="Output" className="max-h-32 rounded" />
+                      ) : typeof output === 'string' ? (
+                        <p className="text-xs text-mest-grey-700 whitespace-pre-wrap max-h-32 overflow-y-auto">{output}</p>
+                      ) : (
+                        <pre className="text-xs text-mest-grey-500 max-h-32 overflow-y-auto">{JSON.stringify(output, null, 2)}</pre>
+                      )}
+                    </div>
+                  )}
+                  {blockResult?.error && (
+                    <div className="mt-2 bg-red-50 rounded p-2 text-xs text-red-700">{blockResult.error}</div>
                   )}
                 </div>
                 {i < blocks.length - 1 && (

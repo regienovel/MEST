@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   try { team = JSON.parse(decodeURIComponent(teamCookie)); } catch { return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); }
   if (!team.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { name, description, blocks, forkedFrom } = await req.json();
+  const { name, description, blocks, forkedFrom, blockOutputs } = await req.json();
   const id = crypto.randomUUID();
 
   const chain: Chain = {
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     type: 'chain',
     title: name,
     description,
-    data: { blocks, forkedFrom },
+    data: { blocks, forkedFrom, blockOutputs },
     createdAt: chain.createdAt,
     views: 0,
     forks: 0,
