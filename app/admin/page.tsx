@@ -32,6 +32,10 @@ export default function AdminPage() {
   const [teams, setTeams] = useState<TeamUsage[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [ragSubmissions, setRagSubmissions] = useState<Array<{ id: string; teamId: string; teamName: string; name: string; description: string; config: Record<string, unknown>; submittedAt: string; documents: Array<{ name: string }> }>>([]);
+  const [queryingModel, setQueryingModel] = useState<string | null>(null);
+  const [queryInput, setQueryInput] = useState('');
+  const [queryResult, setQueryResult] = useState('');
 
   // Broadcast
   const [broadcastEn, setBroadcastEn] = useState('');
@@ -61,6 +65,10 @@ export default function AdminPage() {
 
     fetch('/api/gallery?sort=newest').then(r => r.json()).then(d => {
       setGalleryItems(d.items || []);
+    }).catch(() => {});
+
+    fetch('/api/admin/rag-models').then(r => r.json()).then(d => {
+      setRagSubmissions(d.submissions || []);
     }).catch(() => {});
 
     fetch('/api/config').then(r => r.json()).then(d => {
@@ -160,6 +168,49 @@ export default function AdminPage() {
     if (!confirm(t('admin.teams.confirmDelete'))) return;
     await fetch(`/api/admin/teams/${id}`, { method: 'DELETE' });
     fetchData();
+  }
+
+  async function runAdminQuery(submission: { config: Record<string, unknown>; documentData?: unknown[] }) {
+    if (!queryInput.trim()) return;
+    setQueryResult('Running...');
+    try {
+      const res = await fetch('/api/rag/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: queryInput,
+          strict: true,
+          config: submission.config,
+          teamDocsOverride: (submission as unknown as { documentData?: unknown[] }).documentData,
+        }),
+      });
+      const reader = res.body?.getReader();
+      if (!reader) { setQueryResult('Error'); return; }
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let result = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const parts = buffer.split('\n\n');
+        buffer = parts.pop() || '';
+        for (const part of parts) {
+          const line = part.trim();
+          if (!line.startsWith('data: ')) continue;
+          try {
+            const data = JSON.parse(line.slice(6));
+            if (data.token) result += data.token;
+            if (data.stage === 'generate' && data.status === 'done' && data.payload?.response) {
+              result = data.payload.response as string;
+            }
+          } catch {}
+        }
+      }
+      setQueryResult(result || 'No response');
+    } catch {
+      setQueryResult('Query failed');
+    }
   }
 
   async function purgeRag(teamId: string) {
@@ -295,6 +346,79 @@ export default function AdminPage() {
                 </div>
               ));
             })()}
+          </div>
+        )}
+
+        {/* Submitted RAG Models */}
+        {ragSubmissions.length > 0 && (
+          <div className="bg-white rounded-xl border-2 border-purple-200 p-6">
+            <h2 className="font-serif text-xl text-mest-ink mb-4">Submitted RAG Models</h2>
+            <div className="space-y-3">
+              {ragSubmissions.map((sub, idx) => (
+                <div key={`${sub.teamId}-${sub.id}-${idx}`} className="border border-mest-grey-300/60 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <span className="px-2 py-0.5 bg-mest-blue-light text-mest-blue rounded-full text-xs font-semibold mr-2">{sub.teamName}</span>
+                      <span className="font-medium text-mest-ink">{sub.name}</span>
+                      {sub.description && <span className="text-xs text-mest-grey-500 ml-2">— {sub.description}</span>}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-mest-grey-300">{sub.submittedAt ? new Date(sub.submittedAt).toLocaleString() : ''}</span>
+                      <Button size="sm" variant="outline" onClick={() => { setQueryingModel(queryingModel === sub.id ? null : sub.id); setQueryResult(''); }} className="text-xs">
+                        {queryingModel === sub.id ? 'Close' : 'Query'}
+                      </Button>
+                    </div>
+                  </div>
+                  {/* Config summary */}
+                  {(() => {
+                    const c = sub.config || {};
+                    return (
+                      <div className="flex flex-wrap gap-2 text-xs">
+                        <span className="bg-mest-grey-100 px-2 py-0.5 rounded">Model: {String(c.generationModel || 'gpt-4o')}</span>
+                        <span className="bg-mest-grey-100 px-2 py-0.5 rounded">Top-K: {String(c.topK || 5)}</span>
+                        <span className="bg-mest-grey-100 px-2 py-0.5 rounded">Threshold: {String(c.strictThreshold || 0.15)}</span>
+                        <span className="bg-mest-grey-100 px-2 py-0.5 rounded">Rerank: {String(c.enableReranking) === 'true' ? 'ON' : 'OFF'}</span>
+                        <span className="bg-mest-grey-100 px-2 py-0.5 rounded">Temp: {String(c.temperature || 0.2)}</span>
+                        <span className="bg-mest-grey-100 px-2 py-0.5 rounded">{sub.documents?.length || 0} docs</span>
+                      </div>
+                    );
+                  })()}
+                  {/* System prompt preview */}
+                  {!!sub.config?.systemPrompt && (
+                    <div className="mt-2 bg-mest-grey-50 rounded p-2 text-xs text-mest-grey-700 max-h-20 overflow-y-auto font-mono">
+                      {String(sub.config.systemPrompt).slice(0, 200)}{String(sub.config.systemPrompt).length > 200 ? '...' : ''}
+                    </div>
+                  )}
+                  {/* Query interface */}
+                  {queryingModel === sub.id && (
+                    <div className="mt-3 border-t border-mest-grey-300/30 pt-3 space-y-2">
+                      <div className="flex gap-2">
+                        <Input
+                          value={queryInput}
+                          onChange={e => setQueryInput(e.target.value)}
+                          placeholder="Type a question to test this model..."
+                          className="flex-1"
+                          onKeyDown={e => e.key === 'Enter' && queryInput.trim() && runAdminQuery(sub)}
+                        />
+                        <Button
+                          size="sm"
+                          onClick={() => runAdminQuery(sub)}
+                          disabled={!queryInput.trim()}
+                          className="bg-mest-gold hover:bg-mest-gold/90 text-white"
+                        >
+                          Run
+                        </Button>
+                      </div>
+                      {queryResult && (
+                        <div className="bg-mest-grey-50 rounded-lg p-3 text-sm whitespace-pre-wrap">
+                          {queryResult}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 

@@ -172,43 +172,78 @@ Return ONLY a JSON array of the chunk numbers in order of relevance, most releva
 
 export const STRICT_THRESHOLD = 0.15;
 
+interface GenerationConfig {
+  strictThreshold?: number;
+  generationModel?: 'gpt-4o' | 'claude-sonnet';
+  systemPrompt?: string;
+  refusalMessage?: string;
+  temperature?: number;
+  citationStyle?: 'inline' | 'footnote' | 'none';
+}
+
 export async function* generateGrounded(
   query: string,
   chunks: RankedChunk[],
-  strict: boolean
+  strict: boolean,
+  config?: GenerationConfig
 ): AsyncGenerator<string> {
+  const threshold = config?.strictThreshold ?? STRICT_THRESHOLD;
+  const refusal = config?.refusalMessage ?? "I don't know — this answer is not in the source documents.";
+  const model = config?.generationModel ?? 'gpt-4o';
+  const temp = config?.temperature ?? 0.2;
+  const customSystemPrompt = config?.systemPrompt;
+  const citationStyle = config?.citationStyle ?? 'inline';
+
   // Check strict mode threshold
   if (strict) {
     const maxSimilarity = Math.max(...chunks.map(c => c.similarity));
-    if (maxSimilarity < STRICT_THRESHOLD) {
-      yield "I don't know — this answer is not in the source documents.";
+    if (maxSimilarity < threshold) {
+      yield refusal;
       return;
     }
   }
 
   const topChunks = chunks.slice(0, 3);
+
+  // Citation format
+  const citationMarker = citationStyle === 'footnote' ? 'superscript numbers ¹ ² ³' : citationStyle === 'none' ? 'no citation markers' : 'inline brackets [1], [2], [3]';
+
   const contextBlock = topChunks
     .map((c, i) => `[Source ${i + 1}: ${c.documentName}]\n${c.text}`)
     .join('\n\n---\n\n');
 
-  const systemPrompt = strict
-    ? `You are a helpful assistant that ONLY answers based on the provided source documents. You MUST cite your sources using footnote markers [1], [2], [3] corresponding to the source numbers. If the sources genuinely do not contain ANY relevant information to answer the question, say "I don't know — this answer is not in the source documents." Do NOT make up information beyond what the sources state.`
-    : `You are a helpful assistant. Answer the user's question based on the provided source documents. Cite your sources using footnote markers [1], [2], [3]. Use the information in the sources even if it's indirect or partial — extract the best answer you can. If you need to infer, say so explicitly.`;
+  const systemPrompt = customSystemPrompt
+    ? `${customSystemPrompt}\n\nCite sources using ${citationMarker}. If you cannot answer from the sources, respond with: "${refusal}"`
+    : strict
+      ? `You are a helpful assistant that ONLY answers based on the provided source documents. Cite sources using ${citationMarker}. If the sources do not contain relevant information, say: "${refusal}". Do NOT make up information.`
+      : `You are a helpful assistant. Answer based on the provided source documents. Cite sources using ${citationMarker}. Extract the best answer you can even from indirect sources. If you must infer, say so.`;
 
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4o',
-    stream: true,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: `Sources:\n\n${contextBlock}\n\n---\n\nQuestion: ${query}` },
-    ],
-    temperature: 0.3,
-    max_tokens: 1024,
-  });
+  if (model === 'claude-sonnet') {
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1024,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: `Sources:\n\n${contextBlock}\n\n---\n\nQuestion: ${query}` }],
+      temperature: temp,
+    });
+    const text = response.content[0].type === 'text' ? response.content[0].text : '';
+    yield text;
+  } else {
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      stream: true,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Sources:\n\n${contextBlock}\n\n---\n\nQuestion: ${query}` },
+      ],
+      temperature: temp,
+      max_tokens: 1024,
+    });
 
-  for await (const chunk of response) {
-    const text = chunk.choices[0]?.delta?.content;
-    if (text) yield text;
+    for await (const chunk of response) {
+      const text = chunk.choices[0]?.delta?.content;
+      if (text) yield text;
+    }
   }
 }
 

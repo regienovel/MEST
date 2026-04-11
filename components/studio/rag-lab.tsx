@@ -10,6 +10,7 @@ import { ArrowLeft, Upload, Trash2, FileText, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { VectorSpace } from './vector-space';
+import { ConfigureTab } from './rag-configure';
 
 interface RagLabProps {
   teamId: string;
@@ -51,14 +52,16 @@ interface RetrievedChunk {
   newRank?: number;
 }
 
-type TabId = 'documents' | 'pipeline' | 'strict';
+type TabId = 'documents' | 'pipeline' | 'strict' | 'configure';
 
 export function RagLab({ teamId, teamName, xp }: RagLabProps) {
   const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<TabId>('documents');
+  const [activeModelName, setActiveModelName] = useState<string | null>(null);
 
   const tabs: Array<{ id: TabId; label: string }> = [
     { id: 'documents', label: t('rag.tab.documents') },
+    { id: 'configure', label: 'Configure' },
     { id: 'pipeline', label: t('rag.tab.pipeline') },
     { id: 'strict', label: t('rag.tab.strict') },
   ];
@@ -91,8 +94,16 @@ export function RagLab({ teamId, teamName, xp }: RagLabProps) {
         </div>
       </div>
 
+      {/* Active model badge */}
+      {activeModelName && (
+        <div className="bg-mest-gold-light text-mest-gold text-xs font-semibold px-4 py-1.5 text-center">
+          Active model: {activeModelName}
+        </div>
+      )}
+
       <div className="flex-1 max-w-6xl mx-auto w-full px-4 py-6">
         {activeTab === 'documents' && <DocumentsTab teamId={teamId} />}
+        {activeTab === 'configure' && <ConfigureTab teamId={teamId} onActiveModelChange={setActiveModelName} />}
         {activeTab === 'pipeline' && <PipelineTab teamId={teamId} />}
         {activeTab === 'strict' && <StrictModeTab teamId={teamId} />}
       </div>
