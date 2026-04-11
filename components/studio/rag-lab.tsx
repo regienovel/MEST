@@ -653,7 +653,7 @@ function StrictModeTab({ teamId }: { teamId: string }) {
           Compare how RAG responds with strict mode ON vs OFF. With strict mode, the system refuses to answer if no source documents are relevant enough.
         </p>
         <div className="inline-flex items-center gap-2 bg-mest-gold-light text-mest-gold text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
-          <span>Strict mode threshold: 35% similarity</span>
+          <span>Strict mode threshold: 15% similarity</span>
         </div>
         <div className="flex gap-3">
           <Textarea

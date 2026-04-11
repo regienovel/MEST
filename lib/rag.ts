@@ -170,7 +170,7 @@ Return ONLY a JSON array of the chunk numbers in order of relevance, most releva
 
 // --- Grounded generation with citations ---
 
-export const STRICT_THRESHOLD = 0.35;
+export const STRICT_THRESHOLD = 0.15;
 
 export async function* generateGrounded(
   query: string,
@@ -191,7 +191,9 @@ export async function* generateGrounded(
     .map((c, i) => `[Source ${i + 1}: ${c.documentName}]\n${c.text}`)
     .join('\n\n---\n\n');
 
-  const systemPrompt = `You are a helpful assistant that ONLY answers based on the provided source documents. You MUST cite your sources using footnote markers [1], [2], [3] corresponding to the source numbers. If the sources do not contain enough information to answer, say "I don't know — this answer is not in the source documents." Do NOT make up information.`;
+  const systemPrompt = strict
+    ? `You are a helpful assistant that ONLY answers based on the provided source documents. You MUST cite your sources using footnote markers [1], [2], [3] corresponding to the source numbers. If the sources genuinely do not contain ANY relevant information to answer the question, say "I don't know — this answer is not in the source documents." Do NOT make up information beyond what the sources state.`
+    : `You are a helpful assistant. Answer the user's question based on the provided source documents. Cite your sources using footnote markers [1], [2], [3]. Use the information in the sources even if it's indirect or partial — extract the best answer you can. If you need to infer, say so explicitly.`;
 
   const response = await openai.chat.completions.create({
     model: 'gpt-4o',
