@@ -153,6 +153,8 @@ Return ONLY a JSON array of the chunk numbers in order of relevance, most releva
 
 // --- Grounded generation with citations ---
 
+export const STRICT_THRESHOLD = 0.35;
+
 export async function* generateGrounded(
   query: string,
   chunks: RankedChunk[],
@@ -161,7 +163,7 @@ export async function* generateGrounded(
   // Check strict mode threshold
   if (strict) {
     const maxSimilarity = Math.max(...chunks.map(c => c.similarity));
-    if (maxSimilarity < 0.7) {
+    if (maxSimilarity < STRICT_THRESHOLD) {
       yield "I don't know — this answer is not in the source documents.";
       return;
     }

@@ -633,9 +633,12 @@ function StrictModeTab({ teamId }: { teamId: string }) {
     <div className="space-y-6">
       <div className="bg-white rounded-xl border border-mest-grey-300/60 p-6">
         <h3 className="font-serif text-lg text-mest-ink mb-4">{t('rag.tab.strict')}</h3>
-        <p className="text-sm text-mest-grey-500 mb-4">
-          Compare how RAG responds with strict mode ON vs OFF. With strict mode, the system refuses to answer if no source documents are relevant enough (similarity &lt; 70%).
+        <p className="text-sm text-mest-grey-500 mb-3">
+          Compare how RAG responds with strict mode ON vs OFF. With strict mode, the system refuses to answer if no source documents are relevant enough.
         </p>
+        <div className="inline-flex items-center gap-2 bg-mest-gold-light text-mest-gold text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
+          <span>Strict mode threshold: 35% similarity</span>
+        </div>
         <div className="flex gap-3">
           <Textarea
             value={query}
