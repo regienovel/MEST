@@ -13,12 +13,22 @@ export async function POST(req: NextRequest) {
 
   const { documentId } = await req.json();
   const docs = (await storage.get<RagDocument[]>(`rag:docs:${team.id}`)) || [];
-  const filtered = docs.filter(d => d.id !== documentId);
+  const docToDelete = docs.find(d => d.id === documentId);
 
-  if (filtered.length === docs.length) {
+  if (!docToDelete) {
     return NextResponse.json({ error: 'Document not found' }, { status: 404 });
   }
 
+  // Remove document from list (this removes text, chunks, and embeddings since they're all stored in the doc object)
+  const filtered = docs.filter(d => d.id !== documentId);
   await storage.set(`rag:docs:${team.id}`, filtered);
-  return NextResponse.json({ ok: true });
+
+  // Also clean up any standalone keys that might reference this document
+  await storage.delete(`rag:chunks:${team.id}:${documentId}`);
+  await storage.delete(`rag:embeddings:${team.id}:${documentId}`);
+  await storage.delete(`rag:doc:${team.id}:${documentId}`);
+
+  console.log(`[rag-delete] Deleted document ${documentId} (${docToDelete.name}) for team ${team.id}. ${docToDelete.chunkCount} chunks removed. Was embedded: ${docToDelete.embedded}`);
+
+  return NextResponse.json({ ok: true, deleted: { name: docToDelete.name, chunks: docToDelete.chunkCount, wasEmbedded: docToDelete.embedded } });
 }
