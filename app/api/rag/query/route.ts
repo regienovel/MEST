@@ -104,7 +104,12 @@ export async function POST(req: NextRequest) {
         if (config.enableReranking) {
           const t4 = Date.now();
           emit({ stage: 'rerank', status: 'running' });
-          chunksForGeneration = await rerankChunks(query, topK);
+          try {
+            chunksForGeneration = await rerankChunks(query, topK);
+          } catch (rerankErr) {
+            console.error('[rag-query] Rerank failed, using original order:', rerankErr);
+            chunksForGeneration = topK;
+          }
           emit({
             stage: 'rerank', status: 'done', elapsed_ms: Date.now() - t4,
             payload: {

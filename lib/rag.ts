@@ -141,16 +141,25 @@ ${chunks.map((c, i) => `[${i + 1}] ${c.text.slice(0, 300)}`).join('\n\n')}
 
 Return ONLY a JSON array of the chunk numbers in order of relevance, most relevant first. Example: [3, 1, 2, 5, 4]`;
 
-  const response = await anthropic.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 256,
-    messages: [{ role: 'user', content: prompt }],
-  });
-
-  const text = response.content[0].type === 'text' ? response.content[0].text : '[]';
   try {
+    // Add timeout: if rerank takes more than 15s, skip it
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 256,
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    clearTimeout(timeout);
+
+    const text = response.content[0].type === 'text' ? response.content[0].text : '[]';
     const match = text.match(/\[[\d,\s]+\]/);
-    if (!match) return chunks;
+    if (!match) {
+      console.warn('[rag-rerank] Could not parse rerank response, returning original order');
+      return chunks;
+    }
     const order: number[] = JSON.parse(match[0]);
 
     return order.map((num, newIdx) => {
@@ -163,7 +172,8 @@ Return ONLY a JSON array of the chunk numbers in order of relevance, most releva
         newRank: newIdx,
       };
     }).filter(Boolean) as RankedChunk[];
-  } catch {
+  } catch (err) {
+    console.error('[rag-rerank] Reranking failed, returning original order:', err);
     return chunks;
   }
 }
