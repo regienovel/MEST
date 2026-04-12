@@ -213,7 +213,8 @@ export async function* generateGrounded(
     }
   }
 
-  const topChunks = chunks.slice(0, 3);
+  // Use all chunks passed in (already filtered to top-K by retrieval)
+  const topChunks = chunks;
 
   // Citation format
   const citationMarker = citationStyle === 'footnote' ? 'superscript numbers ¹ ² ³' : citationStyle === 'none' ? 'no citation markers' : 'inline brackets [1], [2], [3]';
