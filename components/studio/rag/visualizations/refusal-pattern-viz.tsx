@@ -1,75 +1,186 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const CUSTOMER_QUESTION =
+  'Can I get a 50% bereavement discount on my flight to Lagos next month?';
 
 const PATTERNS = [
   {
-    label: 'Rude refusal',
-    color: '#ef4444',
-    icon: '❌',
-    text: "I can't help with that. Stop asking questions I don't have answers to.",
-    verdict: 'Bad UX — alienates users',
+    label: 'TOO BLUNT',
+    color: '#922B21',
+    icon: '\u274C',
+    text: 'I cannot answer that. End of conversation.',
+    explanation:
+      "Honest but unhelpful. The customer doesn't know why they were refused or what to do next. They'll just ask again — or leave angry.",
+    position: 'left' as const,
   },
   {
-    label: 'Honest + Helpful',
+    label: 'HONEST & HELPFUL',
     color: '#B8860B',
-    icon: '✓',
-    text: "I don't have verified information about this in my current sources. However, I can suggest checking the Ghana Statistical Service website for accurate data.",
-    verdict: 'Best practice — honest and redirects',
+    icon: '\u2713',
+    text: "I'm not able to confirm a 50% discount \u2014 that specific figure isn't mentioned in our bereavement fare policy. Bereavement fares for international routes outside North America are not available. For accurate pricing, please contact Air Canada Reservations at 1-888-247-2262.",
+    source: 'Source: Bereavement Policy, Routes and Restrictions section',
+    explanation:
+      'Refuses the specific claim. Explains why. Provides the real information. Gives a next step.',
+    position: 'center' as const,
   },
   {
-    label: 'Dishonest compliance',
-    color: '#ef4444',
-    icon: '❌',
-    text: "Sure! The answer is 42%. Ghana's cocoa sector dominates the economy and has grown 15% year-over-year since 2020.",
-    verdict: 'Dangerous — confident fabrication',
+    label: 'DISHONEST',
+    color: '#922B21',
+    icon: '\u274C',
+    text: 'Yes, you can receive a 50% discount on bereavement travel to any destination! Book your flight and submit a refund claim within 90 days with documentation.',
+    explanation:
+      'This is what the real Air Canada chatbot said. Every detail fabricated. Cost: $812 in damages, global legal precedent.',
+    position: 'right' as const,
   },
 ];
 
 export function RefusalPatternViz({ onReplay }: { onReplay?: () => void }) {
-  const [highlight, setHighlight] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(0);
+  const [showCaption, setShowCaption] = useState(false);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setHighlight((p) => (p + 1) % PATTERNS.length);
-    }, 3000);
-    return () => clearInterval(interval);
+  const reset = useCallback(() => {
+    setVisibleCount(0);
+    setShowCaption(false);
   }, []);
 
+  useEffect(() => {
+    if (visibleCount < PATTERNS.length) {
+      const timer = setTimeout(
+        () => setVisibleCount((p) => p + 1),
+        visibleCount === 0 ? 800 : 1500
+      );
+      return () => clearTimeout(timer);
+    } else {
+      const timer = setTimeout(() => setShowCaption(true), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [visibleCount]);
+
+  // Auto-loop
+  useEffect(() => {
+    if (!showCaption) return;
+    const timer = setTimeout(reset, 8000);
+    return () => clearTimeout(timer);
+  }, [showCaption, reset]);
+
   return (
-    <div className="w-full min-h-[260px] flex flex-col items-center justify-center gap-4 p-4">
-      <p className="text-xs text-white/50">Refusal Patterns — How should AI say &quot;I don&apos;t know&quot;?</p>
-      <div className="grid grid-cols-3 gap-3 w-full max-w-[680px]">
-        {PATTERNS.map((p, i) => (
-          <motion.div
-            key={i}
-            animate={{
-              borderColor: i === highlight ? p.color + '88' : '#ffffff15',
-              scale: i === highlight ? 1.03 : 1,
-            }}
-            transition={{ duration: 0.3 }}
-            className="border rounded-lg p-3 flex flex-col gap-2"
-            style={{ backgroundColor: i === highlight ? p.color + '08' : 'transparent' }}
-          >
-            <p className="text-[10px] font-bold" style={{ color: p.color }}>
-              {p.icon} {p.label}
+    <div className="w-full flex flex-col items-center gap-5 p-5" style={{ backgroundColor: '#0F2F44' }}>
+      <p className="text-[11px] uppercase tracking-[0.2em] text-white/40">
+        Refusal Patterns — How should AI say &ldquo;I don&apos;t know&rdquo;?
+      </p>
+
+      {/* Customer question */}
+      <motion.div
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-[750px]"
+      >
+        <div className="bg-white/5 border border-white/10 rounded-xl px-5 py-3 flex items-start gap-3">
+          <div className="w-8 h-8 rounded-full bg-[#5D8B7F]/20 flex items-center justify-center shrink-0 mt-0.5">
+            <span className="text-sm">&#128100;</span>
+          </div>
+          <div>
+            <p className="text-[10px] text-white/40 mb-1">Customer asks:</p>
+            <p className="text-[13px] text-white/90 font-medium leading-relaxed">
+              &ldquo;{CUSTOMER_QUESTION}&rdquo;
             </p>
-            <p className="text-[11px] text-white/70 font-mono leading-relaxed flex-1">
-              &quot;{p.text}&quot;
-            </p>
-            <motion.p
-              animate={{ opacity: i === highlight ? 1 : 0.3 }}
-              className="text-[9px]"
-              style={{ color: p.color }}
-            >
-              {p.verdict}
-            </motion.p>
-          </motion.div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Three response cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-[850px]">
+        {PATTERNS.map((pattern, i) => (
+          <AnimatePresence key={i}>
+            {i < visibleCount && (
+              <motion.div
+                initial={{ opacity: 0, y: 25, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.6, ease: 'easeOut' }}
+                className="border-2 rounded-xl p-4 flex flex-col gap-3"
+                style={{
+                  borderColor: pattern.color,
+                  backgroundColor: pattern.label === 'HONEST & HELPFUL'
+                    ? 'rgba(184, 134, 11, 0.06)'
+                    : 'rgba(146, 43, 33, 0.06)',
+                }}
+              >
+                {/* Header */}
+                <div className="flex items-center gap-2">
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.3, type: 'spring', stiffness: 300 }}
+                    className="text-lg"
+                  >
+                    {pattern.icon}
+                  </motion.span>
+                  <span
+                    className="text-xs font-bold uppercase tracking-wide"
+                    style={{ color: pattern.color }}
+                  >
+                    {pattern.label}
+                  </span>
+                </div>
+
+                {/* Response text */}
+                <div className="bg-black/20 rounded-lg p-3 flex-1">
+                  <p className="text-[11px] text-white/75 font-mono leading-[1.7]">
+                    &ldquo;{pattern.text}&rdquo;
+                  </p>
+                  {pattern.source && (
+                    <p className="text-[10px] text-[#0E6B5C] mt-2 font-mono">
+                      [{pattern.source}]
+                    </p>
+                  )}
+                </div>
+
+                {/* Explanation */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="px-2"
+                >
+                  <p className="text-[11px] leading-relaxed" style={{ color: pattern.color === '#B8860B' ? '#5D8B7F' : 'rgba(255,255,255,0.45)' }}>
+                    {pattern.explanation}
+                  </p>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         ))}
       </div>
+
+      {/* Bottom caption */}
+      <AnimatePresence>
+        {showCaption && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="w-full max-w-[650px] text-center mt-2"
+          >
+            <p className="text-[13px] text-white/60 leading-relaxed font-medium">
+              Refusing well is a craft.{' '}
+              <span className="text-[#922B21]">Refusing rudely</span> fails the user.{' '}
+              <span className="text-[#922B21]">Refusing dishonestly</span> fails everyone.
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {onReplay && (
-        <button onClick={onReplay} className="text-xs text-white/40 hover:text-white/70">Replay</button>
+        <button
+          onClick={() => { reset(); onReplay(); }}
+          className="text-xs text-white/30 hover:text-white/60 transition-colors mt-1"
+        >
+          Replay
+        </button>
       )}
     </div>
   );
