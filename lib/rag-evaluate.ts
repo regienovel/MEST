@@ -1,5 +1,5 @@
 import { storage } from './storage';
-import { embedText, retrieveTopK, cosineSimilarity, type RagDocument, type Chunk, type RankedChunk } from './rag';
+import { embedText, retrieveTopK, cosineSimilarity, generateGrounded, type RagDocument, type Chunk, type RankedChunk } from './rag';
 import { type RagConfig, getTeamConfig } from './rag-config';
 
 export interface TestCase {
@@ -13,9 +13,10 @@ export interface TestCase {
 export interface TestResult {
   testCase: TestCase;
   retrievedChunks: Array<{ id: string; text: string; similarity: number; rank: number }>;
-  expectedChunkRank: number | null; // Where the expected chunk ranked (-1 if not found)
+  expectedChunkRank: number | null;
   passed: boolean;
   explanation: string;
+  generatedResponse: string; // The actual model output for this query
 }
 
 export interface EvaluationMetrics {
@@ -85,7 +86,7 @@ export async function runEvaluation(teamId: string): Promise<EvaluationMetrics> 
       totalTests: suite.length, passedTests: 0,
       results: suite.map(tc => ({
         testCase: tc, retrievedChunks: [], expectedChunkRank: null,
-        passed: false, explanation: 'No embedded documents available',
+        passed: false, explanation: 'No embedded documents available', generatedResponse: '',
       })),
     };
   }
@@ -125,8 +126,17 @@ export async function runEvaluation(teamId: string): Promise<EvaluationMetrics> 
     const topSimilarity = topK[0]?.similarity || 0;
     const threshold = config.strictThreshold || 0.15;
 
+    // Generate actual response for this query
+    let generatedResponse = '';
+    try {
+      for await (const token of generateGrounded(testCase.query, topK, true, config)) {
+        generatedResponse += token;
+      }
+    } catch {
+      generatedResponse = '[Generation failed]';
+    }
+
     if (testCase.expectedAction === 'refuse') {
-      // For refusal tests: check if system would refuse (top similarity below threshold)
       totalRefusalTests++;
       const wouldRefuse = topSimilarity < threshold;
       if (wouldRefuse) correctRefusals++;
@@ -136,6 +146,7 @@ export async function runEvaluation(teamId: string): Promise<EvaluationMetrics> 
         retrievedChunks,
         expectedChunkRank: null,
         passed: wouldRefuse,
+        generatedResponse,
         explanation: wouldRefuse
           ? `Correctly refused (top similarity ${Math.round(topSimilarity * 100)}% < threshold ${Math.round(threshold * 100)}%)`
           : `Should have refused but would answer (top similarity ${Math.round(topSimilarity * 100)}% ≥ threshold ${Math.round(threshold * 100)}%)`,
@@ -172,6 +183,7 @@ export async function runEvaluation(teamId: string): Promise<EvaluationMetrics> 
         retrievedChunks,
         expectedChunkRank: firstRelevantIdx >= 0 ? firstRelevantIdx + 1 : null,
         passed,
+        generatedResponse,
         explanation: passed
           ? `Found ${relevantInTopK} relevant chunks. Best match at #${firstRelevantIdx + 1} (${Math.round(topSimilarity * 100)}%)`
           : wouldAnswer

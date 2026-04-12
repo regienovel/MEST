@@ -20,6 +20,7 @@ interface TestResult {
   expectedChunkRank: number | null;
   passed: boolean;
   explanation: string;
+  generatedResponse: string;
 }
 
 interface EvaluationMetrics {
@@ -236,15 +237,34 @@ export function EvaluateTab({ teamId }: { teamId: string }) {
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden"
                       >
-                        <div className="ml-10 mr-4 mb-2 mt-1 space-y-1">
-                          <p className="text-xs text-mest-grey-500 font-semibold mb-1">Retrieved chunks:</p>
-                          {result.retrievedChunks.map(chunk => (
-                            <div key={chunk.id} className="flex items-center gap-2 text-xs bg-mest-grey-50 rounded px-3 py-1.5">
-                              <span className="font-mono text-mest-grey-500 w-4">#{chunk.rank}</span>
-                              <span className="flex-1 text-mest-grey-700 truncate">{chunk.text}</span>
-                              <span className="text-mest-gold font-semibold">{Math.round(chunk.similarity * 100)}%</span>
+                        <div className="ml-10 mr-4 mb-2 mt-1 space-y-3">
+                          {/* Model's actual response */}
+                          <div>
+                            <p className="text-xs text-mest-grey-500 font-semibold mb-1">Model response:</p>
+                            <div className={`text-sm rounded-lg px-4 py-3 ${
+                              result.passed ? 'bg-mest-sage-light/70 border border-mest-sage/20' : 'bg-mest-rust-light/70 border border-mest-rust/20'
+                            }`}>
+                              <p className="text-mest-grey-700 whitespace-pre-wrap leading-relaxed">
+                                {result.generatedResponse ? result.generatedResponse.split(/(\[\d+\])/).map((part, pi) =>
+                                  /^\[\d+\]$/.test(part) ? (
+                                    <span key={pi} className="inline-flex items-center justify-center bg-mest-gold text-white text-[8px] rounded-full w-4 h-4 mx-0.5 font-bold">{part.slice(1, -1)}</span>
+                                  ) : <span key={pi}>{part}</span>
+                                ) : <span className="text-mest-grey-500 italic">No response generated</span>}
+                              </p>
                             </div>
-                          ))}
+                          </div>
+
+                          {/* Retrieved chunks */}
+                          <div>
+                            <p className="text-xs text-mest-grey-500 font-semibold mb-1">Retrieved chunks:</p>
+                            {result.retrievedChunks.map(chunk => (
+                              <div key={chunk.id} className="flex items-center gap-2 text-xs bg-mest-grey-50 rounded px-3 py-1.5 mb-1">
+                                <span className="font-mono text-mest-grey-500 w-4">#{chunk.rank}</span>
+                                <span className="flex-1 text-mest-grey-700 truncate">{chunk.text}</span>
+                                <span className="text-mest-gold font-semibold">{Math.round(chunk.similarity * 100)}%</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </motion.div>
                     )}
