@@ -16,6 +16,7 @@ import { ScenarioTab } from './scenario-tab';
 import { EmbeddingVisualizer } from './embedding-visualizer';
 import { PipelineStages } from './pipeline-stages';
 import { TerminologyTab } from './terminology-tab';
+import { EvaluateTab } from './evaluate-tab';
 
 interface RagLabProps {
   teamId: string;
@@ -57,7 +58,7 @@ interface RetrievedChunk {
   newRank?: number;
 }
 
-type TabId = 'scenarios' | 'terminology' | 'documents' | 'pipeline' | 'strict' | 'configure';
+type TabId = 'scenarios' | 'terminology' | 'documents' | 'configure' | 'pipeline' | 'evaluate' | 'strict';
 
 export function RagLab({ teamId, teamName, xp }: RagLabProps) {
   const { t } = useI18n();
@@ -70,6 +71,7 @@ export function RagLab({ teamId, teamName, xp }: RagLabProps) {
     { id: 'documents', label: t('rag.tab.documents') },
     { id: 'configure', label: 'Configure' },
     { id: 'pipeline', label: t('rag.tab.pipeline') },
+    { id: 'evaluate', label: 'Evaluate' },
     { id: 'strict', label: t('rag.tab.strict') },
   ];
 
@@ -117,6 +119,7 @@ export function RagLab({ teamId, teamName, xp }: RagLabProps) {
         <div className={activeTab === 'pipeline' ? '' : 'hidden'}>
           <PipelineTab teamId={teamId} />
         </div>
+        {activeTab === 'evaluate' && <EvaluateTab teamId={teamId} />}
         {activeTab === 'strict' && <StrictModeTab teamId={teamId} />}
       </div>
     </div>
