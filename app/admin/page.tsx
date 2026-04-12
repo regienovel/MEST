@@ -57,10 +57,13 @@ export default function AdminPage() {
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamPw, setNewTeamPw] = useState('');
 
+  const [scorecards, setScorecards] = useState<Record<string, Record<string, { status: string }>>>({});
+
   const fetchData = useCallback(() => {
     fetch('/api/admin/usage').then(r => r.json()).then(d => {
       setTeams(d.teams || []);
       setStats(d.stats || null);
+      if (d.scorecards) setScorecards(d.scorecards);
     }).catch(() => {});
 
     fetch('/api/gallery?sort=newest').then(r => r.json()).then(d => {
@@ -224,6 +227,14 @@ export default function AdminPage() {
   }
 
   async function adminSetScore(teamId: string, property: string, status: string) {
+    // Optimistic update
+    setScorecards(prev => ({
+      ...prev,
+      [teamId]: {
+        ...(prev[teamId] || {}),
+        [property]: { status },
+      },
+    }));
     await fetch('/api/admin/scorecard', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -358,29 +369,40 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {teams.map(team => (
-                  <tr key={`score-${team.id}`} className="border-t border-mest-grey-300/30">
-                    <td className="px-3 py-2 font-medium">{team.name}</td>
-                    {['honest_uncertainty', 'source_citation', 'context_fit', 'recoverability', 'adversarial_robustness'].map(prop => (
-                      <td key={prop} className="px-2 py-2 text-center">
-                        <div className="flex gap-1 justify-center">
-                          <button
-                            onClick={() => adminSetScore(team.id, prop, 'pass')}
-                            className="px-1.5 py-0.5 rounded bg-mest-sage/20 text-mest-sage hover:bg-mest-sage/40"
-                          >✓</button>
-                          <button
-                            onClick={() => adminSetScore(team.id, prop, 'fail')}
-                            className="px-1.5 py-0.5 rounded bg-mest-rust/20 text-mest-rust hover:bg-mest-rust/40"
-                          >✗</button>
-                          <button
-                            onClick={() => adminSetScore(team.id, prop, 'untested')}
-                            className="px-1.5 py-0.5 rounded bg-mest-grey-100 text-mest-grey-500 hover:bg-mest-grey-300/50"
-                          >—</button>
-                        </div>
-                      </td>
-                    ))}
-                  </tr>
-                ))}
+                {teams.map(team => {
+                  const teamScore = scorecards[team.id] || {};
+                  return (
+                    <tr key={`score-${team.id}`} className="border-t border-mest-grey-300/30">
+                      <td className="px-3 py-2 font-medium">{team.name}</td>
+                      {['honest_uncertainty', 'source_citation', 'context_fit', 'recoverability', 'adversarial_robustness'].map(prop => {
+                        const current = teamScore[prop]?.status || 'untested';
+                        return (
+                          <td key={prop} className={`px-2 py-2 text-center ${
+                            current === 'pass' ? 'bg-mest-sage-light' :
+                            current === 'fail' ? 'bg-mest-rust-light' : ''
+                          }`}>
+                            <div className="flex gap-1 justify-center items-center">
+                              {current === 'pass' && <span className="text-mest-sage text-sm mr-1">✓</span>}
+                              {current === 'fail' && <span className="text-mest-rust text-sm mr-1">✗</span>}
+                              <button
+                                onClick={() => adminSetScore(team.id, prop, 'pass')}
+                                className={`px-1.5 py-0.5 rounded text-xs ${current === 'pass' ? 'bg-mest-sage text-white' : 'bg-mest-sage/20 text-mest-sage hover:bg-mest-sage/40'}`}
+                              >✓</button>
+                              <button
+                                onClick={() => adminSetScore(team.id, prop, 'fail')}
+                                className={`px-1.5 py-0.5 rounded text-xs ${current === 'fail' ? 'bg-mest-rust text-white' : 'bg-mest-rust/20 text-mest-rust hover:bg-mest-rust/40'}`}
+                              >✗</button>
+                              <button
+                                onClick={() => adminSetScore(team.id, prop, 'untested')}
+                                className="px-1.5 py-0.5 rounded text-xs bg-mest-grey-100 text-mest-grey-500 hover:bg-mest-grey-300/50"
+                              >—</button>
+                            </div>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

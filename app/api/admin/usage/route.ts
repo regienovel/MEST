@@ -48,8 +48,17 @@ export async function GET() {
 
   const topTeam = teams.sort((a, b) => b.callsThisHour - a.callsThisHour)[0];
 
+  // Fetch scorecards for all teams
+  const scorecards: Record<string, Record<string, { status: string; lastTested?: string }>> = {};
+  for (const seedTeam of teamsSeed.teams) {
+    if (seedTeam.id === 'admin') continue;
+    const sc = await storage.get<Record<string, { status: string; lastTested?: string }>>(`health:scorecard:${seedTeam.id}`);
+    if (sc) scorecards[seedTeam.id] = sc;
+  }
+
   return NextResponse.json({
     teams,
+    scorecards,
     stats: {
       totalCallsToday,
       totalCostToday: totalCostToday.toFixed(2),
