@@ -17,6 +17,9 @@ import { EmbeddingVisualizer } from './embedding-visualizer';
 import { PipelineStages } from './pipeline-stages';
 import { TerminologyTab } from './terminology-tab';
 import { EvaluateTab } from './evaluate-tab';
+import { ExplainabilityReportPanel } from './explainability-report';
+import { generateExplainabilityReport, reportToMarkdown, type ExplainabilityReport } from '@/lib/rag-explain';
+import { type RagConfig, getTeamConfig, DEFAULT_CONFIG } from '@/lib/rag-config';
 
 interface RagLabProps {
   teamId: string;
@@ -419,6 +422,37 @@ function PipelineTab({ teamId }: { teamId: string }) {
   const [chunkPoints, setChunkPoints] = useState<ChunkPoint[]>([]);
   const [queryPoint, setQueryPoint] = useState<{ x: number; y: number } | null>(null);
   const [hasResults, setHasResults] = useState(false);
+  const [showExplain, setShowExplain] = useState(false);
+  const [explainReport, setExplainReport] = useState<ExplainabilityReport | null>(null);
+  const [teamConfig, setTeamConfig] = useState<RagConfig>(DEFAULT_CONFIG);
+
+  // Load team config for explainability report
+  useEffect(() => {
+    fetch('/api/rag/config').then(r => r.json()).then(d => {
+      if (d.config) setTeamConfig({ ...DEFAULT_CONFIG, ...d.config });
+    }).catch(() => {});
+  }, []);
+
+  const handleExplain = () => {
+    if (!query || !hasResults) return;
+    const report = generateExplainabilityReport(
+      query, stageStatuses, retrievedChunks, rerankedChunks, generatedText, teamConfig
+    );
+    setExplainReport(report);
+    setShowExplain(true);
+  };
+
+  const handleExportReport = () => {
+    if (!explainReport) return;
+    const md = reportToMarkdown(explainReport);
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `explainability-report-${Date.now()}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const clearResults = () => {
     setStageStatuses({});
@@ -428,6 +462,8 @@ function PipelineTab({ teamId }: { teamId: string }) {
     setChunkPoints([]);
     setQueryPoint(null);
     setHasResults(false);
+    setShowExplain(false);
+    setExplainReport(null);
   };
 
   const runPipeline = async () => {
@@ -517,14 +553,23 @@ function PipelineTab({ teamId }: { teamId: string }) {
             {isRunning ? t('rag.query.running') : t('rag.query.run')}
           </Button>
           {hasResults && !isRunning && (
-            <Button
-              onClick={clearResults}
-              variant="outline"
-              size="sm"
-              className="text-xs"
-            >
-              {t('chain.clear')}
-            </Button>
+            <>
+              <Button
+                onClick={handleExplain}
+                size="sm"
+                className="bg-[#0E6B5C] hover:bg-[#0E6B5C]/90 text-white text-xs gap-1"
+              >
+                🔍 Explain This
+              </Button>
+              <Button
+                onClick={clearResults}
+                variant="outline"
+                size="sm"
+                className="text-xs"
+              >
+                {t('chain.clear')}
+              </Button>
+            </>
           )}
         </div>
       </div>
@@ -628,6 +673,15 @@ function PipelineTab({ teamId }: { teamId: string }) {
             })}
           </div>
         </motion.div>
+      )}
+
+      {/* Explainability Report */}
+      {showExplain && explainReport && (
+        <ExplainabilityReportPanel
+          report={explainReport}
+          onClose={() => setShowExplain(false)}
+          onExport={handleExportReport}
+        />
       )}
     </div>
   );

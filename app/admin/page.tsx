@@ -366,6 +366,7 @@ export default function AdminPage() {
                   <th className="text-center px-2 py-2 font-medium">Context Fit</th>
                   <th className="text-center px-2 py-2 font-medium">Recoverability</th>
                   <th className="text-center px-2 py-2 font-medium">Adversarial</th>
+                  <th className="text-center px-2 py-2 font-medium">Explainability</th>
                 </tr>
               </thead>
               <tbody>
@@ -374,7 +375,7 @@ export default function AdminPage() {
                   return (
                     <tr key={`score-${team.id}`} className="border-t border-mest-grey-300/30">
                       <td className="px-3 py-2 font-medium">{team.name}</td>
-                      {['honest_uncertainty', 'source_citation', 'context_fit', 'recoverability', 'adversarial_robustness'].map(prop => {
+                      {['honest_uncertainty', 'source_citation', 'context_fit', 'recoverability', 'adversarial_robustness', 'explainability'].map(prop => {
                         const current = teamScore[prop]?.status || 'untested';
                         return (
                           <td key={prop} className={`px-2 py-2 text-center ${

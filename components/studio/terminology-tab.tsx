@@ -27,6 +27,7 @@ const vizModules: Record<string, () => Promise<{ default: React.ComponentType<{ 
   'refusal-pattern': () => import('./rag/visualizations/refusal-pattern-viz').then(m => ({ default: m.RefusalPatternViz })),
   'adversarial-test': () => import('./rag/visualizations/adversarial-test-viz').then(m => ({ default: m.AdversarialTestViz })),
   'retrieval-evaluation': () => import('./rag/visualizations/retrieval-evaluation-viz').then(m => ({ default: m.RetrievalEvaluationViz })),
+  explainability: () => import('./rag/visualizations/explainability-viz').then(m => ({ default: m.ExplainabilityViz })),
 };
 
 export function TerminologyTab() {

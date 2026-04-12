@@ -39,6 +39,7 @@ const TRUST_PROPERTIES = [
   { key: 'context_fit', label: 'Context Fit', labelFr: 'Pertinence contextuelle', icon: '🧩' },
   { key: 'recoverability', label: 'Recoverability', labelFr: 'Récupérabilité', icon: '🔄' },
   { key: 'adversarial_robustness', label: 'Adversarial Robustness', labelFr: 'Robustesse adversariale', icon: '🛡️' },
+  { key: 'explainability', label: 'Explainability', labelFr: 'Explicabilité', icon: '🔍' },
 ];
 
 export function HealthDashboard({ teamId, teamName, xp }: HealthDashboardProps) {
