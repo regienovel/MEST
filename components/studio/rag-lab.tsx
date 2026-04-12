@@ -410,6 +410,17 @@ function PipelineTab({ teamId }: { teamId: string }) {
   const [generatedText, setGeneratedText] = useState('');
   const [chunkPoints, setChunkPoints] = useState<ChunkPoint[]>([]);
   const [queryPoint, setQueryPoint] = useState<{ x: number; y: number } | null>(null);
+  const [hasResults, setHasResults] = useState(false);
+
+  const clearResults = () => {
+    setStageStatuses({});
+    setRetrievedChunks([]);
+    setRerankedChunks([]);
+    setGeneratedText('');
+    setChunkPoints([]);
+    setQueryPoint(null);
+    setHasResults(false);
+  };
 
   const runPipeline = async () => {
     if (!query.trim()) return;
@@ -475,6 +486,7 @@ function PipelineTab({ teamId }: { teamId: string }) {
       }
     } catch {}
     setIsRunning(false);
+    setHasResults(true);
   };
 
   return (
@@ -488,13 +500,25 @@ function PipelineTab({ teamId }: { teamId: string }) {
           rows={2}
           className="flex-1 resize-none"
         />
-        <Button
-          onClick={runPipeline}
-          disabled={isRunning || !query.trim()}
-          className="bg-mest-gold hover:bg-mest-gold/90 text-white gap-1.5 px-6 self-end"
-        >
-          {isRunning ? t('rag.query.running') : t('rag.query.run')}
-        </Button>
+        <div className="flex flex-col gap-2 self-end">
+          <Button
+            onClick={runPipeline}
+            disabled={isRunning || !query.trim()}
+            className="bg-mest-gold hover:bg-mest-gold/90 text-white gap-1.5 px-6"
+          >
+            {isRunning ? t('rag.query.running') : t('rag.query.run')}
+          </Button>
+          {hasResults && !isRunning && (
+            <Button
+              onClick={clearResults}
+              variant="outline"
+              size="sm"
+              className="text-xs"
+            >
+              {t('chain.clear')}
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Pipeline stages */}
