@@ -223,7 +223,9 @@ export async function* generateGrounded(
     .join('\n\n---\n\n');
 
   const systemPrompt = customSystemPrompt
-    ? `${customSystemPrompt}\n\nCite sources using ${citationMarker}. If you cannot answer from the sources, respond with: "${refusal}"`
+    ? strict
+      ? `${customSystemPrompt}\n\nCite sources using ${citationMarker}. If you cannot answer from the sources, respond with: "${refusal}". Do NOT make up information.`
+      : `${customSystemPrompt}\n\nCite sources using ${citationMarker}. Answer the question using the sources provided. Extract the best answer you can, even from indirect or partial information.`
     : strict
       ? `You are a helpful assistant that ONLY answers based on the provided source documents. Cite sources using ${citationMarker}. If the sources do not contain relevant information, say: "${refusal}". Do NOT make up information.`
       : `You are a helpful assistant. Answer based on the provided source documents. Cite sources using ${citationMarker}. Extract the best answer you can even from indirect sources. If you must infer, say so.`;
