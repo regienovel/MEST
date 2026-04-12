@@ -659,7 +659,18 @@ function PipelineTab({ teamId }: { teamId: string }) {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-xl border-2 border-mest-gold/30 p-6"
         >
-          <h3 className="text-sm font-semibold text-mest-ink mb-3">✨ Generated Response (with citations)</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-mest-ink">✨ Generated Response (with citations)</h3>
+            {hasResults && !isRunning && (
+              <Button
+                onClick={handleExplain}
+                size="sm"
+                className="bg-[#0E6B5C] hover:bg-[#0E6B5C]/90 text-white gap-1.5 text-xs"
+              >
+                🔍 Explain This Response
+              </Button>
+            )}
+          </div>
           <div className="text-sm text-mest-grey-700 whitespace-pre-wrap leading-relaxed">
             {generatedText.split(/(\[\d+\])/).map((part, i) => {
               if (/^\[\d+\]$/.test(part)) {
