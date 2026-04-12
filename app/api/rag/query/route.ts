@@ -28,8 +28,9 @@ export async function POST(req: NextRequest) {
   if (!query) return new Response('Missing query', { status: 400 });
   logApiCall(team.id, 'rag', `${strict ? '[strict] ' : ''}${query.slice(0, 60)}`, startTime, true).catch(() => {});
 
-  // Use config from request body (for admin querying submitted models) or team's saved config
-  const config: RagConfig = configOverride || await getTeamConfig(team.id);
+  // Use team's saved config as base, merge any overrides from request body
+  const teamConfig = await getTeamConfig(team.id);
+  const config: RagConfig = configOverride ? { ...teamConfig, ...configOverride } : teamConfig;
 
   // Get documents — either from override (admin querying) or from team's storage
   let docs: RagDocument[];
