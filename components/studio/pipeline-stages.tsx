@@ -1,4 +1,5 @@
 'use client';
+import { useI18n } from '@/lib/i18n-context';
 import { motion } from 'framer-motion';
 
 interface StageData {
@@ -11,87 +12,77 @@ interface StageData {
 interface PipelineStagesProps {
   stageStatuses: Record<string, StageData>;
   query: string;
-  locale: string;
+  locale?: string;
 }
 
 const STAGES = ['query', 'embed_query', 'retrieve', 'rerank', 'generate'] as const;
 
-const STAGE_INFO: Record<string, {
-  emoji: string;
-  title: string;
-  titleFr: string;
-  subtitle: string;
-  subtitleFr: string;
-  activeDetail: string;
-  doneDetail: (data?: StageData) => string;
-}> = {
-  query: {
-    emoji: '💬',
-    title: 'Query',
-    titleFr: 'Requête',
-    subtitle: 'Your question enters the pipeline',
-    subtitleFr: 'Votre question entre dans le pipeline',
-    activeDetail: 'Preparing your question...',
-    doneDetail: () => 'Question received and ready',
-  },
-  embed_query: {
-    emoji: '🔢',
-    title: 'Embed Query',
-    titleFr: 'Vectoriser',
-    subtitle: 'Convert question to a 1536-number vector',
-    subtitleFr: 'Convertir la question en vecteur de 1536 nombres',
-    activeDetail: 'Calling OpenAI text-embedding-3-small...',
-    doneDetail: (d) => `Converted to ${d?.payload?.dimensions || 1536}-dimensional vector`,
-  },
-  retrieve: {
-    emoji: '🔍',
-    title: 'Search Vectors',
-    titleFr: 'Recherche vectorielle',
-    subtitle: 'Find the closest chunks by cosine similarity',
-    subtitleFr: 'Trouver les fragments les plus proches par similarité cosinus',
-    activeDetail: 'Computing cosine similarity against all chunks...',
-    doneDetail: (d) => {
-      const results = d?.payload?.results as Array<{ similarity: number }> | undefined;
-      if (!results) return 'Top chunks found';
-      const top = Math.round((results[0]?.similarity || 0) * 100);
-      return `Top match: ${top}% similarity (${results.length} chunks retrieved)`;
-    },
-  },
-  rerank: {
-    emoji: '📊',
-    title: 'Rerank',
-    titleFr: 'Reclasser',
-    subtitle: 'Claude re-evaluates chunk relevance',
-    subtitleFr: 'Claude réévalue la pertinence des fragments',
-    activeDetail: 'Claude Sonnet is reading and reordering chunks...',
-    doneDetail: (d) => {
-      if (d?.payload?.skipped) return 'Reranking skipped (disabled in config)';
-      return 'Chunks reordered by relevance';
-    },
-  },
-  generate: {
-    emoji: '✨',
-    title: 'Generate',
-    titleFr: 'Générer',
-    subtitle: 'GPT-4o answers using only the retrieved chunks',
-    subtitleFr: 'GPT-4o répond en utilisant uniquement les fragments récupérés',
-    activeDetail: 'Generating grounded response with citations...',
-    doneDetail: () => 'Response generated with source citations',
-  },
+const STAGE_META: Record<string, { emoji: string }> = {
+  query: { emoji: '💬' },
+  embed_query: { emoji: '🔢' },
+  retrieve: { emoji: '🔍' },
+  rerank: { emoji: '📊' },
+  generate: { emoji: '✨' },
 };
 
-export function PipelineStages({ stageStatuses, query, locale }: PipelineStagesProps) {
+export function PipelineStages({ stageStatuses, query }: PipelineStagesProps) {
+  const { t } = useI18n();
+
+  const STAGE_TITLES: Record<string, string> = {
+    query: t('rag.stage.query'),
+    embed_query: t('rag.stage.embed'),
+    retrieve: t('rag.stage.retrieve'),
+    rerank: t('rag.stage.rerank'),
+    generate: t('rag.stage.generate'),
+  };
+
+  const STAGE_SUBTITLES: Record<string, string> = {
+    query: t('pipeline.query.active'),
+    embed_query: t('pipeline.embed.active'),
+    retrieve: t('pipeline.retrieve.active'),
+    rerank: t('pipeline.rerank.active'),
+    generate: t('pipeline.generate.active'),
+  };
+
+  const getActiveDetail = (stage: string) => {
+    const map: Record<string, string> = {
+      query: t('pipeline.query.active'),
+      embed_query: t('pipeline.embed.active'),
+      retrieve: t('pipeline.retrieve.active'),
+      rerank: t('pipeline.rerank.active'),
+      generate: t('pipeline.generate.active'),
+    };
+    return map[stage] || '';
+  };
+
+  const getDoneDetail = (stage: string, data?: StageData) => {
+    if (stage === 'query') return t('pipeline.query.done');
+    if (stage === 'embed_query') return t('pipeline.embed.done').replace('{n}', String(data?.payload?.dimensions || 1536));
+    if (stage === 'retrieve') {
+      const results = data?.payload?.results as Array<{ similarity: number }> | undefined;
+      if (!results) return t('pipeline.retrieve.done');
+      const top = Math.round((results[0]?.similarity || 0) * 100);
+      return t('pipeline.retrieve.doneDetail').replace('{pct}', String(top)).replace('{n}', String(results.length));
+    }
+    if (stage === 'rerank') {
+      if (data?.payload?.skipped) return t('pipeline.rerank.skipped');
+      return t('pipeline.rerank.done');
+    }
+    if (stage === 'generate') return t('pipeline.generate.done');
+    return '';
+  };
+
   return (
     <div className="bg-gradient-to-br from-[#0F2F44] to-[#0a1f2e] rounded-2xl overflow-hidden shadow-xl">
       {/* Header */}
       <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-white text-sm font-semibold">RAG Pipeline</span>
-          <span className="text-white/40 text-xs">5 stages</span>
+          <span className="text-white text-sm font-semibold">{t('pipeline.title')}</span>
+          <span className="text-white/40 text-xs">5 {t('pipeline.stages')}</span>
         </div>
         {query && (
           <span className="text-white/50 text-xs max-w-[300px] truncate">
-            Query: &ldquo;{query}&rdquo;
+            {t('pipeline.queryLabel')}: &ldquo;{query}&rdquo;
           </span>
         )}
       </div>
@@ -101,7 +92,7 @@ export function PipelineStages({ stageStatuses, query, locale }: PipelineStagesP
         {STAGES.map((stage, i) => {
           const data = stageStatuses[stage];
           const status = data?.status || 'idle';
-          const info = STAGE_INFO[stage];
+          const meta = STAGE_META[stage];
           const isActive = status === 'running' || status === 'streaming';
           const isDone = status === 'done';
           const isIdle = !isActive && !isDone;
@@ -131,21 +122,21 @@ export function PipelineStages({ stageStatuses, query, locale }: PipelineStagesP
                     >
                       {isDone ? '✓' : i + 1}
                     </motion.span>
-                    <span className="text-xl">{info.emoji}</span>
+                    <span className="text-xl">{meta.emoji}</span>
                   </div>
 
                   {/* Title + subtitle */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className={`text-sm font-semibold ${isIdle ? 'text-white/30' : 'text-white'}`}>
-                        {locale === 'fr' ? info.titleFr : info.title}
+                        {STAGE_TITLES[stage]}
                       </span>
                       {isDone && data?.elapsed_ms !== undefined && (
                         <span className="text-mest-sage text-xs font-mono">{data.elapsed_ms}ms</span>
                       )}
                     </div>
                     <p className={`text-xs mt-0.5 ${isIdle ? 'text-white/15' : 'text-white/50'}`}>
-                      {locale === 'fr' ? info.subtitleFr : info.subtitle}
+                      {STAGE_SUBTITLES[stage]}
                     </p>
                   </div>
 
@@ -158,7 +149,7 @@ export function PipelineStages({ stageStatuses, query, locale }: PipelineStagesP
                           animate={{ scale: [1, 1.5, 1], opacity: [1, 0.4, 1] }}
                           transition={{ repeat: Infinity, duration: 0.6 }}
                         />
-                        <span className="text-mest-gold text-xs">{info.activeDetail}</span>
+                        <span className="text-mest-gold text-xs">{getActiveDetail(stage)}</span>
                       </motion.div>
                     )}
                     {isDone && (
@@ -167,7 +158,7 @@ export function PipelineStages({ stageStatuses, query, locale }: PipelineStagesP
                         animate={{ opacity: 1, x: 0 }}
                         className="text-mest-sage text-xs"
                       >
-                        {info.doneDetail(data)}
+                        {getDoneDetail(stage, data)}
                       </motion.span>
                     )}
                   </div>

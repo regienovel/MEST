@@ -111,7 +111,7 @@ export function HealthDashboard({ teamId, teamName, xp }: HealthDashboardProps) 
               {(metrics?.activeModules || []).map(mod => (
                 <span key={mod} className="text-xs bg-mest-sage-light text-mest-sage px-2 py-0.5 rounded-full capitalize">{mod}</span>
               ))}
-              {(metrics?.activeModules?.length ?? 0) === 0 && <span className="text-xs text-mest-grey-300">None yet</span>}
+              {(metrics?.activeModules?.length ?? 0) === 0 && <span className="text-xs text-mest-grey-300">{t('health.noneYet')}</span>}
             </div>
           </div>
         </div>
@@ -144,7 +144,7 @@ export function HealthDashboard({ teamId, teamName, xp }: HealthDashboardProps) 
                     </p>
                   )}
                   <div className="mt-2 text-xs text-mest-grey-300 italic">
-                    {status === 'untested' ? 'Awaiting trainer evaluation' : 'Set by trainer'}
+                    {status === 'untested' ? t('health.awaitingTrainer') : t('health.setByTrainer')}
                   </div>
                 </div>
               );
@@ -156,17 +156,17 @@ export function HealthDashboard({ teamId, teamName, xp }: HealthDashboardProps) 
         <div className="bg-white rounded-xl border border-mest-grey-300/60 p-6">
           <h2 className="font-serif text-lg text-mest-ink mb-4">{t('health.lastCalls')}</h2>
           {(metrics?.lastCalls?.length ?? 0) === 0 ? (
-            <p className="text-sm text-mest-grey-500 italic">No calls recorded yet.</p>
+            <p className="text-sm text-mest-grey-500 italic">{t('health.noCalls')}</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-mest-grey-50">
                   <tr>
-                    <th className="text-left px-3 py-2 font-medium">Time</th>
-                    <th className="text-left px-3 py-2 font-medium">Module</th>
-                    <th className="text-left px-3 py-2 font-medium">Input</th>
-                    <th className="text-center px-3 py-2 font-medium">Status</th>
-                    <th className="text-right px-3 py-2 font-medium">Latency</th>
+                    <th className="text-left px-3 py-2 font-medium">{t('health.time')}</th>
+                    <th className="text-left px-3 py-2 font-medium">{t('health.module')}</th>
+                    <th className="text-left px-3 py-2 font-medium">{t('health.input')}</th>
+                    <th className="text-center px-3 py-2 font-medium">{t('health.status')}</th>
+                    <th className="text-right px-3 py-2 font-medium">{t('health.latency')}</th>
                   </tr>
                 </thead>
                 <tbody>

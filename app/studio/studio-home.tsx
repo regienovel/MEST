@@ -53,14 +53,14 @@ export function StudioHome({ teamName, xp }: StudioHomeProps) {
     },
     {
       title: t('rag.title'),
-      description: 'Build a RAG pipeline. See how AI retrieves and cites sources.',
+      description: t('studio.modules.rag.desc'),
       href: '/studio/rag',
       icon: BookOpen,
       borderColor: 'border-l-4 border-l-purple-500',
     },
     {
       title: t('health.title'),
-      description: 'Monitor your team\'s AI usage, latency, errors, and trust scorecard.',
+      description: t('studio.modules.health.desc'),
       href: '/studio/health',
       icon: HeartPulse,
       borderColor: 'border-l-4 border-l-pink-500',

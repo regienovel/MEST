@@ -85,7 +85,7 @@ export function ConfigureTab({ teamId, onConfigChange, onActiveModelChange }: Co
       });
       const data = await res.json();
       if (data.ok) {
-        setMessage({ type: 'success', text: `"${modelName}" saved!` });
+        setMessage({ type: 'success', text: `"${modelName}" ${t('config.saved')}` });
         onActiveModelChange?.(modelName);
         setShowSaveModal(false);
         setModelName('');
@@ -99,7 +99,7 @@ export function ConfigureTab({ teamId, onConfigChange, onActiveModelChange }: Co
   };
 
   const handleDeleteModel = async (modelId: string) => {
-    if (!confirm('Delete this model?')) return;
+    if (!confirm(t('config.deleteModel'))) return;
     await fetch('/api/rag/models', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -111,11 +111,11 @@ export function ConfigureTab({ teamId, onConfigChange, onActiveModelChange }: Co
   const handleLoadModel = (model: SavedModel) => {
     setConfig(model.config);
     onActiveModelChange?.(model.name);
-    setMessage({ type: 'success', text: `Loaded "${model.name}"` });
+    setMessage({ type: 'success', text: `${t('config.load')}: "${model.name}"` });
   };
 
   const handleSubmitModel = async (modelId: string, modelName: string) => {
-    if (!confirm(`Submit "${modelName}" to the trainer for evaluation? The submitted version will be locked.`)) return;
+    if (!confirm(t('config.submitConfirm'))) return;
     const res = await fetch('/api/rag/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -123,7 +123,7 @@ export function ConfigureTab({ teamId, onConfigChange, onActiveModelChange }: Co
     });
     const data = await res.json();
     if (data.ok) {
-      setMessage({ type: 'success', text: `"${modelName}" submitted to trainer!` });
+      setMessage({ type: 'success', text: `"${modelName}" ${t('config.submittedMsg')}` });
       fetchData();
     } else {
       setMessage({ type: 'error', text: data.error || 'Submit failed' });
@@ -143,7 +143,7 @@ export function ConfigureTab({ teamId, onConfigChange, onActiveModelChange }: Co
       {/* Saved Models */}
       {models.length > 0 && (
         <div className="bg-white rounded-xl border border-mest-grey-300/60 p-4">
-          <h3 className="text-sm font-semibold text-mest-ink mb-3">Saved Models</h3>
+          <h3 className="text-sm font-semibold text-mest-ink mb-3">{t('config.savedModels')}</h3>
           <div className="space-y-2">
             {models.map(model => (
               <div key={model.id} className="flex items-center gap-3 p-3 rounded-lg bg-mest-grey-50">
@@ -152,7 +152,7 @@ export function ConfigureTab({ teamId, onConfigChange, onActiveModelChange }: Co
                     <span className="text-sm font-medium text-mest-ink">{model.name}</span>
                     {model.submitted && (
                       <span className="text-xs bg-mest-sage-light text-mest-sage px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <CheckCircle size={10} /> Submitted
+                        <CheckCircle size={10} /> {t('config.submitted')}
                       </span>
                     )}
                   </div>
@@ -160,10 +160,10 @@ export function ConfigureTab({ teamId, onConfigChange, onActiveModelChange }: Co
                   <p className="text-xs text-mest-grey-300 mt-0.5">{new Date(model.createdAt).toLocaleString()}</p>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Button size="sm" variant="outline" onClick={() => handleLoadModel(model)} className="text-xs">Load</Button>
+                  <Button size="sm" variant="outline" onClick={() => handleLoadModel(model)} className="text-xs">{t('config.load')}</Button>
                   {!model.submitted && (
                     <Button size="sm" onClick={() => handleSubmitModel(model.id, model.name)} className="bg-mest-gold hover:bg-mest-gold/90 text-white text-xs gap-1">
-                      <Upload size={12} /> Submit
+                      <Upload size={12} /> {t('config.submit')}
                     </Button>
                   )}
                   <button onClick={() => handleDeleteModel(model.id)} className="p-1 hover:bg-mest-rust-light rounded text-mest-grey-300 hover:text-mest-rust">
@@ -178,26 +178,26 @@ export function ConfigureTab({ teamId, onConfigChange, onActiveModelChange }: Co
 
       {/* Configuration Form */}
       <div className="bg-white rounded-xl border border-mest-grey-300/60 p-6 space-y-5">
-        <h3 className="font-serif text-lg text-mest-ink">Configure Your RAG Model</h3>
+        <h3 className="font-serif text-lg text-mest-ink">{t('config.title')}</h3>
 
         {/* Chunking */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="text-sm font-medium text-mest-ink block mb-1">Chunking strategy</label>
+            <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.chunkStrategy')}</label>
             <NativeSelect value={config.chunkStrategy} onChange={v => updateConfig('chunkStrategy', v)}>
-              <option value="paragraph">By paragraph</option>
-              <option value="fixed">Fixed size</option>
-              <option value="semantic">Semantic (AI)</option>
+              <option value="paragraph">{t('config.byParagraph')}</option>
+              <option value="fixed">{t('config.fixedSize')}</option>
+              <option value="semantic">{t('config.semantic')}</option>
             </NativeSelect>
           </div>
           {config.chunkStrategy === 'fixed' && (
             <>
               <div>
-                <label className="text-sm font-medium text-mest-ink block mb-1">Chunk size</label>
+                <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.chunkSize')}</label>
                 <Input type="number" value={config.chunkSize} onChange={e => updateConfig('chunkSize', parseInt(e.target.value) || 500)} />
               </div>
               <div>
-                <label className="text-sm font-medium text-mest-ink block mb-1">Chunk overlap</label>
+                <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.chunkOverlap')}</label>
                 <Input type="number" value={config.chunkOverlap} onChange={e => updateConfig('chunkOverlap', parseInt(e.target.value) || 50)} />
               </div>
             </>
@@ -207,20 +207,20 @@ export function ConfigureTab({ teamId, onConfigChange, onActiveModelChange }: Co
         {/* Retrieval */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="text-sm font-medium text-mest-ink block mb-1">Top-K retrieval</label>
+            <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.topK')}</label>
             <Input type="number" min={1} max={20} value={config.topK} onChange={e => updateConfig('topK', parseInt(e.target.value) || 5)} />
-            <p className="text-xs text-mest-grey-500 mt-1">How many chunks to retrieve (1-20)</p>
+            <p className="text-xs text-mest-grey-500 mt-1">{t('config.topKDesc')}</p>
           </div>
           <div>
-            <label className="text-sm font-medium text-mest-ink block mb-1">Reranking</label>
+            <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.reranking')}</label>
             <NativeSelect value={config.enableReranking ? 'on' : 'off'} onChange={v => updateConfig('enableReranking', v === 'on')}>
-              <option value="on">Enabled</option>
-              <option value="off">Disabled</option>
+              <option value="on">{t('config.enabled')}</option>
+              <option value="off">{t('config.disabled')}</option>
             </NativeSelect>
           </div>
           {config.enableReranking && (
             <div>
-              <label className="text-sm font-medium text-mest-ink block mb-1">Reranking model</label>
+              <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.rerankModel')}</label>
               <NativeSelect value={config.rerankModel} onChange={v => updateConfig('rerankModel', v)}>
                 <option value="claude-sonnet">Claude Sonnet</option>
                 <option value="gpt-4o">GPT-4o</option>
@@ -232,60 +232,60 @@ export function ConfigureTab({ teamId, onConfigChange, onActiveModelChange }: Co
         {/* Generation */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="text-sm font-medium text-mest-ink block mb-1">Generation model</label>
+            <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.genModel')}</label>
             <NativeSelect value={config.generationModel} onChange={v => updateConfig('generationModel', v)}>
               <option value="gpt-4o">GPT-4o</option>
               <option value="claude-sonnet">Claude Sonnet</option>
             </NativeSelect>
           </div>
           <div>
-            <label className="text-sm font-medium text-mest-ink block mb-1">Temperature: {config.temperature}</label>
+            <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.temperature')}: {config.temperature}</label>
             <input type="range" min={0} max={1} step={0.05} value={config.temperature}
               onChange={e => updateConfig('temperature', parseFloat(e.target.value))}
               className="w-full"
             />
-            <p className="text-xs text-mest-grey-500 mt-1">Lower = more focused, higher = more creative</p>
+            <p className="text-xs text-mest-grey-500 mt-1">{t('config.tempDesc')}</p>
           </div>
           <div>
-            <label className="text-sm font-medium text-mest-ink block mb-1">Strict threshold: {config.strictThreshold}</label>
+            <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.strictThreshold')}: {config.strictThreshold}</label>
             <input type="range" min={0} max={1} step={0.05} value={config.strictThreshold}
               onChange={e => updateConfig('strictThreshold', parseFloat(e.target.value))}
               className="w-full"
             />
-            <p className="text-xs text-mest-grey-500 mt-1">Min similarity to answer (higher = stricter)</p>
+            <p className="text-xs text-mest-grey-500 mt-1">{t('config.strictDesc')}</p>
           </div>
         </div>
 
         {/* Citation */}
         <div>
-          <label className="text-sm font-medium text-mest-ink block mb-1">Citation style</label>
+          <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.citationStyle')}</label>
           <NativeSelect value={config.citationStyle} onChange={v => updateConfig('citationStyle', v)} className="w-48">
-            <option value="inline">Inline [1] [2] [3]</option>
-            <option value="footnote">Footnotes ¹ ² ³</option>
-            <option value="none">No citations</option>
+            <option value="inline">{t('config.citationInline')}</option>
+            <option value="footnote">{t('config.citationFootnote')}</option>
+            <option value="none">{t('config.citationNone')}</option>
           </NativeSelect>
         </div>
 
         {/* System Prompt */}
         <div>
-          <label className="text-sm font-medium text-mest-ink block mb-1">System prompt</label>
+          <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.systemPrompt')}</label>
           <Textarea
             value={config.systemPrompt}
             onChange={e => updateConfig('systemPrompt', e.target.value)}
             rows={5}
             className="resize-y font-mono text-xs"
-            placeholder="Instructions for the AI model..."
+            placeholder={t('config.systemPromptPlaceholder')}
           />
-          <p className="text-xs text-mest-grey-500 mt-1">This is the most important configuration. Tell the AI how to behave.</p>
+          <p className="text-xs text-mest-grey-500 mt-1">{t('config.systemPromptDesc')}</p>
         </div>
 
         {/* Refusal Message */}
         <div>
-          <label className="text-sm font-medium text-mest-ink block mb-1">Refusal message</label>
+          <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.refusalMessage')}</label>
           <Input
             value={config.refusalMessage}
             onChange={e => updateConfig('refusalMessage', e.target.value)}
-            placeholder="What the model says when it can't answer..."
+            placeholder={t('config.refusalPlaceholder')}
           />
         </div>
       </div>
@@ -294,25 +294,25 @@ export function ConfigureTab({ teamId, onConfigChange, onActiveModelChange }: Co
       <div className="flex justify-end">
         <Button onClick={() => setShowSaveModal(true)} className="bg-mest-blue hover:bg-mest-blue/90 text-white gap-2">
           <Save size={16} />
-          Save as Model
+          {t('config.saveAsModel')}
         </Button>
       </div>
 
       {/* Save Modal */}
-      <Modal open={showSaveModal} onClose={() => setShowSaveModal(false)} title="Save as Model">
+      <Modal open={showSaveModal} onClose={() => setShowSaveModal(false)} title={t('config.saveAsModel')}>
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-mest-ink block mb-1">Model name *</label>
+            <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.modelName')} *</label>
             <Input value={modelName} onChange={e => setModelName(e.target.value)} placeholder="e.g. Strict Air Canada v1" />
           </div>
           <div>
-            <label className="text-sm font-medium text-mest-ink block mb-1">Description (optional)</label>
+            <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.modelDesc')}</label>
             <Input value={modelDesc} onChange={e => setModelDesc(e.target.value)} placeholder="e.g. Higher threshold, more cautious refusals" />
           </div>
           <div className="flex gap-2 justify-end">
             <Button variant="outline" onClick={() => setShowSaveModal(false)}>{t('common.cancel')}</Button>
             <Button onClick={handleSaveModel} disabled={saving || !modelName.trim()} className="bg-mest-blue hover:bg-mest-blue/90 text-white">
-              {saving ? <Loader2 size={14} className="animate-spin" /> : 'Save'}
+              {saving ? <Loader2 size={14} className="animate-spin" /> : t('common.save')}
             </Button>
           </div>
         </div>

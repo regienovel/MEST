@@ -31,7 +31,7 @@ const vizModules: Record<string, () => Promise<{ default: React.ComponentType<{ 
 };
 
 export function TerminologyTab() {
-  const { locale } = useI18n();
+  const { t, locale } = useI18n();
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(
     Object.fromEntries(TERMINOLOGY.map(s => [s.title, true]))
   );
@@ -63,8 +63,7 @@ export function TerminologyTab() {
     <div className="space-y-4">
       <div className="bg-mest-gold-light rounded-xl p-4 border border-mest-gold/30">
         <p className="text-sm text-mest-grey-700">
-          <strong>16 core concepts</strong> you need to understand to build a trustworthy RAG system.
-          Click <strong>Visualise</strong> on any term to see an animated explanation.
+          {t('terminology.intro')}
         </p>
       </div>
 
@@ -80,7 +79,7 @@ export function TerminologyTab() {
               <span className="font-serif text-lg text-mest-ink">
                 {locale === 'fr' ? section.titleFr : section.title}
               </span>
-              <span className="text-xs text-mest-grey-500">{section.terms.length} terms</span>
+              <span className="text-xs text-mest-grey-500">{section.terms.length} {t('terminology.terms')}</span>
             </div>
             {expandedSections[section.title] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
           </button>
@@ -108,7 +107,7 @@ export function TerminologyTab() {
                       size="sm"
                     >
                       <Eye size={14} />
-                      Visualise
+                      {t('terminology.visualise')}
                     </Button>
                   </div>
                 </div>
@@ -136,7 +135,7 @@ export function TerminologyTab() {
             )}
             <div className="flex justify-center mt-4">
               <Button onClick={replay} variant="outline" size="sm" className="text-white border-white/30 hover:bg-white/10">
-                ↻ Replay
+                ↻ {t('terminology.replay')}
               </Button>
             </div>
           </div>

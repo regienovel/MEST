@@ -98,14 +98,13 @@ export function EvaluateTab({ teamId }: { teamId: string }) {
       {/* Header */}
       <div className="bg-mest-gold-light rounded-xl p-4 border border-mest-gold/30">
         <p className="text-sm text-mest-grey-700">
-          <strong>Systematic evaluation</strong> — build a test suite of queries, run them all against your current RAG configuration,
-          and measure retrieval quality with formal metrics. One good answer doesn&apos;t mean the system works.
+          {t('eval.description')}
         </p>
       </div>
 
       {/* Test Suite Builder */}
       <div className="bg-white rounded-xl border border-mest-grey-300/60 p-5">
-        <h3 className="font-serif text-lg text-mest-ink mb-4">Test Suite ({suite.length} cases)</h3>
+        <h3 className="font-serif text-lg text-mest-ink mb-4">{t('eval.testSuite')} ({suite.length} {t('eval.cases')})</h3>
 
         {/* Existing test cases */}
         <div className="space-y-2 mb-4">
@@ -116,7 +115,7 @@ export function EvaluateTab({ teamId }: { teamId: string }) {
               <span className={`text-xs px-2 py-0.5 rounded-full ${
                 tc.expectedAction === 'answer' ? 'bg-mest-sage-light text-mest-sage' : 'bg-mest-rust-light text-mest-rust'
               }`}>
-                {tc.expectedAction === 'answer' ? '✓ Should answer' : '✗ Should refuse'}
+                {tc.expectedAction === 'answer' ? `✓ ${t('eval.shouldAnswer')}` : `✗ ${t('eval.shouldRefuse')}`}
               </span>
               <button onClick={() => removeTestCase(tc.id)} className="p-1 hover:bg-mest-rust-light rounded text-mest-grey-300 hover:text-mest-rust">
                 <Trash2 size={14} />
@@ -131,16 +130,16 @@ export function EvaluateTab({ teamId }: { teamId: string }) {
             <Input
               value={newQuery}
               onChange={e => setNewQuery(e.target.value)}
-              placeholder="Add a test query..."
+              placeholder={t('eval.addQuery')}
               onKeyDown={e => e.key === 'Enter' && addTestCase()}
             />
           </div>
           <NativeSelect value={newAction} onChange={v => setNewAction(v as 'answer' | 'refuse')} className="w-36">
-            <option value="answer">Should answer</option>
-            <option value="refuse">Should refuse</option>
+            <option value="answer">{t('eval.shouldAnswer')}</option>
+            <option value="refuse">{t('eval.shouldRefuse')}</option>
           </NativeSelect>
           <Button onClick={addTestCase} disabled={!newQuery.trim()} variant="outline" size="sm" className="gap-1">
-            <Plus size={14} /> Add
+            <Plus size={14} /> {t('eval.add')}
           </Button>
         </div>
       </div>
@@ -152,7 +151,7 @@ export function EvaluateTab({ teamId }: { teamId: string }) {
           disabled={running || suite.length === 0}
           className="bg-mest-gold hover:bg-mest-gold/90 text-white gap-2 px-8 py-3 text-base"
         >
-          {running ? <><Loader2 size={18} className="animate-spin" /> Running {suite.length} tests...</> : <><Play size={18} /> Run Evaluation ({suite.length} tests)</>}
+          {running ? <><Loader2 size={18} className="animate-spin" /> {t('eval.running')} {suite.length} {t('eval.tests')}...</> : <><Play size={18} /> {t('eval.runEval')} ({suite.length} {t('eval.tests')})</>}
         </Button>
       </div>
 
@@ -162,42 +161,42 @@ export function EvaluateTab({ teamId }: { teamId: string }) {
           {/* Score summary */}
           <div className="bg-[#0F2F44] rounded-2xl p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white text-sm font-semibold">Evaluation Results</h3>
+              <h3 className="text-white text-sm font-semibold">{t('eval.results')}</h3>
               <span className={`text-lg font-bold ${metrics.passedTests === metrics.totalTests ? 'text-[#0E6B5C]' : 'text-[#B8860B]'}`}>
-                {metrics.passedTests}/{metrics.totalTests} passed
+                {metrics.passedTests}/{metrics.totalTests} {t('eval.passed')}
               </span>
             </div>
 
             {/* 5 metric cards */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
               <MetricCard
-                label="Precision@K"
+                label={t('eval.precisionK')}
                 value={`${metrics.precisionAtK}%`}
-                desc="Relevant chunks / retrieved chunks"
+                desc={t('eval.precisionDesc')}
                 color={metrics.precisionAtK > 70 ? '#0E6B5C' : metrics.precisionAtK > 40 ? '#B8860B' : '#922B21'}
               />
               <MetricCard
-                label="Recall@K"
+                label={t('eval.recallK')}
                 value={`${metrics.recallAtK}%`}
-                desc="Found relevant / total relevant"
+                desc={t('eval.recallDesc')}
                 color={metrics.recallAtK > 70 ? '#0E6B5C' : metrics.recallAtK > 40 ? '#B8860B' : '#922B21'}
               />
               <MetricCard
-                label="MRR"
+                label={t('eval.mrr')}
                 value={metrics.mrr.toFixed(2)}
-                desc="First relevant chunk's rank"
+                desc={t('eval.mrrDesc')}
                 color={metrics.mrr > 0.5 ? '#0E6B5C' : metrics.mrr > 0.25 ? '#B8860B' : '#922B21'}
               />
               <MetricCard
-                label="NDCG"
+                label={t('eval.ndcg')}
                 value={metrics.ndcg.toFixed(2)}
-                desc="Ranking quality score"
+                desc={t('eval.ndcgDesc')}
                 color={metrics.ndcg > 0.7 ? '#0E6B5C' : metrics.ndcg > 0.4 ? '#B8860B' : '#922B21'}
               />
               <MetricCard
-                label="Refusal Accuracy"
+                label={t('eval.refusalAcc')}
                 value={`${metrics.refusalAccuracy}%`}
-                desc="Correct refusals / should-refuse"
+                desc={t('eval.refusalDesc')}
                 color={metrics.refusalAccuracy > 80 ? '#0E6B5C' : metrics.refusalAccuracy > 50 ? '#B8860B' : '#922B21'}
               />
             </div>
@@ -205,7 +204,7 @@ export function EvaluateTab({ teamId }: { teamId: string }) {
 
           {/* Query-by-query breakdown */}
           <div className="bg-white rounded-xl border border-mest-grey-300/60 p-5">
-            <h3 className="font-serif text-lg text-mest-ink mb-4">Query-by-Query Breakdown</h3>
+            <h3 className="font-serif text-lg text-mest-ink mb-4">{t('eval.breakdown')}</h3>
             <div className="space-y-2">
               {metrics.results.map((result, i) => (
                 <div key={result.testCase.id}>
@@ -240,7 +239,7 @@ export function EvaluateTab({ teamId }: { teamId: string }) {
                         <div className="ml-10 mr-4 mb-2 mt-1 space-y-3">
                           {/* Model's actual response */}
                           <div>
-                            <p className="text-xs text-mest-grey-500 font-semibold mb-1">Model response:</p>
+                            <p className="text-xs text-mest-grey-500 font-semibold mb-1">{t('eval.modelResponse')}:</p>
                             <div className={`text-sm rounded-lg px-4 py-3 ${
                               result.passed ? 'bg-mest-sage-light/70 border border-mest-sage/20' : 'bg-mest-rust-light/70 border border-mest-rust/20'
                             }`}>
@@ -249,14 +248,14 @@ export function EvaluateTab({ teamId }: { teamId: string }) {
                                   /^\[\d+\]$/.test(part) ? (
                                     <span key={pi} className="inline-flex items-center justify-center bg-mest-gold text-white text-[8px] rounded-full w-4 h-4 mx-0.5 font-bold">{part.slice(1, -1)}</span>
                                   ) : <span key={pi}>{part}</span>
-                                ) : <span className="text-mest-grey-500 italic">No response generated</span>}
+                                ) : <span className="text-mest-grey-500 italic">{t('eval.noResponse')}</span>}
                               </p>
                             </div>
                           </div>
 
                           {/* Retrieved chunks */}
                           <div>
-                            <p className="text-xs text-mest-grey-500 font-semibold mb-1">Retrieved chunks:</p>
+                            <p className="text-xs text-mest-grey-500 font-semibold mb-1">{t('eval.retrievedChunks')}:</p>
                             {result.retrievedChunks.map(chunk => (
                               <div key={chunk.id} className="flex items-center gap-2 text-xs bg-mest-grey-50 rounded px-3 py-1.5 mb-1">
                                 <span className="font-mono text-mest-grey-500 w-4">#{chunk.rank}</span>

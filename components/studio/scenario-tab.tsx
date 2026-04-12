@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useI18n } from '@/lib/i18n-context';
 import { Button } from '@/components/ui/button';
 import { Download, ChevronDown, ChevronUp, FileText } from 'lucide-react';
 
@@ -31,12 +32,12 @@ interface Scenario {
   }>;
 }
 
-const TRUST_LABELS: Record<string, string> = {
-  honest_uncertainty: 'Honest Uncertainty',
-  source_citation: 'Source Citation',
-  context_fit: 'Context Fit',
-  recoverability: 'Recoverability',
-  adversarial_robustness: 'Adversarial Robustness',
+const TRUST_LABEL_KEYS: Record<string, string> = {
+  honest_uncertainty: 'trust.honest_uncertainty',
+  source_citation: 'trust.source_citation',
+  context_fit: 'trust.context_fit',
+  recoverability: 'trust.recoverability',
+  adversarial_robustness: 'trust.adversarial_robustness',
 };
 
 const TRUST_COLORS: Record<string, string> = {
@@ -48,6 +49,7 @@ const TRUST_COLORS: Record<string, string> = {
 };
 
 export function ScenarioTab() {
+  const { t } = useI18n();
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -75,15 +77,14 @@ export function ScenarioTab() {
     docs.forEach(doc => downloadFile(doc.filename, doc.content));
   };
 
-  if (loading) return <div className="text-center py-12 text-mest-grey-500 animate-pulse">Loading scenarios...</div>;
+  if (loading) return <div className="text-center py-12 text-mest-grey-500 animate-pulse">{t('common.loading')}</div>;
 
   return (
     <div className="space-y-4">
       <div className="bg-mest-gold-light rounded-xl p-4 border border-mest-gold/30">
         <p className="text-sm text-mest-grey-700">
-          <strong>11 real-world AI failure cases.</strong> Each scenario represents a time AI caused real harm.
-          Your team will study one scenario, discuss what went wrong, and present your analysis.
-          For the <strong>Air Canada</strong> scenario, you will also build a RAG chatbot using the source documents below.
+          <strong>{t('scenario.intro.bold')}</strong>{' '}
+          <span dangerouslySetInnerHTML={{ __html: t('scenario.intro.text') }} />
         </p>
       </div>
 
@@ -109,11 +110,11 @@ export function ScenarioTab() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="font-serif text-lg text-mest-ink">{scenario.title}</h3>
                     {isAirCanada && (
-                      <span className="text-xs bg-mest-gold text-white px-2 py-0.5 rounded-full font-semibold">RAG BUILD</span>
+                      <span className="text-xs bg-mest-gold text-white px-2 py-0.5 rounded-full font-semibold">{t('scenario.ragBuild')}</span>
                     )}
                     <span className="text-xs text-mest-grey-500">{scenario.year} · {scenario.location}</span>
                     <span className={`text-xs px-2 py-0.5 rounded-full border ${trustColor}`}>
-                      {TRUST_LABELS[scenario.the_lesson.trust_property_violated]}
+                      {t(TRUST_LABEL_KEYS[scenario.the_lesson.trust_property_violated] as any)}
                     </span>
                   </div>
                   <p className="text-sm text-mest-grey-500 mt-1 italic">{scenario.headline}</p>
@@ -130,32 +131,32 @@ export function ScenarioTab() {
               <div className="border-t border-mest-grey-300/30 px-5 py-4 space-y-4">
                 {/* The Failure */}
                 <div>
-                  <h4 className="text-sm font-semibold text-mest-ink mb-2">What went wrong</h4>
+                  <h4 className="text-sm font-semibold text-mest-ink mb-2">{t('scenario.whatWentWrong')}</h4>
                   <p className="text-sm text-mest-grey-700 whitespace-pre-line leading-relaxed">{scenario.the_failure.what_went_wrong}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-mest-rust mb-2">Who was harmed</h4>
+                  <h4 className="text-sm font-semibold text-mest-rust mb-2">{t('scenario.whoHarmed')}</h4>
                   <p className="text-sm text-mest-grey-700 whitespace-pre-line leading-relaxed">{scenario.the_failure.who_was_harmed}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-mest-ink mb-2">Root cause</h4>
+                  <h4 className="text-sm font-semibold text-mest-ink mb-2">{t('scenario.rootCause')}</h4>
                   <p className="text-sm text-mest-grey-700 leading-relaxed">{scenario.the_failure.the_root_cause}</p>
                 </div>
 
                 {/* The Lesson */}
                 <div className="bg-mest-gold-light rounded-lg p-4">
-                  <h4 className="text-sm font-semibold text-mest-gold mb-2">Why this matters for African builders</h4>
+                  <h4 className="text-sm font-semibold text-mest-gold mb-2">{t('scenario.whyMatters')}</h4>
                   <p className="text-sm text-mest-grey-700 italic">{scenario.the_lesson.why_it_matters_for_african_builders}</p>
                   <div className="flex flex-wrap gap-1 mt-3">
-                    {scenario.the_lesson.rebuild_techniques.map(t => (
-                      <span key={t} className="text-xs bg-white/60 text-mest-grey-700 px-2 py-0.5 rounded">{t}</span>
+                    {scenario.the_lesson.rebuild_techniques.map(tech => (
+                      <span key={tech} className="text-xs bg-white/60 text-mest-grey-700 px-2 py-0.5 rounded">{tech}</span>
                     ))}
                   </div>
                 </div>
 
                 {/* Discussion Questions */}
                 <div>
-                  <h4 className="text-sm font-semibold text-mest-ink mb-2">Discussion questions</h4>
+                  <h4 className="text-sm font-semibold text-mest-ink mb-2">{t('scenario.discussion')}</h4>
                   <ol className="space-y-1.5">
                     {scenario.discussion_questions.map((q, i) => (
                       <li key={i} className="text-sm text-mest-grey-700 flex gap-2">
@@ -170,18 +171,18 @@ export function ScenarioTab() {
                 {isAirCanada && scenario.rag_documents && scenario.rag_documents.length > 0 && (
                   <div className="bg-mest-blue-light rounded-lg p-4 border border-mest-blue/20">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-sm font-semibold text-mest-blue">Source Documents for RAG Build</h4>
+                      <h4 className="text-sm font-semibold text-mest-blue">{t('scenario.sourceDocuments')}</h4>
                       <Button
                         size="sm"
                         onClick={() => downloadAllFiles(scenario.rag_documents)}
                         className="bg-mest-blue hover:bg-mest-blue/90 text-white gap-1.5"
                       >
                         <Download size={14} />
-                        Download All
+                        {t('scenario.downloadAll')}
                       </Button>
                     </div>
                     <p className="text-xs text-mest-grey-500 mb-3">
-                      Upload these files to your RAG Lab Documents tab, embed them, then configure your chatbot in the Configure tab.
+                      {t('scenario.uploadInstructions')}
                     </p>
                     <div className="space-y-2">
                       {scenario.rag_documents.map(doc => (

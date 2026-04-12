@@ -69,12 +69,12 @@ export function RagLab({ teamId, teamName, xp }: RagLabProps) {
   const [activeModelName, setActiveModelName] = useState<string | null>(null);
 
   const tabs: Array<{ id: TabId; label: string }> = [
-    { id: 'scenarios', label: 'Scenarios' },
-    { id: 'terminology', label: 'Terminology' },
+    { id: 'scenarios', label: t('rag.tab.scenarios') },
+    { id: 'terminology', label: t('rag.tab.terminology') },
     { id: 'documents', label: t('rag.tab.documents') },
-    { id: 'configure', label: 'Configure' },
+    { id: 'configure', label: t('rag.tab.configure') },
     { id: 'pipeline', label: t('rag.tab.pipeline') },
-    { id: 'evaluate', label: 'Evaluate' },
+    { id: 'evaluate', label: t('rag.tab.evaluate') },
     { id: 'strict', label: t('rag.tab.strict') },
   ];
 
@@ -109,7 +109,7 @@ export function RagLab({ teamId, teamName, xp }: RagLabProps) {
       {/* Active model badge */}
       {activeModelName && (
         <div className="bg-mest-gold-light text-mest-gold text-xs font-semibold px-4 py-1.5 text-center">
-          Active model: {activeModelName}
+          {t('common.activeModel')}: {activeModelName}
         </div>
       )}
 
@@ -200,7 +200,7 @@ function DocumentsTab({ teamId }: { teamId: string }) {
 
     // Stage 1: Chunking visualization — show chunks appearing one by one
     const emptyPreviews = Array.from({ length: chunkCount }, (_, i) => ({
-      index: i, preview: `Loading chunk ${i + 1}...`, charCount: 0, sampleVector: [],
+      index: i, preview: `${t('embed.chunk')} ${i + 1}...`, charCount: 0, sampleVector: [],
     }));
     setEmbedViz({ docName, stage: 'chunking', chunkPreviews: emptyPreviews, dimensions: 1536, activeChunkIndex: -1 });
     await new Promise(r => setTimeout(r, chunkCount * 300 + 500));
@@ -267,7 +267,7 @@ function DocumentsTab({ teamId }: { teamId: string }) {
   };
 
   const handleDelete = async (docId: string) => {
-    if (!confirm('Delete this document?')) return;
+    if (!confirm(t('common.deleteDocument'))) return;
     try {
       const res = await fetch('/api/rag/delete', {
         method: 'POST',
@@ -314,11 +314,11 @@ function DocumentsTab({ teamId }: { teamId: string }) {
         {strategy === 'fixed' && (
           <>
             <div>
-              <label className="text-sm font-medium text-mest-ink block mb-1">Chunk size</label>
+              <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.chunkSize')}</label>
               <Input value={chunkSize} onChange={e => setChunkSize(e.target.value)} className="w-24" type="number" />
             </div>
             <div>
-              <label className="text-sm font-medium text-mest-ink block mb-1">Overlap</label>
+              <label className="text-sm font-medium text-mest-ink block mb-1">{t('config.chunkOverlap')}</label>
               <Input value={overlap} onChange={e => setOverlap(e.target.value)} className="w-24" type="number" />
             </div>
           </>
@@ -357,7 +357,7 @@ function DocumentsTab({ teamId }: { teamId: string }) {
                   className="gap-1 text-xs"
                 >
                   {reprocessingDocId === doc.id ? <Loader2 size={12} className="animate-spin" /> : '🔄'}
-                  Rechunk
+                  {t('common.rechunk')}
                 </Button>
                 <button
                   onClick={() => handleDelete(doc.id)}
@@ -559,7 +559,7 @@ function PipelineTab({ teamId }: { teamId: string }) {
                 size="sm"
                 className="bg-[#0E6B5C] hover:bg-[#0E6B5C]/90 text-white text-xs gap-1"
               >
-                🔍 Explain This
+                🔍 {t('pipeline.explainThis')}
               </Button>
               <Button
                 onClick={clearResults}
@@ -594,7 +594,7 @@ function PipelineTab({ teamId }: { teamId: string }) {
         {/* Top-K Results */}
         {retrievedChunks.length > 0 && (
           <div className="bg-white rounded-xl border border-mest-grey-300/60 p-4">
-            <h3 className="text-sm font-semibold text-mest-ink mb-3">Top-K Retrieved</h3>
+            <h3 className="text-sm font-semibold text-mest-ink mb-3">{t('pipeline.topKRetrieved')}</h3>
             <AnimatePresence>
               {retrievedChunks.map((chunk, i) => (
                 <motion.div
@@ -621,7 +621,7 @@ function PipelineTab({ teamId }: { teamId: string }) {
         {/* Reranked Results */}
         {rerankedChunks.length > 0 && (
           <div className="bg-white rounded-xl border border-mest-grey-300/60 p-4">
-            <h3 className="text-sm font-semibold text-mest-ink mb-3">After Reranking (Claude)</h3>
+            <h3 className="text-sm font-semibold text-mest-ink mb-3">{t('pipeline.afterReranking')}</h3>
             <AnimatePresence>
               {rerankedChunks.map((chunk, i) => {
                 const moved = chunk.originalRank !== undefined && chunk.newRank !== undefined
@@ -660,14 +660,14 @@ function PipelineTab({ teamId }: { teamId: string }) {
           className="bg-white rounded-xl border-2 border-mest-gold/30 p-6"
         >
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-mest-ink">✨ Generated Response (with citations)</h3>
+            <h3 className="text-sm font-semibold text-mest-ink">✨ {t('pipeline.generatedResponse')}</h3>
             {hasResults && !isRunning && (
               <Button
                 onClick={handleExplain}
                 size="sm"
                 className="bg-[#0E6B5C] hover:bg-[#0E6B5C]/90 text-white gap-1.5 text-xs"
               >
-                🔍 Explain This Response
+                🔍 {t('pipeline.explainThis')}
               </Button>
             )}
           </div>
@@ -770,11 +770,11 @@ function StrictModeTab({ teamId }: { teamId: string }) {
       <div className="bg-white rounded-xl border border-mest-grey-300/60 p-6">
         <h3 className="font-serif text-lg text-mest-ink mb-4">{t('rag.tab.strict')}</h3>
         <p className="text-sm text-mest-grey-500 mb-3">
-          Compare how RAG responds with strict mode ON vs OFF. With strict mode, the system refuses to answer if no source documents are relevant enough.
+          {t('strict.description')}
         </p>
         <div className="flex items-center gap-3 mb-4">
           <span className="text-xs font-semibold text-mest-gold bg-mest-gold-light px-3 py-1.5 rounded-full">
-            Strict threshold: {Math.round(threshold * 100)}%
+            {t('strict.threshold')}: {Math.round(threshold * 100)}%
           </span>
           <input
             type="range"
@@ -786,7 +786,7 @@ function StrictModeTab({ teamId }: { teamId: string }) {
             className="w-48"
           />
           <span className="text-xs text-mest-grey-500">
-            {threshold < 0.2 ? 'Very lenient' : threshold < 0.4 ? 'Lenient' : threshold < 0.6 ? 'Moderate' : threshold < 0.8 ? 'Strict' : 'Very strict'}
+            {threshold < 0.2 ? t('strict.veryLenient') : threshold < 0.4 ? t('strict.lenient') : threshold < 0.6 ? t('strict.moderate') : threshold < 0.8 ? t('strict.strict') : t('strict.veryStrict')}
           </span>
         </div>
         <div className="flex gap-3">

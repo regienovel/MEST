@@ -1,4 +1,5 @@
 'use client';
+import { useI18n } from '@/lib/i18n-context';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ChunkPreview {
@@ -20,6 +21,7 @@ interface EmbeddingVisualizerProps {
 export function EmbeddingVisualizer({
   docName, stage, chunkPreviews, dimensions, activeChunkIndex, errorMessage
 }: EmbeddingVisualizerProps) {
+  const { t } = useI18n();
   return (
     <div className="bg-gradient-to-br from-[#0F2F44] to-[#0a1f2e] rounded-2xl overflow-hidden shadow-xl">
       {/* Header */}
@@ -32,9 +34,9 @@ export function EmbeddingVisualizer({
           />
           <h3 className="text-white text-base font-semibold">{docName}</h3>
           <span className="text-white/80 text-sm">
-            {stage === 'chunking' && '— Splitting document into chunks...'}
-            {stage === 'embedding' && `— Embedding chunk ${activeChunkIndex + 1} of ${chunkPreviews.length}...`}
-            {stage === 'done' && `— ✓ ${chunkPreviews.length} chunks embedded (${dimensions} dimensions)`}
+            {stage === 'chunking' && `— ${t('embed.splittingChunks')}`}
+            {stage === 'embedding' && `— ${t('embed.embeddingChunk').replace('{current}', String(activeChunkIndex + 1)).replace('{total}', String(chunkPreviews.length))}`}
+            {stage === 'done' && `— ✓ ${t('embed.doneMsg').replace('{n}', String(chunkPreviews.length)).replace('{d}', String(dimensions))}`}
             {stage === 'error' && `— ✗ ${errorMessage}`}
           </span>
         </div>
@@ -48,8 +50,8 @@ export function EmbeddingVisualizer({
               className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold bg-mest-sage text-white"
               transition={{ repeat: Infinity, duration: 1 }}
             >1</motion.span>
-            <span className="text-white text-sm font-semibold">CHUNKING</span>
-            <span className="text-white/60 text-sm">— Split text into searchable pieces</span>
+            <span className="text-white text-sm font-semibold">{t('embed.chunking')}</span>
+            <span className="text-white/60 text-sm">— {t('embed.chunkingDesc')}</span>
           </div>
 
           <div className="ml-9 space-y-2">
@@ -80,12 +82,12 @@ export function EmbeddingVisualizer({
                       animate={stage === 'embedding' && i === activeChunkIndex ? { scale: [1, 1.05, 1] } : {}}
                       transition={{ repeat: Infinity, duration: 0.6 }}
                     >
-                      chunk {i + 1}
+                      {t('embed.chunk')} {i + 1}
                     </motion.span>
                     <p className="text-white/90 text-sm leading-relaxed flex-1 line-clamp-2">
                       {chunk.preview}{chunk.charCount > 120 ? '...' : ''}
                     </p>
-                    <span className="text-white/40 text-xs shrink-0 mt-0.5">{chunk.charCount} chars</span>
+                    <span className="text-white/40 text-xs shrink-0 mt-0.5">{chunk.charCount} {t('embed.chars')}</span>
                   </div>
                 </motion.div>
               ))}
@@ -115,7 +117,7 @@ export function EmbeddingVisualizer({
               >
                 text-embedding-3-small
               </motion.span>
-              <span className="text-white/50 text-[11px]">OpenAI Embedding API</span>
+              <span className="text-white/50 text-[11px]">{t('embed.openaiApi')}</span>
               <motion.div
                 className="w-0.5 h-8 bg-gradient-to-b from-mest-gold/20 to-mest-gold/60"
                 initial={{ scaleY: 0 }}
@@ -137,8 +139,8 @@ export function EmbeddingVisualizer({
                 animate={stage === 'embedding' ? { scale: [1, 1.1, 1] } : {}}
                 transition={{ repeat: Infinity, duration: 1 }}
               >2</motion.span>
-              <span className="text-white text-sm font-semibold">EMBEDDING</span>
-              <span className="text-white/60 text-sm">— Each chunk becomes a {dimensions || 1536}-number vector</span>
+              <span className="text-white text-sm font-semibold">{t('embed.embedding')}</span>
+              <span className="text-white/60 text-sm">— {t('embed.embeddingDesc')} ({dimensions || 1536})</span>
             </div>
 
             <div className="ml-9 space-y-2">
@@ -169,7 +171,7 @@ export function EmbeddingVisualizer({
                         animate={isActive ? { scale: [1, 1.05, 1] } : {}}
                         transition={{ repeat: Infinity, duration: 0.6 }}
                       >
-                        vec {i + 1}
+                        {t('embed.vec')} {i + 1}
                       </motion.span>
 
                       {/* Vector number preview */}
@@ -188,7 +190,7 @@ export function EmbeddingVisualizer({
                                 {v.toFixed(3)}{vi < chunk.sampleVector.length - 1 ? ', ' : ''}
                               </motion.span>
                             ))}
-                            <span className="text-white/30 text-xs font-mono ml-1">...{(dimensions || 1536) - 8} more</span>
+                            <span className="text-white/30 text-xs font-mono ml-1">...{(dimensions || 1536) - 8} {t('embed.more')}</span>
                             <span className="text-white/50 font-mono text-xs">]</span>
                           </>
                         ) : isActive ? (
@@ -201,10 +203,10 @@ export function EmbeddingVisualizer({
                                 transition={{ repeat: Infinity, duration: 0.5, delay: vi * 0.06 }}
                               />
                             ))}
-                            <span className="text-white/40 text-xs ml-1">computing...</span>
+                            <span className="text-white/40 text-xs ml-1">{t('embed.computing')}</span>
                           </div>
                         ) : (
-                          <span className="text-white/20 text-xs italic">waiting...</span>
+                          <span className="text-white/20 text-xs italic">{t('embed.waiting')}</span>
                         )}
                       </div>
 
@@ -229,13 +231,13 @@ export function EmbeddingVisualizer({
                 className="ml-9 mt-5 bg-mest-sage/15 border border-mest-sage/30 rounded-xl px-5 py-4"
               >
                 <p className="text-white text-sm font-semibold">
-                  ✓ Each chunk is now a point in {dimensions}-dimensional space
+                  ✓ {t('embed.complete').replace('{n}', String(dimensions))}
                 </p>
                 <p className="text-white/70 text-sm mt-1">
-                  Similar text = nearby points. Different text = far apart.
+                  {t('embed.completeDesc')}
                 </p>
                 <p className="text-mest-gold text-xs mt-3 font-medium">
-                  → Go to the Pipeline Visualizer tab to search this vector space with a question
+                  → {t('embed.goToPipeline')}
                 </p>
               </motion.div>
             )}
