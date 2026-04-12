@@ -111,7 +111,9 @@ export function RagLab({ teamId, teamName, xp }: RagLabProps) {
         {activeTab === 'scenarios' && <ScenarioTab />}
         {activeTab === 'documents' && <DocumentsTab teamId={teamId} />}
         {activeTab === 'configure' && <ConfigureTab teamId={teamId} onActiveModelChange={setActiveModelName} />}
-        {activeTab === 'pipeline' && <PipelineTab teamId={teamId} />}
+        <div className={activeTab === 'pipeline' ? '' : 'hidden'}>
+          <PipelineTab teamId={teamId} />
+        </div>
         {activeTab === 'strict' && <StrictModeTab teamId={teamId} />}
       </div>
     </div>
