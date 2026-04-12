@@ -15,6 +15,7 @@ import { ScenarioBrief } from './scenario-brief';
 import { ScenarioTab } from './scenario-tab';
 import { EmbeddingVisualizer } from './embedding-visualizer';
 import { PipelineStages } from './pipeline-stages';
+import { TerminologyTab } from './terminology-tab';
 
 interface RagLabProps {
   teamId: string;
@@ -56,7 +57,7 @@ interface RetrievedChunk {
   newRank?: number;
 }
 
-type TabId = 'scenarios' | 'documents' | 'pipeline' | 'strict' | 'configure';
+type TabId = 'scenarios' | 'terminology' | 'documents' | 'pipeline' | 'strict' | 'configure';
 
 export function RagLab({ teamId, teamName, xp }: RagLabProps) {
   const { t } = useI18n();
@@ -65,6 +66,7 @@ export function RagLab({ teamId, teamName, xp }: RagLabProps) {
 
   const tabs: Array<{ id: TabId; label: string }> = [
     { id: 'scenarios', label: 'Scenarios' },
+    { id: 'terminology', label: 'Terminology' },
     { id: 'documents', label: t('rag.tab.documents') },
     { id: 'configure', label: 'Configure' },
     { id: 'pipeline', label: t('rag.tab.pipeline') },
@@ -107,8 +109,9 @@ export function RagLab({ teamId, teamName, xp }: RagLabProps) {
       )}
 
       <div className="flex-1 max-w-6xl mx-auto w-full px-4 py-6">
-        {activeTab !== 'scenarios' && <ScenarioBrief />}
+        {activeTab !== 'scenarios' && activeTab !== 'terminology' && <ScenarioBrief />}
         {activeTab === 'scenarios' && <ScenarioTab />}
+        {activeTab === 'terminology' && <TerminologyTab />}
         {activeTab === 'documents' && <DocumentsTab teamId={teamId} />}
         {activeTab === 'configure' && <ConfigureTab teamId={teamId} onActiveModelChange={setActiveModelName} />}
         <div className={activeTab === 'pipeline' ? '' : 'hidden'}>
