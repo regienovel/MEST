@@ -39,7 +39,7 @@ const PAIRS: PairData[] = [
   },
 ];
 
-export function CosineSimilarityViz({ onReplay }: { onReplay?: () => void }) {
+export function CosineSimilarityViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [pairIdx, setPairIdx] = useState(0);
   const [animatedScore, setAnimatedScore] = useState(0);
   const [cycle, setCycle] = useState(0);
@@ -51,6 +51,7 @@ export function CosineSimilarityViz({ onReplay }: { onReplay?: () => void }) {
   }, []);
 
   useEffect(() => {
+    if (isPaused) return;
     const timers: ReturnType<typeof setTimeout>[] = [];
     let offset = 0;
 
@@ -75,7 +76,7 @@ export function CosineSimilarityViz({ onReplay }: { onReplay?: () => void }) {
     timers.push(setTimeout(() => resetCycle(), offset + 500));
 
     return () => timers.forEach(clearTimeout);
-  }, [cycle, resetCycle]);
+  }, [cycle, resetCycle, isPaused]);
 
   const pair = PAIRS[pairIdx];
   const radA = 0;
@@ -113,11 +114,6 @@ export function CosineSimilarityViz({ onReplay }: { onReplay?: () => void }) {
     <div className="w-full min-h-[380px] flex flex-col items-center gap-4 p-5" style={{ backgroundColor: '#0F2F44' }}>
       <div className="flex items-center justify-between w-full max-w-2xl">
         <p className="text-sm font-semibold text-white tracking-wide">Cosine Similarity — The Angle Between Meanings</p>
-        {onReplay && (
-          <button onClick={() => resetCycle()} className="text-xs text-white/40 hover:text-white/70 transition-colors">
-            Replay
-          </button>
-        )}
       </div>
 
       <div className="flex flex-col md:flex-row items-center gap-6 w-full max-w-2xl">

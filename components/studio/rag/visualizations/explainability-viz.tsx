@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const QUESTION = 'Can I get a retroactive bereavement discount?';
@@ -46,10 +46,12 @@ const PHASE_TIMES = {
   total: 22,
 };
 
-export function ExplainabilityViz({ onReplay }: { onReplay?: () => void }) {
+export function ExplainabilityViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [elapsed, setElapsed] = useState(0);
   const [bbCharIndex, setBbCharIndex] = useState(0);
   const [glassCharIndex, setGlassCharIndex] = useState(0);
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = !!isPaused; }, [isPaused]);
 
   const reset = useCallback(() => {
     setElapsed(0);
@@ -60,6 +62,7 @@ export function ExplainabilityViz({ onReplay }: { onReplay?: () => void }) {
   // Master clock: ticks every 100ms
   useEffect(() => {
     const interval = setInterval(() => {
+      if (pausedRef.current) return;
       setElapsed((prev) => {
         const next = prev + 0.1;
         if (next >= PHASE_TIMES.total) {
@@ -74,19 +77,21 @@ export function ExplainabilityViz({ onReplay }: { onReplay?: () => void }) {
 
   // Black box answer streaming (3-6s)
   useEffect(() => {
+    if (isPaused) return;
     if (elapsed < PHASE_TIMES.blackBoxStart || elapsed > 6) return;
     if (bbCharIndex >= BLACK_BOX_ANSWER.length) return;
     const timer = setTimeout(() => setBbCharIndex((p) => Math.min(p + 2, BLACK_BOX_ANSWER.length)), 30);
     return () => clearTimeout(timer);
-  }, [elapsed, bbCharIndex]);
+  }, [elapsed, bbCharIndex, isPaused]);
 
   // Glass box answer streaming (14-17s)
   useEffect(() => {
+    if (isPaused) return;
     if (elapsed < 14 || elapsed > 17) return;
     if (glassCharIndex >= GLASS_ANSWER.length) return;
     const timer = setTimeout(() => setGlassCharIndex((p) => Math.min(p + 2, GLASS_ANSWER.length)), 30);
     return () => clearTimeout(timer);
-  }, [elapsed, glassCharIndex]);
+  }, [elapsed, glassCharIndex, isPaused]);
 
   const showQuestion = elapsed >= PHASE_TIMES.questionStart;
   const showBlackBox = elapsed >= PHASE_TIMES.blackBoxStart;
@@ -411,20 +416,6 @@ export function ExplainabilityViz({ onReplay }: { onReplay?: () => void }) {
         )}
       </AnimatePresence>
 
-      {/* Replay button */}
-      {elapsed >= PHASE_TIMES.total - 0.5 && (
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          onClick={() => {
-            reset();
-            onReplay?.();
-          }}
-          className="text-[10px] uppercase tracking-wider text-white/30 hover:text-white/60 transition-colors font-mono"
-        >
-          ↻ Replay
-        </motion.button>
-      )}
     </div>
   );
 }

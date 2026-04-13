@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const SENTENCE = ['The', 'trader', 'at', 'the', 'market', 'said', 'her', 'plantain', 'prices', 'have', 'gone', 'up', 'because', 'of', 'the', 'harmattan'];
@@ -21,14 +21,17 @@ const EXPLANATIONS: Record<number, string> = {
   15: '"Harmattan" connects to prices going up — the model learned from millions of texts that dry season weather events affect crop economics.',
 };
 
-export function TransformerViz({ onReplay }: { onReplay?: () => void }) {
+export function TransformerViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [activeWord, setActiveWord] = useState(-1);
   const [cycle, setCycle] = useState(0);
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = !!isPaused; }, [isPaused]);
 
   useEffect(() => {
     setActiveWord(-1);
     setCycle(0);
     const interval = setInterval(() => {
+      if (pausedRef.current) return;
       setCycle(c => {
         const next = c + 1;
         const idx = Math.floor(next / 2) % FOCAL_WORDS.length;

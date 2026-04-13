@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const QUESTION = "What is Air Canada's bereavement fare policy?";
@@ -33,9 +33,11 @@ const RESPONSE_PARTS = [
 const STAGE_DURATION = [1800, 1800, 2400, 2000, 2200, 3800];
 const TOTAL_CYCLE = STAGE_DURATION.reduce((a, b) => a + b, 0);
 
-export function RAGViz({ onReplay }: { onReplay?: () => void }) {
+export function RAGViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [stage, setStage] = useState(0);
   const [elapsed, setElapsed] = useState(0);
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = !!isPaused; }, [isPaused]);
 
   const resetCycle = useCallback(() => {
     setStage(0);
@@ -44,6 +46,7 @@ export function RAGViz({ onReplay }: { onReplay?: () => void }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      if (pausedRef.current) return;
       setElapsed((prev) => {
         const next = prev + 100;
         if (next >= TOTAL_CYCLE) {
@@ -315,14 +318,6 @@ export function RAGViz({ onReplay }: { onReplay?: () => void }) {
           : 'This is RAG. The model answers from your documents, not its imagination.'}
       </motion.p>
 
-      {onReplay && (
-        <button
-          onClick={() => { resetCycle(); onReplay(); }}
-          className="text-xs text-white/40 hover:text-white/70 transition-colors mt-1 border border-white/10 rounded px-3 py-1 hover:border-white/30"
-        >
-          Replay
-        </button>
-      )}
     </div>
   );
 }

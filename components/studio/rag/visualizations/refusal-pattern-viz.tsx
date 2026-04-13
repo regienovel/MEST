@@ -37,7 +37,7 @@ const PATTERNS = [
   },
 ];
 
-export function RefusalPatternViz({ onReplay }: { onReplay?: () => void }) {
+export function RefusalPatternViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [visibleCount, setVisibleCount] = useState(0);
   const [showCaption, setShowCaption] = useState(false);
 
@@ -47,6 +47,7 @@ export function RefusalPatternViz({ onReplay }: { onReplay?: () => void }) {
   }, []);
 
   useEffect(() => {
+    if (isPaused) return;
     if (visibleCount < PATTERNS.length) {
       const timer = setTimeout(
         () => setVisibleCount((p) => p + 1),
@@ -57,14 +58,15 @@ export function RefusalPatternViz({ onReplay }: { onReplay?: () => void }) {
       const timer = setTimeout(() => setShowCaption(true), 1000);
       return () => clearTimeout(timer);
     }
-  }, [visibleCount]);
+  }, [visibleCount, isPaused]);
 
   // Auto-loop
   useEffect(() => {
+    if (isPaused) return;
     if (!showCaption) return;
     const timer = setTimeout(reset, 8000);
     return () => clearTimeout(timer);
-  }, [showCaption, reset]);
+  }, [showCaption, reset, isPaused]);
 
   return (
     <div className="w-full flex flex-col items-center gap-5 p-5" style={{ backgroundColor: '#0F2F44' }}>
@@ -174,14 +176,6 @@ export function RefusalPatternViz({ onReplay }: { onReplay?: () => void }) {
         )}
       </AnimatePresence>
 
-      {onReplay && (
-        <button
-          onClick={() => { reset(); onReplay(); }}
-          className="text-xs text-white/30 hover:text-white/60 transition-colors mt-1"
-        >
-          Replay
-        </button>
-      )}
     </div>
   );
 }

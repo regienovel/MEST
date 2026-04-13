@@ -5,11 +5,9 @@ import { TERMINOLOGY, type Term } from '@/lib/rag-terminology';
 import { Modal } from '@/components/ui/modal';
 import { ChevronDown, ChevronUp, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import dynamic from 'next/dynamic';
-
 // Lazy-load visualization components
-const visualizations: Record<string, React.ComponentType<{ onReplay?: () => void }>> = {};
-const vizModules: Record<string, () => Promise<{ default: React.ComponentType<{ onReplay?: () => void }> }>> = {
+type VizProps = { onReplay?: () => void; isPaused?: boolean };
+const vizModules: Record<string, () => Promise<{ default: React.ComponentType<VizProps> }>> = {
   transformer: () => import('./rag/visualizations/transformer-viz').then(m => ({ default: m.TransformerViz })),
   attention: () => import('./rag/visualizations/attention-viz').then(m => ({ default: m.AttentionViz })),
   token: () => import('./rag/visualizations/token-viz').then(m => ({ default: m.TokenViz })),
@@ -36,8 +34,9 @@ export function TerminologyTab() {
     Object.fromEntries(TERMINOLOGY.map(s => [s.title, true]))
   );
   const [vizTerm, setVizTerm] = useState<Term | null>(null);
-  const [VizComponent, setVizComponent] = useState<React.ComponentType<{ onReplay?: () => void }> | null>(null);
+  const [VizComponent, setVizComponent] = useState<React.ComponentType<VizProps> | null>(null);
   const [vizKey, setVizKey] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const toggleSection = (title: string) => {
     setExpandedSections(prev => ({ ...prev, [title]: !prev[title] }));
@@ -46,6 +45,7 @@ export function TerminologyTab() {
   const openViz = async (term: Term) => {
     setVizTerm(term);
     setVizKey(k => k + 1);
+    setIsPaused(false);
 
     if (vizModules[term.id]) {
       try {
@@ -56,8 +56,6 @@ export function TerminologyTab() {
       }
     }
   };
-
-  const replay = () => setVizKey(k => k + 1);
 
   return (
     <div className="space-y-4">
@@ -127,15 +125,20 @@ export function TerminologyTab() {
         >
           <div className="bg-[#0F2F44] rounded-xl p-6 min-h-[60vh] flex flex-col">
             {VizComponent ? (
-              <VizComponent key={vizKey} onReplay={replay} />
+              <VizComponent key={vizKey} isPaused={isPaused} />
             ) : (
               <div className="flex-1 flex items-center justify-center text-white/50 text-sm">
-                Visualization loading...
+                {t('common.loading')}
               </div>
             )}
             <div className="flex justify-center mt-4">
-              <Button onClick={replay} variant="outline" size="sm" className="text-white border-white/30 hover:bg-white/10">
-                ↻ {t('terminology.replay')}
+              <Button
+                onClick={() => setIsPaused(p => !p)}
+                variant="outline"
+                size="sm"
+                className="text-white border-white/30 hover:bg-white/10 gap-1.5"
+              >
+                {isPaused ? '▶' : '⏸'} {isPaused ? t('terminology.resume') : t('terminology.pause')}
               </Button>
             </div>
           </div>

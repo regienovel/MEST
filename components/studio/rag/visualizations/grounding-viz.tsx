@@ -16,7 +16,7 @@ const GROUNDED_TEXT =
 
 const TOTAL_CYCLE = 18000; // full loop ms
 
-export function GroundingViz({ onReplay }: { onReplay?: () => void }) {
+export function GroundingViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [phase, setPhase] = useState<'streaming' | 'reveal' | 'hold'>('streaming');
   const [charIndex, setCharIndex] = useState(0);
   const [showContext, setShowContext] = useState(false);
@@ -34,6 +34,7 @@ export function GroundingViz({ onReplay }: { onReplay?: () => void }) {
 
   // Phase management
   useEffect(() => {
+    if (isPaused) return;
     if (phase === 'streaming') {
       // Start context reveal after 800ms
       const ctxTimer = setTimeout(() => setShowContext(true), 800);
@@ -43,18 +44,20 @@ export function GroundingViz({ onReplay }: { onReplay?: () => void }) {
       const holdTimer = setTimeout(reset, 5000);
       return () => clearTimeout(holdTimer);
     }
-  }, [phase, reset]);
+  }, [phase, reset, isPaused]);
 
   // Ungrounded streaming
   useEffect(() => {
+    if (isPaused) return;
     if (phase !== 'streaming') return;
     if (charIndex >= maxUngrounded) return;
     const timer = setTimeout(() => setCharIndex((p) => p + 1), 28);
     return () => clearTimeout(timer);
-  }, [phase, charIndex, maxUngrounded]);
+  }, [phase, charIndex, maxUngrounded, isPaused]);
 
   // Grounded streaming (starts after context appears + delay)
   useEffect(() => {
+    if (isPaused) return;
     if (phase !== 'streaming') return;
     if (!showContext) return;
     const delay = setTimeout(() => {
@@ -62,23 +65,25 @@ export function GroundingViz({ onReplay }: { onReplay?: () => void }) {
       setGroundedCharIndex((p) => p + 1);
     }, 35);
     return () => clearTimeout(delay);
-  }, [phase, showContext, groundedCharIndex, maxGrounded]);
+  }, [phase, showContext, groundedCharIndex, maxGrounded, isPaused]);
 
   // Transition to reveal phase
   useEffect(() => {
+    if (isPaused) return;
     if (phase !== 'streaming') return;
     if (charIndex >= maxUngrounded && groundedCharIndex >= maxGrounded) {
       const timer = setTimeout(() => setPhase('reveal'), 600);
       return () => clearTimeout(timer);
     }
-  }, [phase, charIndex, groundedCharIndex, maxUngrounded, maxGrounded]);
+  }, [phase, charIndex, groundedCharIndex, maxUngrounded, maxGrounded, isPaused]);
 
   // Transition from reveal to hold
   useEffect(() => {
+    if (isPaused) return;
     if (phase !== 'reveal') return;
     const timer = setTimeout(() => setPhase('hold'), 4000);
     return () => clearTimeout(timer);
-  }, [phase]);
+  }, [phase, isPaused]);
 
   const Cursor = () => (
     <motion.span
@@ -259,14 +264,6 @@ export function GroundingViz({ onReplay }: { onReplay?: () => void }) {
         )}
       </AnimatePresence>
 
-      {onReplay && (
-        <button
-          onClick={() => { reset(); onReplay(); }}
-          className="text-xs text-white/30 hover:text-white/60 transition-colors mt-1"
-        >
-          Replay
-        </button>
-      )}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 const QUESTION = "What is Air Canada's bereavement fare policy?";
@@ -8,10 +8,12 @@ const HALLUCINATED = "Air Canada offers bereavement fares for passengers travell
 
 const GROUNDED = "According to Air Canada's published bereavement policy [1], bereavement fares must be requested AT THE TIME OF BOOKING by calling 1-888-247-2262. Air Canada does not offer retroactive bereavement discounts [2]. Tickets purchased at full fare cannot be reclassified as bereavement fares after travel, regardless of circumstances.";
 
-export function HallucinationViz({ onReplay }: { onReplay?: () => void }) {
+export function HallucinationViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [leftChars, setLeftChars] = useState(0);
   const [rightChars, setRightChars] = useState(0);
   const [phase, setPhase] = useState<'typing' | 'reveal' | 'reset'>('typing');
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = !!isPaused; }, [isPaused]);
 
   useEffect(() => {
     setLeftChars(0);
@@ -20,6 +22,7 @@ export function HallucinationViz({ onReplay }: { onReplay?: () => void }) {
 
     let frame = 0;
     const interval = setInterval(() => {
+      if (pausedRef.current) return;
       frame++;
       if (phase === 'typing' || frame < 200) {
         setLeftChars(c => Math.min(c + 2, HALLUCINATED.length));

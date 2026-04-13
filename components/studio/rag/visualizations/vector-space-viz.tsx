@@ -73,7 +73,7 @@ function getDot(id: number) {
   return allDots.find((d) => d.id === id)!;
 }
 
-export function VectorSpaceViz({ onReplay }: { onReplay?: () => void }) {
+export function VectorSpaceViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [queryIdx, setQueryIdx] = useState(0);
   const [phase, setPhase] = useState<'enter' | 'connect' | 'hold'>('enter');
   const [cycle, setCycle] = useState(0);
@@ -85,6 +85,7 @@ export function VectorSpaceViz({ onReplay }: { onReplay?: () => void }) {
   }, []);
 
   useEffect(() => {
+    if (isPaused) return;
     const timers: ReturnType<typeof setTimeout>[] = [];
     let offset = 0;
 
@@ -109,7 +110,7 @@ export function VectorSpaceViz({ onReplay }: { onReplay?: () => void }) {
     timers.push(setTimeout(() => resetCycle(), offset + 500));
 
     return () => timers.forEach(clearTimeout);
-  }, [cycle, resetCycle]);
+  }, [cycle, resetCycle, isPaused]);
 
   const query = QUERIES[queryIdx];
   const targetCluster = CLUSTERS[query.targetCluster];
@@ -122,11 +123,6 @@ export function VectorSpaceViz({ onReplay }: { onReplay?: () => void }) {
     <div className="w-full min-h-[380px] flex flex-col items-center gap-4 p-5" style={{ backgroundColor: '#0F2F44' }}>
       <div className="flex items-center justify-between w-full max-w-2xl">
         <p className="text-sm font-semibold text-white tracking-wide">Vector Space — Nearest Neighbor Search</p>
-        {onReplay && (
-          <button onClick={() => resetCycle()} className="text-xs text-white/40 hover:text-white/70 transition-colors">
-            Replay
-          </button>
-        )}
       </div>
 
       {/* Vector space canvas */}

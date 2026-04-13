@@ -28,7 +28,7 @@ const SEMANTIC_CHUNKS = [
 
 type Phase = 'source' | 'paragraph' | 'fixed' | 'semantic' | 'highlight';
 
-export function ChunkingViz({ onReplay }: { onReplay?: () => void }) {
+export function ChunkingViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [phase, setPhase] = useState<Phase>('source');
   const [cycle, setCycle] = useState(0);
 
@@ -38,6 +38,7 @@ export function ChunkingViz({ onReplay }: { onReplay?: () => void }) {
   }, []);
 
   useEffect(() => {
+    if (isPaused) return;
     const timers: ReturnType<typeof setTimeout>[] = [];
     timers.push(setTimeout(() => setPhase('paragraph'), 2000));
     timers.push(setTimeout(() => setPhase('fixed'), 4500));
@@ -45,17 +46,12 @@ export function ChunkingViz({ onReplay }: { onReplay?: () => void }) {
     timers.push(setTimeout(() => setPhase('highlight'), 9500));
     timers.push(setTimeout(() => resetCycle(), 14000));
     return () => timers.forEach(clearTimeout);
-  }, [cycle, resetCycle]);
+  }, [cycle, resetCycle, isPaused]);
 
   return (
     <div className="w-full min-h-[340px] flex flex-col items-center gap-4 p-5" style={{ backgroundColor: '#0F2F44' }}>
       <div className="flex items-center justify-between w-full max-w-2xl">
         <p className="text-sm font-semibold text-white tracking-wide">Document Chunking Strategies</p>
-        {onReplay && (
-          <button onClick={() => { resetCycle(); }} className="text-xs text-white/40 hover:text-white/70 transition-colors">
-            Replay
-          </button>
-        )}
       </div>
 
       {/* Source document */}

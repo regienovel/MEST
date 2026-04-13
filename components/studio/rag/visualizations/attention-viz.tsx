@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const SENTENCE = ['The', 'trader', 'at', 'the', 'market', 'said', 'her', 'plantain', 'prices', 'have', 'gone', 'up', 'because', 'of', 'the', 'harmattan'];
@@ -42,12 +42,15 @@ const STEPS: FocusStep[] = [
   },
 ];
 
-export function AttentionViz({ onReplay }: { onReplay?: () => void }) {
+export function AttentionViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [stepIdx, setStepIdx] = useState(0);
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = !!isPaused; }, [isPaused]);
 
   useEffect(() => {
     setStepIdx(0);
     const interval = setInterval(() => {
+      if (pausedRef.current) return;
       setStepIdx(s => (s + 1) % STEPS.length);
     }, 5000);
     return () => clearInterval(interval);

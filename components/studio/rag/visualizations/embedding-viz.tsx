@@ -23,7 +23,7 @@ const PHRASES: PhraseData[] = [
 
 type Phase = 'phrase' | 'numbers' | 'condense' | 'dots';
 
-export function EmbeddingViz({ onReplay }: { onReplay?: () => void }) {
+export function EmbeddingViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [phase, setPhase] = useState<Phase>('phrase');
   const [currentDot, setCurrentDot] = useState(0);
   const [visibleDots, setVisibleDots] = useState<number[]>([]);
@@ -39,6 +39,7 @@ export function EmbeddingViz({ onReplay }: { onReplay?: () => void }) {
   }, []);
 
   useEffect(() => {
+    if (isPaused) return;
     const timers: ReturnType<typeof setTimeout>[] = [];
 
     // Phase 1: Show first phrase
@@ -69,7 +70,7 @@ export function EmbeddingViz({ onReplay }: { onReplay?: () => void }) {
     timers.push(setTimeout(() => resetCycle(), 3500 + PHRASES.length * 1500 + 4000));
 
     return () => timers.forEach(clearTimeout);
-  }, [cycle, resetCycle]);
+  }, [cycle, resetCycle, isPaused]);
 
   const distanceColor = (d: string) => {
     if (d === 'VERY CLOSE' || d === 'CLOSE') return '#0E6B5C';
@@ -81,11 +82,6 @@ export function EmbeddingViz({ onReplay }: { onReplay?: () => void }) {
     <div className="w-full min-h-[340px] flex flex-col items-center gap-4 p-5" style={{ backgroundColor: '#0F2F44' }}>
       <div className="flex items-center justify-between w-full max-w-2xl">
         <p className="text-sm font-semibold text-white tracking-wide">Text to Embedding to Vector Space</p>
-        {onReplay && (
-          <button onClick={() => resetCycle()} className="text-xs text-white/40 hover:text-white/70 transition-colors">
-            Replay
-          </button>
-        )}
       </div>
 
       <div className="w-full max-w-2xl flex flex-col items-center gap-4 min-h-[260px] justify-center">

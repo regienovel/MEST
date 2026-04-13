@@ -324,6 +324,11 @@ const en = {
   'scenario.sourceDocuments': 'Source Documents for RAG Build',
   'scenario.downloadAll': 'Download All',
   'scenario.uploadInstructions': 'Upload these files to your RAG Lab Documents tab, embed them, then configure your chatbot in the Configure tab.',
+  'scenario.hideBrief': 'Hide full brief',
+  'scenario.readBrief': 'Read full brief',
+  'scenario.theLesson': 'The lesson',
+  'scenario.trustViolated': 'Trust property violated',
+  'scenario.rebuildTechniques': 'Rebuild techniques',
 
   // Pipeline
   'pipeline.title': 'RAG Pipeline',
@@ -371,6 +376,8 @@ const en = {
   // Terminology
   'terminology.visualise': 'Visualise',
   'terminology.replay': 'Replay',
+  'terminology.pause': 'Pause',
+  'terminology.resume': 'Resume',
   'terminology.intro': '16 core concepts you need to understand to build a trustworthy RAG system. Click Visualise on any term to see an animated explanation.',
   'terminology.terms': 'terms',
 
@@ -773,6 +780,11 @@ const fr: Record<keyof typeof en, string> = {
   'scenario.sourceDocuments': 'Documents sources pour la construction RAG',
   'scenario.downloadAll': 'Tout télécharger',
   'scenario.uploadInstructions': 'Téléversez ces fichiers dans l\'onglet Documents de votre RAG Lab, vectorisez-les, puis configurez votre chatbot dans l\'onglet Configurer.',
+  'scenario.hideBrief': 'Masquer le résumé complet',
+  'scenario.readBrief': 'Lire le résumé complet',
+  'scenario.theLesson': 'La leçon',
+  'scenario.trustViolated': 'Propriété de confiance violée',
+  'scenario.rebuildTechniques': 'Techniques de reconstruction',
 
   // Pipeline
   'pipeline.title': 'Pipeline RAG',
@@ -820,6 +832,8 @@ const fr: Record<keyof typeof en, string> = {
   // Terminology
   'terminology.visualise': 'Visualiser',
   'terminology.replay': 'Rejouer',
+  'terminology.pause': 'Pause',
+  'terminology.resume': 'Reprendre',
   'terminology.intro': '16 concepts clés que vous devez comprendre pour construire un système RAG fiable. Cliquez sur Visualiser sur n\'importe quel terme pour voir une explication animée.',
   'terminology.terms': 'termes',
 

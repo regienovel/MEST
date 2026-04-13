@@ -8,22 +8,30 @@ interface Scenario {
   id: string;
   team: string;
   title: string;
+  title_fr?: string;
   year: number;
   location: string;
   industry?: string;
   headline: string;
+  headline_fr?: string;
   executive_summary: string;
+  executive_summary_fr?: string;
   the_failure: {
     what_went_wrong: string;
+    what_went_wrong_fr?: string;
     who_was_harmed: string;
+    who_was_harmed_fr?: string;
     the_root_cause: string;
+    the_root_cause_fr?: string;
   };
   the_lesson: {
     trust_property_violated: string;
     rebuild_techniques: string[];
     why_it_matters_for_african_builders: string;
+    why_it_matters_for_african_builders_fr?: string;
   };
   discussion_questions: string[];
+  discussion_questions_fr?: string[];
   rag_documents?: Array<{
     filename: string;
     type: string;
@@ -49,7 +57,8 @@ const TRUST_COLORS: Record<string, string> = {
 };
 
 export function ScenarioTab() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const fr = locale === 'fr';
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -108,7 +117,7 @@ export function ScenarioTab() {
               <div className="flex items-start gap-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-serif text-lg text-mest-ink">{scenario.title}</h3>
+                    <h3 className="font-serif text-lg text-mest-ink">{fr && scenario.title_fr ? scenario.title_fr : scenario.title}</h3>
                     {isAirCanada && (
                       <span className="text-xs bg-mest-gold text-white px-2 py-0.5 rounded-full font-semibold">{t('scenario.ragBuild')}</span>
                     )}
@@ -117,8 +126,8 @@ export function ScenarioTab() {
                       {t(TRUST_LABEL_KEYS[scenario.the_lesson.trust_property_violated] as any)}
                     </span>
                   </div>
-                  <p className="text-sm text-mest-grey-500 mt-1 italic">{scenario.headline}</p>
-                  <p className="text-sm text-mest-grey-700 mt-2">{scenario.executive_summary}</p>
+                  <p className="text-sm text-mest-grey-500 mt-1 italic">{fr && scenario.headline_fr ? scenario.headline_fr : scenario.headline}</p>
+                  <p className="text-sm text-mest-grey-700 mt-2">{fr && scenario.executive_summary_fr ? scenario.executive_summary_fr : scenario.executive_summary}</p>
                 </div>
                 <div className="shrink-0 mt-1">
                   {isExpanded ? <ChevronUp size={18} className="text-mest-grey-300" /> : <ChevronDown size={18} className="text-mest-grey-300" />}
@@ -132,21 +141,21 @@ export function ScenarioTab() {
                 {/* The Failure */}
                 <div>
                   <h4 className="text-sm font-semibold text-mest-ink mb-2">{t('scenario.whatWentWrong')}</h4>
-                  <p className="text-sm text-mest-grey-700 whitespace-pre-line leading-relaxed">{scenario.the_failure.what_went_wrong}</p>
+                  <p className="text-sm text-mest-grey-700 whitespace-pre-line leading-relaxed">{fr && scenario.the_failure.what_went_wrong_fr ? scenario.the_failure.what_went_wrong_fr : scenario.the_failure.what_went_wrong}</p>
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-mest-rust mb-2">{t('scenario.whoHarmed')}</h4>
-                  <p className="text-sm text-mest-grey-700 whitespace-pre-line leading-relaxed">{scenario.the_failure.who_was_harmed}</p>
+                  <p className="text-sm text-mest-grey-700 whitespace-pre-line leading-relaxed">{fr && scenario.the_failure.who_was_harmed_fr ? scenario.the_failure.who_was_harmed_fr : scenario.the_failure.who_was_harmed}</p>
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-mest-ink mb-2">{t('scenario.rootCause')}</h4>
-                  <p className="text-sm text-mest-grey-700 leading-relaxed">{scenario.the_failure.the_root_cause}</p>
+                  <p className="text-sm text-mest-grey-700 leading-relaxed">{fr && scenario.the_failure.the_root_cause_fr ? scenario.the_failure.the_root_cause_fr : scenario.the_failure.the_root_cause}</p>
                 </div>
 
                 {/* The Lesson */}
                 <div className="bg-mest-gold-light rounded-lg p-4">
                   <h4 className="text-sm font-semibold text-mest-gold mb-2">{t('scenario.whyMatters')}</h4>
-                  <p className="text-sm text-mest-grey-700 italic">{scenario.the_lesson.why_it_matters_for_african_builders}</p>
+                  <p className="text-sm text-mest-grey-700 italic">{fr && scenario.the_lesson.why_it_matters_for_african_builders_fr ? scenario.the_lesson.why_it_matters_for_african_builders_fr : scenario.the_lesson.why_it_matters_for_african_builders}</p>
                   <div className="flex flex-wrap gap-1 mt-3">
                     {scenario.the_lesson.rebuild_techniques.map(tech => (
                       <span key={tech} className="text-xs bg-white/60 text-mest-grey-700 px-2 py-0.5 rounded">{tech}</span>
@@ -158,7 +167,7 @@ export function ScenarioTab() {
                 <div>
                   <h4 className="text-sm font-semibold text-mest-ink mb-2">{t('scenario.discussion')}</h4>
                   <ol className="space-y-1.5">
-                    {scenario.discussion_questions.map((q, i) => (
+                    {(fr && scenario.discussion_questions_fr ? scenario.discussion_questions_fr : scenario.discussion_questions).map((q, i) => (
                       <li key={i} className="text-sm text-mest-grey-700 flex gap-2">
                         <span className="text-mest-gold font-bold shrink-0">{i + 1}.</span>
                         <span>{q}</span>

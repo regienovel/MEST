@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const GOLD = '#B8860B';
@@ -120,8 +120,10 @@ function MiniGauge({ percent, color, animate }: { percent: number; color: string
   );
 }
 
-export function RetrievalEvaluationViz({ onReplay }: { onReplay?: () => void }) {
+export function RetrievalEvaluationViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [elapsed, setElapsed] = useState(0);
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = !!isPaused; }, [isPaused]);
 
   const restart = useCallback(() => {
     setElapsed(0);
@@ -129,6 +131,7 @@ export function RetrievalEvaluationViz({ onReplay }: { onReplay?: () => void }) 
 
   useEffect(() => {
     const interval = setInterval(() => {
+      if (pausedRef.current) return;
       setElapsed((prev) => {
         const next = prev + 100;
         if (next >= TOTAL_CYCLE) {
@@ -342,15 +345,6 @@ export function RetrievalEvaluationViz({ onReplay }: { onReplay?: () => void }) 
         </motion.div>
       )}
 
-      {/* Replay button */}
-      <motion.button
-        onClick={() => { restart(); onReplay?.(); }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="mt-auto text-xs font-mono text-white/30 hover:text-white/60 transition-colors border border-white/10 hover:border-white/20 rounded-full px-4 py-1.5"
-      >
-        ↻ Replay
-      </motion.button>
     </div>
   );
 }

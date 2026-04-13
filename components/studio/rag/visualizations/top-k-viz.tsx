@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const CHUNKS = [
@@ -23,11 +23,14 @@ const K_CONFIGS = [
   { k: 1, note: 'Risky: one shot only', duration: 3500 },
 ];
 
-export function TopKViz({ onReplay }: { onReplay?: () => void }) {
+export function TopKViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [kIdx, setKIdx] = useState(0);
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = !!isPaused; }, [isPaused]);
 
   useEffect(() => {
     const interval = setInterval(() => {
+      if (pausedRef.current) return;
       setKIdx((p) => (p + 1) % K_CONFIGS.length);
     }, K_CONFIGS[0].duration);
     return () => clearInterval(interval);
@@ -165,14 +168,6 @@ export function TopKViz({ onReplay }: { onReplay?: () => void }) {
         K controls how many candidates reach the generation model.
       </p>
 
-      {onReplay && (
-        <button
-          onClick={onReplay}
-          className="text-xs text-white/40 hover:text-white/70 transition-colors border border-white/10 rounded px-3 py-1 hover:border-white/30"
-        >
-          Replay
-        </button>
-      )}
     </div>
   );
 }

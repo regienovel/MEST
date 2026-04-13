@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 
 interface Chunk {
@@ -58,8 +58,10 @@ const CHUNKS: Chunk[] = [
 // Phases: 0=initial, 1=claude-reading, 2=reranked
 const PHASE_DURATION = [3000, 2000, 5000];
 
-export function RerankingViz({ onReplay }: { onReplay?: () => void }) {
+export function RerankingViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [phase, setPhase] = useState(0);
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = !!isPaused; }, [isPaused]);
 
   const resetCycle = useCallback(() => setPhase(0), []);
 
@@ -67,6 +69,10 @@ export function RerankingViz({ onReplay }: { onReplay?: () => void }) {
     let timeout: ReturnType<typeof setTimeout>;
 
     const advance = () => {
+      if (pausedRef.current) {
+        timeout = setTimeout(advance, 100);
+        return;
+      }
       setPhase((prev) => {
         const next = (prev + 1) % 3;
         if (next === 0) {
@@ -247,14 +253,6 @@ export function RerankingViz({ onReplay }: { onReplay?: () => void }) {
         Similarity finds related text. Reranking finds the answer.
       </motion.p>
 
-      {onReplay && (
-        <button
-          onClick={() => { resetCycle(); onReplay(); }}
-          className="text-xs text-white/40 hover:text-white/70 transition-colors border border-white/10 rounded px-3 py-1 hover:border-white/30"
-        >
-          Replay
-        </button>
-      )}
     </div>
   );
 }

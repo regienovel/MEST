@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const SOURCES = [
@@ -36,15 +36,21 @@ const RESPONSE_PARTS: Array<{ text: string; cite: number | null }> = [
 const PHASE_DURATION = [3000, 3000, 3000, 4000];
 const TOTAL_PHASES = 4;
 
-export function CitationViz({ onReplay }: { onReplay?: () => void }) {
+export function CitationViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [phase, setPhase] = useState(0);
   const [manualHover, setManualHover] = useState<number | null>(null);
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = !!isPaused; }, [isPaused]);
 
   const resetCycle = useCallback(() => setPhase(0), []);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
     const advance = () => {
+      if (pausedRef.current) {
+        timeout = setTimeout(advance, 100);
+        return;
+      }
       setPhase((prev) => {
         const next = (prev + 1) % TOTAL_PHASES;
         timeout = setTimeout(advance, PHASE_DURATION[next]);
@@ -195,14 +201,6 @@ export function CitationViz({ onReplay }: { onReplay?: () => void }) {
           : 'Hover each citation to trace the claim back to its source document.'}
       </p>
 
-      {onReplay && (
-        <button
-          onClick={() => { resetCycle(); onReplay(); }}
-          className="text-xs text-white/40 hover:text-white/70 transition-colors border border-white/10 rounded px-3 py-1 hover:border-white/30"
-        >
-          Replay
-        </button>
-      )}
     </div>
   );
 }

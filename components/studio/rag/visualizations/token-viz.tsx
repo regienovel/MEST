@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface TokenGroup { word: string; tokens: string[]; color: string }
@@ -35,23 +35,26 @@ const AFRICAN_EXAMPLES = [
 const TOTAL_WORDS = 16;
 const TOTAL_TOKENS = TOKENIZED.reduce((s, t) => s + t.tokens.length, 0);
 
-export function TokenViz({ onReplay }: { onReplay?: () => void }) {
+export function TokenViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [phase, setPhase] = useState<'words' | 'splitting' | 'tokens' | 'bias'>('words');
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = !!isPaused; }, [isPaused]);
 
   useEffect(() => {
     setPhase('words');
     const timers = [
-      setTimeout(() => setPhase('splitting'), 2000),
-      setTimeout(() => setPhase('tokens'), 4000),
-      setTimeout(() => setPhase('bias'), 8000),
-      setTimeout(() => setPhase('words'), 14000),
+      setTimeout(() => { if (!pausedRef.current) setPhase('splitting'); }, 2000),
+      setTimeout(() => { if (!pausedRef.current) setPhase('tokens'); }, 4000),
+      setTimeout(() => { if (!pausedRef.current) setPhase('bias'); }, 8000),
+      setTimeout(() => { if (!pausedRef.current) setPhase('words'); }, 14000),
     ];
     const loop = setInterval(() => {
+      if (pausedRef.current) return;
       setPhase('words');
       timers.push(
-        setTimeout(() => setPhase('splitting'), 2000),
-        setTimeout(() => setPhase('tokens'), 4000),
-        setTimeout(() => setPhase('bias'), 8000),
+        setTimeout(() => { if (!pausedRef.current) setPhase('splitting'); }, 2000),
+        setTimeout(() => { if (!pausedRef.current) setPhase('tokens'); }, 4000),
+        setTimeout(() => { if (!pausedRef.current) setPhase('bias'); }, 8000),
       );
     }, 14000);
     return () => { timers.forEach(clearTimeout); clearInterval(loop); };

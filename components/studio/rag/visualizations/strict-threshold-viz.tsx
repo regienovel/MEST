@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const THRESHOLD_STOPS = [0.15, 0.35, 0.50, 0.75, 0.90];
@@ -34,9 +34,11 @@ function getResponse(testCase: TestCase, threshold: number): { text: string; pas
   return { text: testCase.refusalAnswer, pass: false };
 }
 
-export function StrictThresholdViz({ onReplay }: { onReplay?: () => void }) {
+export function StrictThresholdViz({ onReplay, isPaused }: { onReplay?: () => void; isPaused?: boolean }) {
   const [stopIndex, setStopIndex] = useState(0);
   const threshold = THRESHOLD_STOPS[stopIndex];
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = !!isPaused; }, [isPaused]);
 
   const leftResult = getResponse(LEFT_CASE, threshold);
   const rightResult = getResponse(RIGHT_CASE, threshold);
@@ -51,6 +53,7 @@ export function StrictThresholdViz({ onReplay }: { onReplay?: () => void }) {
 
   useEffect(() => {
     const timer = setInterval(() => {
+      if (pausedRef.current) return;
       setStopIndex((p) => {
         if (p >= THRESHOLD_STOPS.length - 1) {
           // Hold at end, then loop
@@ -219,14 +222,6 @@ export function StrictThresholdViz({ onReplay }: { onReplay?: () => void }) {
         </p>
       </motion.div>
 
-      {onReplay && (
-        <button
-          onClick={() => { reset(); onReplay(); }}
-          className="text-xs text-white/30 hover:text-white/60 transition-colors mt-1"
-        >
-          Replay
-        </button>
-      )}
     </div>
   );
 }
