@@ -11,6 +11,9 @@ import { Switch } from '@/components/ui/switch';
 import { NativeSelect } from '@/components/ui/native-select';
 import { LogOut, ArrowLeft, Star, Trash2, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { Modal } from '@/components/ui/modal';
+import { ModelCardView } from '@/components/studio/model-card-view';
+import type { ModelCard } from '@/lib/model-card';
 
 interface TeamUsage {
   id: string; name: string; xp: number; disabled: boolean;
@@ -59,6 +62,25 @@ export default function AdminPage() {
 
   const [scorecards, setScorecards] = useState<Record<string, Record<string, { status: string }>>>({});
 
+  // Model Cards
+  interface ModelCardOverview {
+    teamId: string;
+    teamName: string;
+    modelName: string;
+    linkedModelId: string | null;
+    linkedModelName?: string;
+    submittedAt?: string;
+    completeness: number;
+    trustCount: number;
+    card: ModelCard;
+  }
+  const [modelCards, setModelCards] = useState<ModelCardOverview[]>([]);
+  const [viewingCard, setViewingCard] = useState<ModelCardOverview | null>(null);
+  const [fullReviewCard, setFullReviewCard] = useState<ModelCardOverview | null>(null);
+  const [fullReviewQuery, setFullReviewQuery] = useState('');
+  const [fullReviewResult, setFullReviewResult] = useState('');
+  const [fullReviewRunning, setFullReviewRunning] = useState(false);
+
   const fetchData = useCallback(() => {
     fetch('/api/admin/usage').then(r => r.json()).then(d => {
       setTeams(d.teams || []);
@@ -72,6 +94,10 @@ export default function AdminPage() {
 
     fetch('/api/admin/rag-models').then(r => r.json()).then(d => {
       setRagSubmissions(d.submissions || []);
+    }).catch(() => {});
+
+    fetch('/api/admin/model-cards').then(r => r.json()).then(d => {
+      setModelCards(d.cards || []);
     }).catch(() => {});
 
     fetch('/api/config').then(r => r.json()).then(d => {
@@ -271,6 +297,57 @@ export default function AdminPage() {
   async function deleteGalleryItem(id: string) {
     await fetch(`/api/admin/gallery/${id}`, { method: 'DELETE' });
     fetchData();
+  }
+
+  async function runFullReviewQuery() {
+    if (!fullReviewCard || !fullReviewQuery.trim()) return;
+    const submission = ragSubmissions.find(s => s.id === fullReviewCard.linkedModelId && s.teamId === fullReviewCard.teamId);
+    if (!submission) {
+      setFullReviewResult(t('admin.mc.review.noModel'));
+      return;
+    }
+    setFullReviewRunning(true);
+    setFullReviewResult('');
+    try {
+      const res = await fetch('/api/rag/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: fullReviewQuery,
+          strict: true,
+          config: submission.config,
+          teamDocsOverride: (submission as unknown as { documentData?: unknown[] }).documentData,
+        }),
+      });
+      const reader = res.body?.getReader();
+      if (!reader) { setFullReviewResult('Error'); setFullReviewRunning(false); return; }
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let result = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const parts = buffer.split('\n\n');
+        buffer = parts.pop() || '';
+        for (const part of parts) {
+          const line = part.trim();
+          if (!line.startsWith('data: ')) continue;
+          try {
+            const data = JSON.parse(line.slice(6));
+            if (data.token) result += data.token;
+            if (data.stage === 'generate' && data.status === 'done' && data.payload?.response) {
+              result = data.payload.response as string;
+            }
+          } catch {}
+        }
+        setFullReviewResult(result);
+      }
+      setFullReviewResult(result || 'No response');
+    } catch {
+      setFullReviewResult('Query failed');
+    }
+    setFullReviewRunning(false);
   }
 
   return (
@@ -478,6 +555,20 @@ export default function AdminPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-mest-grey-300">{sub.submittedAt ? new Date(sub.submittedAt).toLocaleString() : ''}</span>
+                      {(() => {
+                        const linked = modelCards.find(c => c.linkedModelId === sub.id && c.teamId === sub.teamId);
+                        if (!linked) return null;
+                        return (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setViewingCard(linked)}
+                            className="text-xs gap-1"
+                          >
+                            📇 {t('admin.mc.viewCard')}
+                          </Button>
+                        );
+                      })()}
                       <Button size="sm" variant="outline" onClick={() => { setQueryingModel(queryingModel === sub.id ? null : sub.id); setQueryResult(''); }} className="text-xs">
                         {queryingModel === sub.id ? 'Close' : 'Query'}
                       </Button>
@@ -535,6 +626,83 @@ export default function AdminPage() {
             </div>
           </div>
         )}
+
+        {/* Model Cards Overview */}
+        <div className="bg-white rounded-xl border-2 border-mest-blue/30 p-6">
+          <h2 className="font-serif text-xl text-mest-ink mb-1">{t('admin.mc.title')}</h2>
+          <p className="text-sm text-mest-grey-500 mb-4">{t('admin.mc.subtitle')}</p>
+          {modelCards.length === 0 ? (
+            <p className="text-sm text-mest-grey-500 italic py-6 text-center">{t('admin.mc.empty')}</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-mest-grey-50">
+                  <tr>
+                    <th className="text-left px-3 py-2 font-medium">{t('admin.mc.col.team')}</th>
+                    <th className="text-left px-3 py-2 font-medium">{t('admin.mc.col.model')}</th>
+                    <th className="text-left px-3 py-2 font-medium">{t('admin.mc.col.linked')}</th>
+                    <th className="text-center px-3 py-2 font-medium">{t('admin.mc.col.completeness')}</th>
+                    <th className="text-center px-3 py-2 font-medium">{t('admin.mc.col.trust')}</th>
+                    <th className="text-left px-3 py-2 font-medium">{t('admin.mc.col.submitted')}</th>
+                    <th className="text-center px-3 py-2 font-medium">{t('admin.mc.col.status')}</th>
+                    <th className="text-center px-3 py-2 font-medium">{t('admin.mc.col.actions')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {modelCards.map(c => {
+                    const hasLink = !!c.linkedModelId && ragSubmissions.some(s => s.id === c.linkedModelId && s.teamId === c.teamId);
+                    return (
+                      <tr key={c.teamId} className="border-t border-mest-grey-300/30">
+                        <td className="px-3 py-2 font-medium">{c.teamName}</td>
+                        <td className="px-3 py-2">{c.modelName || <span className="text-mest-grey-300 italic">—</span>}</td>
+                        <td className="px-3 py-2 text-mest-grey-700">
+                          {c.linkedModelName || (c.linkedModelId ? c.linkedModelId.slice(0, 8) : <span className="text-mest-grey-300 italic">{t('admin.mc.notLinked')}</span>)}
+                        </td>
+                        <td className="px-3 py-2 text-center">
+                          <span className={`text-xs font-semibold ${c.completeness === 100 ? 'text-mest-sage' : c.completeness >= 60 ? 'text-mest-blue' : 'text-mest-rust'}`}>
+                            {c.completeness}%
+                          </span>
+                        </td>
+                        <td className="px-3 py-2 text-center">
+                          <span className="text-xs font-semibold text-mest-grey-700">{c.trustCount}/5</span>
+                        </td>
+                        <td className="px-3 py-2 text-xs text-mest-grey-500">
+                          {c.submittedAt ? new Date(c.submittedAt).toLocaleString() : '—'}
+                        </td>
+                        <td className="px-3 py-2 text-center">
+                          {hasLink ? (
+                            <span className="text-xs bg-mest-sage-light text-mest-sage px-2 py-0.5 rounded-full font-semibold">
+                              {t('admin.mc.statusSubmitted')}
+                            </span>
+                          ) : (
+                            <span className="text-xs bg-mest-gold-light text-mest-gold px-2 py-0.5 rounded-full font-semibold">
+                              {t('admin.mc.statusUnlinked')}
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-3 py-2 text-center">
+                          <div className="flex gap-1 justify-center">
+                            <Button size="sm" variant="outline" onClick={() => setViewingCard(c)} className="text-xs">
+                              {t('admin.mc.viewCard')}
+                            </Button>
+                            <Button
+                              size="sm"
+                              onClick={() => { setFullReviewCard(c); setFullReviewQuery(''); setFullReviewResult(''); }}
+                              disabled={!hasLink}
+                              className="text-xs bg-mest-blue hover:bg-mest-blue/90 text-white disabled:opacity-40"
+                            >
+                              {t('admin.mc.fullReview')}
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
 
         {/* Broadcast */}
         <div className="bg-white rounded-xl border border-mest-grey-300/60 p-6">
@@ -651,6 +819,84 @@ export default function AdminPage() {
           </div>
         )}
       </div>
+
+      {/* View Card modal */}
+      <Modal
+        open={!!viewingCard}
+        onClose={() => setViewingCard(null)}
+        title={viewingCard ? `${t('admin.mc.modal.title')} — ${viewingCard.teamName}` : t('admin.mc.modal.title')}
+        className="max-w-3xl max-h-[90vh]"
+      >
+        {viewingCard && <ModelCardView card={viewingCard.card} />}
+      </Modal>
+
+      {/* Full Review modal — split screen */}
+      <Modal
+        open={!!fullReviewCard}
+        onClose={() => setFullReviewCard(null)}
+        title={fullReviewCard ? `${t('admin.mc.review.title')} — ${fullReviewCard.teamName}` : t('admin.mc.review.title')}
+        className="max-w-7xl max-h-[95vh]"
+      >
+        {fullReviewCard && (() => {
+          const submission = ragSubmissions.find(s => s.id === fullReviewCard.linkedModelId && s.teamId === fullReviewCard.teamId);
+          return (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* LEFT: Submitted model + test query */}
+              <div className="space-y-3">
+                <h3 className="font-serif text-base text-mest-ink">{t('admin.mc.review.modelSide')}</h3>
+                {submission ? (
+                  <>
+                    <div className="bg-mest-grey-50 rounded-lg p-3 text-xs space-y-1">
+                      <div><strong>{submission.name}</strong></div>
+                      {!!submission.description && <div className="text-mest-grey-700">{submission.description}</div>}
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        <span className="bg-white px-2 py-0.5 rounded">Model: {String(submission.config.generationModel || 'gpt-4o')}</span>
+                        <span className="bg-white px-2 py-0.5 rounded">Top-K: {String(submission.config.topK || 5)}</span>
+                        <span className="bg-white px-2 py-0.5 rounded">Threshold: {String(submission.config.strictThreshold || 0.15)}</span>
+                        <span className="bg-white px-2 py-0.5 rounded">Temp: {String(submission.config.temperature || 0.2)}</span>
+                        <span className="bg-white px-2 py-0.5 rounded">{submission.documents?.length || 0} docs</span>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-xs font-medium text-mest-ink block mb-1">{t('admin.mc.review.testQuery')}</label>
+                      <div className="flex gap-2">
+                        <Input
+                          value={fullReviewQuery}
+                          onChange={e => setFullReviewQuery(e.target.value)}
+                          placeholder="..."
+                          onKeyDown={e => e.key === 'Enter' && fullReviewQuery.trim() && runFullReviewQuery()}
+                          className="flex-1"
+                        />
+                        <Button
+                          size="sm"
+                          onClick={runFullReviewQuery}
+                          disabled={!fullReviewQuery.trim() || fullReviewRunning}
+                          className="bg-mest-gold hover:bg-mest-gold/90 text-white"
+                        >
+                          {fullReviewRunning ? <Loader2 size={14} className="animate-spin" /> : t('admin.mc.review.runQuery')}
+                        </Button>
+                      </div>
+                    </div>
+                    {fullReviewResult && (
+                      <div className="bg-mest-grey-50 rounded-lg p-3 text-sm whitespace-pre-wrap max-h-96 overflow-y-auto">
+                        {fullReviewResult}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <p className="text-sm text-mest-grey-500 italic">{t('admin.mc.review.noModel')}</p>
+                )}
+              </div>
+
+              {/* RIGHT: Model Card */}
+              <div className="space-y-3 max-h-[80vh] overflow-y-auto pr-1">
+                <h3 className="font-serif text-base text-mest-ink sticky top-0 bg-white py-1">{t('admin.mc.review.cardSide')}</h3>
+                <ModelCardView card={fullReviewCard.card} compact />
+              </div>
+            </div>
+          );
+        })()}
+      </Modal>
     </div>
   );
 }

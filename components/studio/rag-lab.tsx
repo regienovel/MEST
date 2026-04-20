@@ -17,6 +17,7 @@ import { EmbeddingVisualizer } from './embedding-visualizer';
 import { PipelineStages } from './pipeline-stages';
 import { TerminologyTab } from './terminology-tab';
 import { EvaluateTab } from './evaluate-tab';
+import { ModelCardTab } from './model-card-tab';
 import { ExplainabilityReportPanel } from './explainability-report';
 import { generateExplainabilityReport, reportToMarkdown, type ExplainabilityReport } from '@/lib/rag-explain';
 import { type RagConfig, getTeamConfig, DEFAULT_CONFIG } from '@/lib/rag-config';
@@ -61,7 +62,7 @@ interface RetrievedChunk {
   newRank?: number;
 }
 
-type TabId = 'scenarios' | 'terminology' | 'documents' | 'configure' | 'pipeline' | 'evaluate' | 'strict';
+type TabId = 'scenarios' | 'terminology' | 'documents' | 'configure' | 'modelcard' | 'pipeline' | 'evaluate' | 'strict';
 
 export function RagLab({ teamId, teamName, xp }: RagLabProps) {
   const { t } = useI18n();
@@ -73,6 +74,7 @@ export function RagLab({ teamId, teamName, xp }: RagLabProps) {
     { id: 'terminology', label: t('rag.tab.terminology') },
     { id: 'documents', label: t('rag.tab.documents') },
     { id: 'configure', label: t('rag.tab.configure') },
+    { id: 'modelcard', label: t('rag.tab.modelcard') },
     { id: 'pipeline', label: t('rag.tab.pipeline') },
     { id: 'evaluate', label: t('rag.tab.evaluate') },
     { id: 'strict', label: t('rag.tab.strict') },
@@ -119,6 +121,7 @@ export function RagLab({ teamId, teamName, xp }: RagLabProps) {
         {activeTab === 'terminology' && <TerminologyTab />}
         {activeTab === 'documents' && <DocumentsTab teamId={teamId} />}
         {activeTab === 'configure' && <ConfigureTab teamId={teamId} onActiveModelChange={setActiveModelName} />}
+        {activeTab === 'modelcard' && <ModelCardTab teamId={teamId} teamName={teamName} />}
         <div className={activeTab === 'pipeline' ? '' : 'hidden'}>
           <PipelineTab teamId={teamId} />
         </div>
